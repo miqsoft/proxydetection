@@ -1,0 +1,1 @@
+{"virtualbox":{"/vagrant/server":{"guestpath":"/vagrant/server","hostpath":"X:/Masterarbeit/Repo/server","disabled":false,"__vagrantfile":true},"/vagrant/results":{"guestpath":"/vagrant/results","hostpath":"X:/Masterarbeit/Repo/pcaps/HTTP1/HTTP2/squid","disabled":false,"__vagrantfile":true}}}
