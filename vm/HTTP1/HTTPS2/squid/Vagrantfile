@@ -1,12 +1,13 @@
 Vagrant.configure("2") do |config|
   # Client Machine
   config.vm.define "client" do |client|
-    client.vm.box = "generic/alpine316"
+    client.vm.box = "generic/alpine319"
     client.vm.network "private_network", ip: "192.168.50.4"
     client.vm.synced_folder "X:/Masterarbeit/Repo/server", "/vagrant/server"
-    client.vm.synced_folder "X:/Masterarbeit/Repo/pcaps/HTTP1/HTTPS1/squid", "/vagrant/results"
+    client.vm.synced_folder "X:/Masterarbeit/Repo/pcaps/HTTP1/HTTPS2/squid", "/vagrant/results"
 
     client.vm.provision "shell", inline: <<-SHELL
+      echo "http://dl-cdn.alpinelinux.org/alpine/v3.19/main" > /etc/apk/repositories
       apk update
       apk add curl
       apk add tcpdump
@@ -17,12 +18,13 @@ Vagrant.configure("2") do |config|
 
   # Proxy Machine
   config.vm.define "proxy" do |proxy|
-    proxy.vm.box = "generic/alpine316"
+    proxy.vm.box = "generic/alpine319"
     proxy.vm.network "private_network", ip: "192.168.50.5"
     proxy.vm.synced_folder "X:/Masterarbeit/Repo/server", "/vagrant/server"
-    proxy.vm.synced_folder "X:/Masterarbeit/Repo/pcaps/HTTP1/HTTPS1/squid", "/vagrant/results"
+    proxy.vm.synced_folder "X:/Masterarbeit/Repo/pcaps/HTTP1/HTTPS2/squid", "/vagrant/results"
 
     proxy.vm.provision "shell", inline: <<-SHELL
+      echo "http://dl-cdn.alpinelinux.org/alpine/v3.19/main" > /etc/apk/repositories
       apk update
       apk add tcpdump
       apk add squid
@@ -33,16 +35,21 @@ Vagrant.configure("2") do |config|
 
   # Server Machine
   config.vm.define "server" do |server|
-    server.vm.box = "generic/alpine316"
+    server.vm.box = "generic/alpine319"
     server.vm.network "private_network", ip: "192.168.50.6"
     server.vm.synced_folder "X:/Masterarbeit/Repo/server", "/vagrant/server"
-    server.vm.synced_folder "X:/Masterarbeit/Repo/pcaps/HTTP1/HTTPS1/squid", "/vagrant/results"
+    server.vm.synced_folder "X:/Masterarbeit/Repo/pcaps/HTTP1/HTTPS2/squid", "/vagrant/results"
 
     server.vm.provision "shell", inline: <<-SHELL
+      echo "http://dl-cdn.alpinelinux.org/alpine/v3.19/main" > /etc/apk/repositories
       apk update
       apk add tcpdump
       apk add python3
-      sudo nohup python3 /vagrant/server/https1_server.py > /vagrant/results/server_out.log 2>&1 &
+      python3 -m ensurepip --upgrade
+      python3 -m venv /home/vagrant/venv
+      source /home/vagrant/venv/bin/activate
+      pip3 install hypercorn quart
+      sudo nohup python3 /vagrant/server/https2_server.py &
     SHELL
   end
 end

@@ -25,9 +25,25 @@ Vagrant.configure("2") do |config|
     proxy.vm.provision "shell", inline: <<-SHELL
       apk update
       apk add tcpdump
-      apk add squid
-      sed -i 's/http_access deny all/http_access allow all/' /etc/squid/squid.conf
-      rc-service squid start
+      # install 3proxy
+      apk add make git gcc libc-dev linux-headers
+      cd /home/vagrant
+      git clone https://github.com/z3apa3a/3proxy
+	  cd 3proxy
+	  make -f Makefile.Linux
+	  make -f Makefile.Linux install
+	  # exchange chroot /usr/local/3proxy proxy proxy by chroot /usr/local/3proxy vagrant vagrant in "/etc/3proxy/3proxy.cfg"
+	  sed -i 's|chroot /usr/local/3proxy proxy proxy|chroot /usr/local/3proxy vagrant vagrant|g' /etc/3proxy/3proxy.cfg
+	  # change owner of 3proxy to avoid permission issues
+	  sudo chown -R vagrant:vagrant /usr/local/3proxy
+	  # add a user
+	  chmod +x /usr/local/3proxy/conf/add3proxyuser.sh
+	  /usr/local/3proxy/conf/add3proxyuser.sh vagrant vagrant
+	  # exchange "auth strong" by "auth none" in "/etc/3proxy/3proxy.cfg"
+	  sed -i 's/auth strong/auth none/g' /usr/local/3proxy/conf/3proxy.cfg
+	  # start 3proxy
+	  service 3proxy start
+
     SHELL
   end
 
@@ -42,7 +58,11 @@ Vagrant.configure("2") do |config|
       apk update
       apk add tcpdump
       apk add python3
-      sudo nohup python3 /vagrant/server/https1_server.py > /vagrant/results/server_out.log 2>&1 &
+      python3 -m ensurepip --upgrade
+      python3 -m venv /home/vagrant/venv
+      source /home/vagrant/venv/bin/activate
+      pip3 install hypercorn quart
+      sudo nohup python3 /vagrant/server/https2_server.py &
     SHELL
   end
 end

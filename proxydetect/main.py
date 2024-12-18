@@ -15,7 +15,7 @@ def __stop_pcap_capture(box, vm):
     box.ssh(vm, "sudo killall tcpdump")
 
 def curl(box, vm, prot: str, host: str = '192.168.50.6', insecure: bool = True, http2: bool = False, http3: bool = False):
-    command = 'curl'
+    command = 'curl' + ' -v'
     if insecure:
         command += ' --insecure'
     if http2:
@@ -24,10 +24,10 @@ def curl(box, vm, prot: str, host: str = '192.168.50.6', insecure: bool = True, 
         command += ' --http3'
     command += f' {prot}://{host}'
     print(f"Running command: {command}")
-    box.ssh(vm, command)
+    box.ssh(vm, f'{command} > /vagrant/results/curl_{vm}.log 2>&1')
 
 def curl_request(proxytype, proxytunnelprotocol, box):
-    prot = 'https' if 'HTTPS' in proxytype else 'http'
+    prot = 'https' if 'HTTPS' in proxytunnelprotocol else 'http'
     http2 = 'HTTP2' in proxytunnelprotocol or 'HTTPS2' in proxytunnelprotocol
     http3 = 'HTTP3' in proxytunnelprotocol or 'HTTPS3' in proxytunnelprotocol
     curl(box, "client", prot, http2=http2, http3=http3)
@@ -48,15 +48,20 @@ def _experiment(box, proxytype: str, proxytunnelprotocol: str, proxysoftware: st
 
 EXPERIMENTS = [
     ('HTTP1', 'HTTP1', 'squid'),
+    ('HTTP1', 'HTTP1', '3proxy'),
     ('HTTP1', 'HTTPS1', 'squid'),
+    ('HTTP1', 'HTTPS1', '3proxy'),
+    ('HTTP1', 'HTTPS2', 'squid'),
+    ('HTTP1', 'HTTPS2', '3proxy'),
     ('HTTP1', 'HTTP2', 'squid'),
+    ('HTTP1', 'HTTP2', '3proxy'),
+    ('HTTP1', 'HTTP3', '3proxy'),
 ]
 
 
 
 def main():
-    experiments = [EXPERIMENTS[2]]
-
+    experiments = [EXPERIMENTS[-1]]
 
     for proxytype, proxytunnelprotocol, proxysoftware in experiments:
         subpath = f'{proxytype}/{proxytunnelprotocol}/{proxysoftware}'
