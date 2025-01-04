@@ -1,0 +1,19 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 192.168.56.6:80...
+* Connected to 192.168.56.6 (192.168.56.6) port 80
+> GET / HTTP/1.1
+> Host: 192.168.56.6
+> User-Agent: curl/8.5.0
+> Accept: */*
+> 
+* HTTP 1.0, assume close after body
+< HTTP/1.0 200 OK
+< Server: BaseHTTP/0.6 Python/3.10.14
+< Date: Mon, 23 Dec 2024 22:11:25 GMT
+< Content-type: text/html
+< 
+{ [13 bytes data]
+100    13    0    13    0     0   1243      0 --:--:-- --:--:-- --:--:--  1300
+* Closing connection
+Hello, HTTP1!

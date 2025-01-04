@@ -1,0 +1,25 @@
+* Uses proxy env variable http_proxy == 'http://192.168.56.5:3128'
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 192.168.56.5:3128...
+* Connected to 192.168.56.5 (192.168.56.5) port 3128
+> GET http://192.168.56.6/ HTTP/1.1
+> Host: 192.168.56.6
+> User-Agent: curl/8.5.0
+> Accept: */*
+> Proxy-Connection: Keep-Alive
+> 
+< HTTP/1.1 200 OK
+< Server: BaseHTTP/0.6 Python/3.10.14
+< Date: Thu, 19 Dec 2024 09:11:58 GMT
+< Content-Type: text/html
+< X-Cache: MISS from alpine316.localdomain
+< X-Cache-Lookup: MISS from alpine316.localdomain:3128
+< Transfer-Encoding: chunked
+< Via: 1.1 alpine316.localdomain (squid/5.5)
+< Connection: keep-alive
+< 
+{ [13 bytes data]
+100    13    0    13    0     0   1481      0 --:--:-- --:--:-- --:--:--  1625
+* Connection #0 to host 192.168.56.5 left intact
+Hello, HTTP1!

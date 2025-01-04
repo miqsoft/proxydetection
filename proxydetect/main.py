@@ -14,7 +14,7 @@ def __start_pcap_capture(box, vm, interface, outputfile):
 def __stop_pcap_capture(box, vm):
     box.ssh(vm, "sudo killall tcpdump")
 
-def curl(box, vm, prot: str, host: str = '192.168.50.6', insecure: bool = True, http2: bool = False, http3: bool = False):
+def curl(box, vm, prot: str, host: str = '192.168.56.6', insecure: bool = True, http2: bool = False, http3: bool = False):
     command = 'curl' + ' -v'
     if insecure:
         command += ' --insecure'
@@ -32,14 +32,18 @@ def curl_request(proxytype, proxytunnelprotocol, box):
     http3 = 'HTTP3' in proxytunnelprotocol or 'HTTPS3' in proxytunnelprotocol
     curl(box, "client", prot, http2=http2, http3=http3)
 
+def openvpn_connect(box, vm: str):
+    box.ssh(vm, "sudo openvpn --config /vagrant/config/client.conf --daemon")
 
 def _experiment(box, proxytype: str, proxytunnelprotocol: str, proxysoftware: str):
     __start_pcap_capture(box, "client", "eth1", "/vagrant/results/client.pcap")
     __start_pcap_capture(box, "proxy", "eth1", "/vagrant/results/proxy.pcap")
     __start_pcap_capture(box, "server", "eth1", "/vagrant/results/server.pcap")
 
-    if 'HTTP' in proxytype:
-        curl_request(proxytype, proxytunnelprotocol, box)
+    if proxysoftware == 'OpenVPN':
+        openvpn_connect(box, "client")
+    curl_request(proxytype, proxytunnelprotocol, box)
+
         
     __stop_pcap_capture(box, "client")
     __stop_pcap_capture(box, "proxy")
@@ -55,9 +59,9 @@ EXPERIMENTS = [
     ('HTTP1', 'HTTPS2', '3proxy'),
     ('HTTP1', 'HTTP2', 'squid'),
     ('HTTP1', 'HTTP2', '3proxy'),
-    ('HTTP1', 'HTTP3', '3proxy'),
+    ('HTTP1', 'HTTP3', '3proxy'), # todo: test
+    ('OpenVPN', 'HTTP1', 'OpenVPN'),
 ]
-
 
 
 def main():
@@ -95,8 +99,8 @@ def main():
             print("An error occurred: stopping all machines")
             print(e)
         finally:
-            #box.destroy()
             pass
+            #box.destroy()
 
 
 if __name__ == '__main__':

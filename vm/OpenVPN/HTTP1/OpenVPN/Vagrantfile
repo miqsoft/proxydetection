@@ -1,0 +1,47 @@
+Vagrant.configure("2") do |config|
+  # Client Machine
+  config.vm.define "client" do |client|
+    client.vm.box = "generic/alpine316"
+    client.vm.network "private_network", ip: "192.168.56.4"
+    client.vm.synced_folder "/home/miq/Documents/masterarbeit/proxydetection/server", "/vagrant/server"
+    client.vm.synced_folder "/home/miq/Documents/masterarbeit/proxydetection/pcaps/OpenVPN/HTTP1/OpenVPN", "/vagrant/results"
+    client.vm.synced_folder "./config", "/vagrant/config"
+
+    client.vm.provision "shell", inline: <<-SHELL
+      apk update
+      apk add openvpn tcpdump
+      modprobe tun
+    SHELL
+  end
+
+  # Proxy Machine
+  config.vm.define "proxy" do |proxy|
+    proxy.vm.box = "generic/debian12"
+    proxy.vm.network "private_network", ip: "192.168.56.5"
+    proxy.vm.synced_folder "/home/miq/Documents/masterarbeit/proxydetection/server", "/vagrant/server"
+    proxy.vm.synced_folder "/home/miq/Documents/masterarbeit/proxydetection/pcaps/OpenVPN/HTTP1/OpenVPN", "/vagrant/results"
+    proxy.vm.synced_folder "./config", "/vagrant/config"
+
+    proxy.vm.provision "shell", inline: <<-SHELL
+        apt update
+        apt install tcpdump -y
+        apt install openvpn -y
+        openvpn --config /vagrant/config/server.conf &
+    SHELL
+  end
+
+  # Server Machine
+  config.vm.define "server" do |server|
+    server.vm.box = "generic/alpine316"
+    server.vm.network "private_network", ip: "192.168.56.6"
+    server.vm.synced_folder "/home/miq/Documents/masterarbeit/proxydetection/server", "/vagrant/server"
+    server.vm.synced_folder "/home/miq/Documents/masterarbeit/proxydetection/pcaps/OpenVPN/HTTP1/OpenVPN", "/vagrant/results"
+
+    server.vm.provision "shell", inline: <<-SHELL
+      apk update
+      apk add tcpdump
+      apk add python3
+      sudo nohup python3 /vagrant/server/http1.py > /vagrant/results/server_out.log 2>&1 &
+    SHELL
+  end
+end
