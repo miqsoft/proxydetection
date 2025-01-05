@@ -32,6 +32,9 @@ def curl_request(proxytype, proxytunnelprotocol, box):
     http3 = 'HTTP3' in proxytunnelprotocol or 'HTTPS3' in proxytunnelprotocol
     curl(box, "client", prot, http2=http2, http3=http3)
 
+def custom_tcp_request(box):
+    box.ssh("client", "python3 /vagrant/client/tcp.py")
+
 def openvpn_connect(box, vm: str):
     box.ssh(vm, "sudo openvpn --config /vagrant/config/client.conf --daemon")
 
@@ -42,8 +45,10 @@ def _experiment(box, proxytype: str, proxytunnelprotocol: str, proxysoftware: st
 
     if proxysoftware == 'OpenVPN':
         openvpn_connect(box, "client")
-    curl_request(proxytype, proxytunnelprotocol, box)
-
+    if 'HTTP' in proxytunnelprotocol:
+        curl_request(proxytype, proxytunnelprotocol, box)
+    if proxytunnelprotocol == 'TCP':
+        custom_tcp_request(box)
         
     __stop_pcap_capture(box, "client")
     __stop_pcap_capture(box, "proxy")
@@ -60,12 +65,13 @@ EXPERIMENTS = [
     ('HTTP1', 'HTTP2', 'squid'),
     ('HTTP1', 'HTTP2', '3proxy'),
     ('HTTP1', 'HTTP3', '3proxy'), # todo: test
+    ('HTTP1', 'TCP', '3proxy'),
     ('OpenVPN', 'HTTP1', 'OpenVPN'),
 ]
 
 
 def main():
-    experiments = [EXPERIMENTS[-1]]
+    experiments = [EXPERIMENTS[-2]]
 
     for proxytype, proxytunnelprotocol, proxysoftware in experiments:
         subpath = f'{proxytype}/{proxytunnelprotocol}/{proxysoftware}'
