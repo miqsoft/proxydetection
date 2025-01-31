@@ -86,7 +86,7 @@ class Droplet:
 
 
 @contextmanager
-def create_droplet(droplet_config):
+def create_droplet(droplet_config: dict):
     ip_addr = droplet_config['ip']
     del droplet_config['ip']
     droplet = Droplet(**droplet_config)
@@ -113,3 +113,52 @@ def create_droplet(droplet_config):
     finally:
         droplet.destroy()
         print("\nDroplet destroyed.")
+
+
+@contextmanager
+def create_droplets(droplet_configs: dict):
+    droplets = {}
+    for name, config in droplet_configs.items():
+        config_without_ip = config.copy()
+        del config_without_ip['ip']
+        droplet = Droplet(**config_without_ip)
+        droplets[name] = droplet
+        droplet.create()
+        print(f"Droplet {name} created, waiting for it to be online...")
+
+    try:
+        seconds_waited = 0
+        all_active = False
+        while seconds_waited < 120:
+            all_active = True
+            for name, droplet in droplets.items():
+                if droplet.status() != 'active':
+                    all_active = False
+                    break
+            if all_active:
+                print("\nAll droplets are online.")
+                break
+
+            print(f"\rWaited seconds: {seconds_waited}", end="")
+            time.sleep(1)
+            seconds_waited += 1
+
+        for name, droplet in droplets.items():
+            ip_addr = droplet_configs[name]['ip']
+            droplet.assign_reserved_ip(ip_addr)
+            print(f"Assigned IP {ip_addr} to droplet {name}.")
+
+        if not all_active:
+            raise DigitalOceanException("Not all droplets became active in time.")
+        yield droplets
+
+    finally:
+        for name, droplet in droplets.items():
+            try:
+                droplet.destroy()
+                print(f"Droplet {name} destroyed.")
+            except DigitalOceanException as e:
+                print(f"Failed to destroy droplet {name}: {e}")
+                continue
+
+
