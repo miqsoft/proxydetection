@@ -1,52 +1,39 @@
-import digitalocean
-import os
-import time
-from contextlib import contextmanager
+from proxydetect.digitaloceanapi import create_droplet
 
-from dotenv import load_dotenv
-load_dotenv()
-DIGITAL_OCEAN_TOKEN = os.getenv('DIGITAL_OCEAN_TOKEN')
+RESERVED_IP = {
+    'proxy': '104.248.101.195',
+    'server': '68.183.243.119'
+}
 
+DNS = {
+    'proxy': 'proxy.labforensic.de',
+    'server': 'server.labforensic.de'
+}
 
-@contextmanager
-def create_droplet(name: str, ram: int = 4, cpu: int = 2, region: str = 'fra1'):
-    print(DIGITAL_OCEAN_TOKEN)
-    manager = digitalocean.Manager(token=DIGITAL_OCEAN_TOKEN)
-    keys = manager.get_all_sshkeys()
+SERVER_DROPLET = {
+    'name': 'server',
+    'ip': RESERVED_IP['server'],
+    'ram': 4,
+    'cpu': 2,
+    'region': 'fra1',
+}
 
-    droplet = digitalocean.Droplet(
-        token=DIGITAL_OCEAN_TOKEN,
-        name=name,
-        region=region,
-        image='ubuntu-24-04-x64',
-        size_slug=f's-{cpu}vcpu-{ram}gb',
-        backups=False,
-        keys=keys,
-    )
-
-    try:
-        droplet.create()
-        print("Droplet created, waiting to be online...")
-        seconds_waited = 0
-        while seconds_waited < 120:
-            droplet.load()
-            if droplet.status == 'active':
-                print("\nDroplet is online.")
-                break
-            print(f"\rWaited seconds: {seconds_waited}", end="")
-            time.sleep(1)
-            seconds_waited += 1
-        yield droplet
-
-    finally:
-        droplet.destroy()
-        print("\nDroplet destroyed.")
-
+PROXY_DROPLET = {
+    'name': 'server',
+    'ip': RESERVED_IP['server'],
+    'ram': 4,
+    'cpu': 2,
+    'region': 'fra1',
+}
 
 if __name__ == '__main__':
+    droplets = {
+        'server': SERVER_DROPLET,
+        # 'proxy': PROXY_DROPLET,
+    }
 
-    with create_droplet('test-droplet') as droplet:
-        # print droplet ip
-        print(f"Droplet IP: {droplet.ip_address}")
-        # wait for input to destroy the droplet
-        input("Press Enter to destroy the droplet...")
+    with create_droplet(SERVER_DROPLET) as server:
+        input("Press Enter to destroy droplets...")
+
+
+
