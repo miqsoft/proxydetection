@@ -2,11 +2,13 @@ import os
 from contextlib import contextmanager
 import time
 import pydo
+from pssh.clients import SSHClient
 
 from dotenv import load_dotenv
 load_dotenv()
 DIGITAL_OCEAN_TOKEN = os.getenv('DIGITAL_OCEAN_TOKEN')
 CLIENT = pydo.Client(DIGITAL_OCEAN_TOKEN)
+PKEY=os.getenv('SSH_PKEY')
 
 class DigitalOceanException(Exception):
     pass
@@ -83,7 +85,46 @@ class Droplet:
         self.ip = None
         self.reserved_ip = None
 
+    def ssh(self, command: str):
+        client = SSHClient(self.reserved_ip, user='root', pkey=PKEY)
+        host_output = client.run_command(command)
+        for line in host_output.stdout:
+            print(f"-:{self.reserved_ip}: {line}")
+        for line in host_output.stderr:
+            print(f"x:{self.reserved_ip}: {line}")
 
+    def scp_copy_file(self, source: str, dest: str, direction: str = 'to'):
+        if direction not in ['to', 'from']:
+            raise ValueError("direction must be 'to' or 'from'")
+        client = SSHClient(self.reserved_ip, user='root', pkey=PKEY)
+        if direction == 'to':
+            client.copy_file(source, dest)
+        else:
+            client.copy_remote_file(source, dest)
+
+    def scp_copy_dir(self, source: str, dest: str, direction: str = 'to'):
+        if direction not in ['to', 'from']:
+            raise ValueError("direction must be 'to' or 'from'")
+        client = SSHClient(self.reserved_ip, user='root', pkey=PKEY)
+        if direction == 'to':
+            client.copy_file(source, dest, recurse=True)
+        else:
+            client.copy_remote_file(source, dest, recurse=True)
+
+    def install_tcpdump(self):
+        self.ssh("apt update && apt install -y tcpdump")
+
+    def start_pcap(self, interface: str, outputfile: str, log: str = '/dev/null'):
+        self.ssh(f"nohup sudo tcpdump -i {interface} -w {outputfile} > {log} 2>&1 & sleep 1")
+
+    def stop_pcap(self):
+        self.ssh("killall tcpdump")
+
+    def __str__(self):
+        return f"Droplet {self.name} ({self.id})"
+
+    def __repr__(self):
+        return str(self)
 
 @contextmanager
 def create_droplet(droplet_config: dict):

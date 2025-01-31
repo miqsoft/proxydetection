@@ -1,5 +1,12 @@
+import time
+
 from proxydetect.digitaloceanapi import create_droplet, create_droplets
-import paramiko
+from vagrantapi import VagrantBox, render_vagrantfile
+from pathlib import Path
+import os
+
+from dotenv import load_dotenv
+load_dotenv()
 
 RESERVED_IP = {
     'proxy': '104.248.101.195',
@@ -27,13 +34,9 @@ PROXY_DROPLET = {
     'region': 'fra1',
 }
 
-
-def create_ssh_client(ip, username='root', key_filename='~/.ssh/id_ecdsa'):
-    client = paramiko.SSHClient()
-    key = paramiko.ECDSAKey.from_private_key_file(key_filename)
-    client.set_missing_host_key_policy(paramiko.WarningPolicy())
-    client.connect(ip, username=username, pkey=key)
-    return client
+CLIENT_VAGRANTDIR_MAP = {
+    'default': 'client/default/Vagrantfile',
+}
 
 
 if __name__ == '__main__':
@@ -41,12 +44,47 @@ if __name__ == '__main__':
         'server': SERVER_DROPLET,
         'proxy': PROXY_DROPLET,
     }
+    PROXY_DNS = DNS['proxy']
+    SERVER_DNS = DNS['server']
+    PROXY_IP = RESERVED_IP['proxy']
+    SERVER_IP = RESERVED_IP['server']
+    BASE_DIR = Path(os.getenv('BASE_DIR'))
+    RESULT_DIR = BASE_DIR/'pcaps'
+    RUN_DIR = BASE_DIR/'run'
+    RELAY_APP_DIR = BASE_DIR/'relay'/'3proxy'
+    SERVER_APP_DIR = BASE_DIR/'server'/'default'
+    render_vagrantfile(BASE_DIR/CLIENT_VAGRANTDIR_MAP['default'], RUN_DIR/'Vagrantfile', RESULT_DIR, BASE_DIR)
 
-    with create_droplets(droplets) as droplets:
-        ssh_proxy = create_ssh_client(RESERVED_IP['proxy'])
-        ssh_server = create_ssh_client(RESERVED_IP['server'])
+    with VagrantBox(RUN_DIR) as client, create_droplets(droplets) as droplets:
+        proxy = droplets['proxy']
+        server = droplets['server']
+
+        proxy.ssh('mkdir -p /app')
+        proxy.ssh('mkdir -p /output')
+        proxy.scp_copy_dir(RELAY_APP_DIR, '/app', direction='to')
+
+        server.ssh('mkdir -p /app')
+        server.ssh('mkdir -p /output')
+        server.scp_copy_dir(SERVER_APP_DIR, '/app', direction='to')
+
+        proxy.ssh('chmod +x /app/setup.sh && /app/setup.sh')
+        server.ssh('chmod +x /app/setup.sh && /app/setup.sh')
+
+        client.start_pcap('eth0', '/vagrant/results/client.pcap', log='/vagrant/results/tcpdump_client.log')
+        proxy.start_pcap('eth0', '/output/proxy.pcap', log='/output/tcpdump_proxy.log')
+        server.start_pcap('eth0', '/output/server.pcap', log='/output/tcpdump_server.log')
 
         input("Press Enter to destroy droplets...")
+
+        client.ssh(f'export http_proxy=http://{PROXY_IP}:3128 && curl -v http://{SERVER_IP}')
+
+        client.stop_pcap()
+        proxy.stop_pcap()
+        server.stop_pcap()
+
+        proxy.scp_copy_file('/output/proxy.pcap', RESULT_DIR/'proxy.pcap', direction='from')
+        server.scp_copy_file('/output/server.pcap', RESULT_DIR/'server.pcap', direction='from')
+
 
 
 

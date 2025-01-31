@@ -1,0 +1,13 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "client" do |client|
+    client.vm.box = "generic/alpine316"
+    client.vm.synced_folder "{{ result_dir }}", "/vagrant/results"
+    client.vm.synced_folder "{{ base_dir }}/client", "/app"
+
+    client.vm.provision "shell", inline: <<-SHELL
+      apk update
+      apk add curl
+      apk add tcpdump
+    SHELL
+  end
+end
