@@ -1,5 +1,4 @@
 import time
-
 from proxydetect.digitaloceanapi import create_droplet, create_droplets
 from vagrantapi import VagrantBox, render_vagrantfile
 from pathlib import Path
@@ -55,6 +54,15 @@ if __name__ == '__main__':
     SERVER_APP_DIR = BASE_DIR/'server'/'default'
     render_vagrantfile(BASE_DIR/CLIENT_VAGRANTDIR_MAP['default'], RUN_DIR/'Vagrantfile', RESULT_DIR, BASE_DIR)
 
+    # with VagrantBox(RUN_DIR) as client:
+    #     client.start_pcap('eth0', '/vagrant/results/client.pcap', log='/vagrant/results/tcpdump_client.log')
+    #     print('client: capture started')
+    #
+    #     input('Press Enter to stop capture')
+    #
+    #     client.stop_pcap()
+
+
     with VagrantBox(RUN_DIR) as client, create_droplets(droplets) as droplets:
         proxy = droplets['proxy']
         server = droplets['server']
@@ -67,23 +75,32 @@ if __name__ == '__main__':
         server.ssh('mkdir -p /output')
         server.scp_copy_dir(SERVER_APP_DIR, '/app', direction='to')
 
-        proxy.ssh('chmod +x /app/setup.sh && /app/setup.sh')
+        # remove crlf from scripts (for windows)
+        proxy.ssh(r"sed -i 's/\r$//' /app/setup.sh")
+        proxy.ssh("chmod +x /app/setup.sh && /app/setup.sh")
+        server.ssh(r"sed -i 's/\r$//' /app/setup.sh")
         server.ssh('chmod +x /app/setup.sh && /app/setup.sh')
 
         client.start_pcap('eth0', '/vagrant/results/client.pcap', log='/vagrant/results/tcpdump_client.log')
+        print('client: capture started')
         proxy.start_pcap('eth0', '/output/proxy.pcap', log='/output/tcpdump_proxy.log')
+        print('proxy: capture started')
         server.start_pcap('eth0', '/output/server.pcap', log='/output/tcpdump_server.log')
+        print('server: capture started')
 
-        input("Press Enter to destroy droplets...")
-
+        print(f'client: run - export http_proxy=http://{PROXY_IP}:3128 && curl -v http://{SERVER_IP}')
         client.ssh(f'export http_proxy=http://{PROXY_IP}:3128 && curl -v http://{SERVER_IP}')
+        print('client: request sent')
 
         client.stop_pcap()
+        print('client: capture stopped')
         proxy.stop_pcap()
+        print('proxy: capture stopped')
         server.stop_pcap()
+        print('server: capture stopped')
 
-        proxy.scp_copy_file('/output/proxy.pcap', RESULT_DIR/'proxy.pcap', direction='from')
-        server.scp_copy_file('/output/server.pcap', RESULT_DIR/'server.pcap', direction='from')
+        proxy.scp_copy_file('/output/proxy.pcap', (RESULT_DIR/'proxy.pcap').as_posix(), direction='from')
+        server.scp_copy_file('/output/server.pcap', (RESULT_DIR/'server.pcap').as_posix(), direction='from')
 
 
 

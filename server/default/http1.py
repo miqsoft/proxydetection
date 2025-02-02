@@ -12,18 +12,20 @@ HOST = "0.0.0.0"
 PORT = 80
 
 class CustomHandler(BaseHTTPRequestHandler):
+    protocol_version = "HTTP/1.1"  # 🔥 Use HTTP/1.1
+
     def do_GET(self):
-        # Set HTTP status code
+        response_body = RESPONSE.encode()
         self.send_response(200)
-        # Set headers
         self.send_header("Content-type", "text/html")
+        self.send_header("Content-Length", str(len(response_body)))  # 🔥 Add Content-Length
+        self.send_header("Connection", "keep-alive")
         self.end_headers()
-        # Write a simple response
-        self.wfile.write(RESPONSE.encode())
+        self.wfile.write(response_body)
 
     def log_message(self, format, *args):
-        # Optional: Log requests to stdout
         print(f"{self.address_string()} - {format % args}")
+
 
 
 

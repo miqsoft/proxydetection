@@ -12,6 +12,8 @@ click = "^8.1.7"
 python-vagrant = "^1.0.0"
 python-digitalocean = "^1.17.0"
 python-dotenv = "^1.0.1"
+pydo = "^0.8.0"
+parallel-ssh = "^2.13.0"
 
 
 [tool.poetry.scripts]

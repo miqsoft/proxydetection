@@ -58,7 +58,7 @@ class Droplet:
             "ssh_keys": [key['id'] for key in keys],
         }
         resp = CLIENT.droplets.create(body=droplet)
-        if not 'droplet' in resp:
+        if 'droplet' not in resp:
             raise DigitalOceanException("Failed to create droplet.")
         self.id = resp['droplet']['id']
 
@@ -72,7 +72,7 @@ class Droplet:
             "type": "assign"
         }
         resp = CLIENT.reserved_ips_actions.post(reserved_ip=ip, body=req)
-        if not 'action' in resp:
+        if 'action' not in resp:
             raise DigitalOceanException("Failed to assign IP to droplet.")
         action_id = resp['action']['id']
         _wait_for_action(action_id)
@@ -115,7 +115,7 @@ class Droplet:
         self.ssh("apt update && apt install -y tcpdump")
 
     def start_pcap(self, interface: str, outputfile: str, log: str = '/dev/null'):
-        self.ssh(f"nohup sudo tcpdump -i {interface} -w {outputfile} > {log} 2>&1 & sleep 1")
+        self.ssh(f"nohup sudo tcpdump -i {interface} -w {outputfile} > {log} 2>&1 & disown")
 
     def stop_pcap(self):
         self.ssh("killall tcpdump")
@@ -171,11 +171,10 @@ def create_droplets(droplet_configs: dict):
         seconds_waited = 0
         all_active = False
         while seconds_waited < 120:
-            all_active = True
-            for name, droplet in droplets.items():
-                if droplet.status() != 'active':
-                    all_active = False
-                    break
+            all_active = all(
+                droplet.status() == 'active'
+                for name, droplet in droplets.items()
+            )
             if all_active:
                 print("\nAll droplets are online.")
                 break
