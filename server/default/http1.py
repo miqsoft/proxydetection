@@ -7,9 +7,9 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
-RESPONSE="Hello, HTTP1!"
+RESPONSE="Hello, HTTP1.1!"
 HOST = "0.0.0.0"
-PORT = 80
+PORT = 8000
 
 class CustomHandler(BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"  # 🔥 Use HTTP/1.1

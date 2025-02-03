@@ -1,0 +1,13 @@
+[Unit]
+Description=Simple HTTP/2 server with TLS
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /app/https2.py
+WorkingDirectory=/app
+Restart=always
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target

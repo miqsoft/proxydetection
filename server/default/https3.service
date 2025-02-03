@@ -1,0 +1,13 @@
+[Unit]
+Description=Simple HTTP/3 server with TLS
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /app/https3.py
+WorkingDirectory=/app
+Restart=always
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
