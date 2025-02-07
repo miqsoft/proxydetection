@@ -2,11 +2,12 @@ import asyncio
 import logging
 from pathlib import Path
 
-from aioquic.asyncio import serve, QuicConnectionProtocol
+from aioquic.asyncio import QuicConnectionProtocol, serve
+from aioquic.h3.connection import H3Connection, H3_ALPN
+from aioquic.h3.events import H3Event, HeadersReceived
 from aioquic.quic.configuration import QuicConfiguration
-from aioquic.quic.events import StreamDataReceived
+from aioquic.quic.events import ProtocolNegotiated, QuicEvent
 
-# Logging setup
 LOG_FILENAME = "/output/server_http3.log"
 logging.basicConfig(
     filename=LOG_FILENAME,
@@ -14,48 +15,64 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
-# Constants
-PORT = 8002
+# Server configuration
 HOST = "0.0.0.0"
-
+PORT = 8002
 CERTFILE = Path("/cert/cert.pem")
 KEYFILE = Path("/cert/key.pem")
 
-class EchoQuicConnectionProtocol(QuicConnectionProtocol):
+
+class HttpServerProtocol(QuicConnectionProtocol):
     """
-    Echoes back any data received on a stream.
+    A very basic HTTP/3 protocol that replies to all requests with a plain text message.
     """
 
-    def quic_event_received(self, event):
-        if isinstance(event, StreamDataReceived):
-            # Echo back the data on the same stream
-            self._quic.send_stream_data(
-                stream_id=event.stream_id,
-                data=event.data,
-                end_stream=event.end_stream,
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._http = None  # Will hold the H3Connection once ALPN negotiation succeeds
+
+    def quic_event_received(self, event: QuicEvent):
+        # When the protocol is negotiated, initialize the HTTP/3 layer.
+        if isinstance(event, ProtocolNegotiated):
+            self._http = H3Connection(self._quic)
+
+        if self._http is None:
+            return
+
+        # Let the H3Connection convert QUIC events to HTTP/3 events.
+        for http_event in self._http.handle_event(event):
+            self.handle_http_event(http_event)
+
+    def handle_http_event(self, event: H3Event):
+        # When headers are received, immediately respond.
+        if isinstance(event, HeadersReceived):
+            stream_id = event.stream_id
+            headers = [
+                (b":status", b"200"),
+                (b"content-type", b"text/plain"),
+            ]
+            self._http.send_headers(stream_id=stream_id, headers=headers)
+            self._http.send_data(
+                stream_id=stream_id, data=b"Hello, world!", end_stream=True
             )
+            self.transmit()
 
 
-async def run_server(host, port, cert, key):
-    configuration = QuicConfiguration(
-        is_client=False,
-        alpn_protocols=["h3"],  # or "h3" depending on your use
-        certificate=cert,
-        private_key=key,
-    )
+async def main():
+    # Create and configure the QUIC configuration.
+    configuration = QuicConfiguration(is_client=False)
+    configuration.alpn_protocols = H3_ALPN  # Enable HTTP/3 ALPNs
+    configuration.load_cert_chain(CERTFILE, KEYFILE)
 
-    # Start the QUIC server
+    # Start the server. The serve() call returns after binding, so we wait forever.
     await serve(
-        host=host,
-        port=port,
+        HOST,
+        PORT,
         configuration=configuration,
-        create_protocol=EchoQuicConnectionProtocol,
+        create_protocol=HttpServerProtocol,
     )
-
-
-def main():
-    asyncio.run(run_server(HOST, PORT, CERTFILE, KEYFILE))
+    await asyncio.Future()  # Run forever
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

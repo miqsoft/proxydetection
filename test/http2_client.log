@@ -11,7 +11,7 @@
 > HTTP2-Settings: AAMAAABkAAQAoAAAAAIAAAAA
 > 
 < HTTP/1.1 101 
-< date: Fri, 07 Feb 2025 15:14:44 GMT
+< date: Fri, 07 Feb 2025 16:31:36 GMT
 < server: hypercorn-h11
 < connection: upgrade
 < upgrade: h2c
@@ -19,10 +19,10 @@
 < HTTP/2 200 
 < content-type: text/html; charset=utf-8
 < content-length: 13
-< date: Fri, 07 Feb 2025 15:14:44 GMT
+< date: Fri, 07 Feb 2025 16:31:36 GMT
 < server: hypercorn-h2
 < 
 { [13 bytes data]
-100    13  100    13    0     0    194      0 --:--:-- --:--:-- --:--:--   196
+100    13  100    13    0     0    170      0 --:--:-- --:--:-- --:--:--   173
 * Connection #0 to host 68.183.243.119 left intact
 Hello, HTTP2!
