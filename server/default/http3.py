@@ -10,7 +10,6 @@ from aioquic.h3.events import DataReceived, HeadersReceived, H3Event
 
 # Logging setup
 LOG_FILENAME = "/output/server_http3.log"
-LOG_FILENAME = "../server_http3.log"
 logging.basicConfig(
     filename=LOG_FILENAME,
     level=logging.INFO,
@@ -24,8 +23,6 @@ RESPONSE_BODY = "Hello, HTTP3!"
 
 CERTFILE = Path("/cert/cert.pem")
 KEYFILE = Path("/cert/key.pem")
-CERTFILE = Path("../../cert/cert.pem")
-KEYFILE = Path("../../cert/key.pem")
 
 
 class Http3ServerProtocol(QuicConnectionProtocol):

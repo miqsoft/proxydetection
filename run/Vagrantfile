@@ -1,9 +1,9 @@
 Vagrant.configure("2") do |config|
   config.vm.define "client" do |client|
     client.vm.box = "generic/alpine316"
-    client.vm.synced_folder "X:/Masterarbeit/Repo/test", "/output"
-    client.vm.synced_folder "X:/Masterarbeit/Repo/client/default", "/app"
-    client.vm.synced_folder "X:/Masterarbeit/Repo/cert", "/cert"
+    client.vm.synced_folder "/home/miq/Documents/masterarbeit/proxydetection/test", "/output"
+    client.vm.synced_folder "/home/miq/Documents/masterarbeit/proxydetection/client/default", "/app"
+    client.vm.synced_folder "/home/miq/Documents/masterarbeit/proxydetection/cert", "/cert"
 
     client.vm.provision "shell", inline: <<-SHELL
       sudo apk update
