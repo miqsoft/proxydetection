@@ -1,14 +1,16 @@
 import asyncio
-from aioquic.asyncio import QuicConnectionProtocol, serve
-from aioquic.quic.configuration import QuicConfiguration
-from aioquic.quic.events import HandshakeCompleted, StreamDataReceived
-
 import logging
+from pathlib import Path
+
+from aioquic.asyncio import serve, QuicConnectionProtocol
+from aioquic.quic.configuration import QuicConfiguration
+from aioquic.h3.connection import H3Connection, H3_ALPN
+from aioquic.h3.events import DataReceived, HeadersReceived, H3Event
 
 # Logging setup
-log_filename = "/output/server.log"
+LOG_FILENAME = "/output/server_http3.log"
 logging.basicConfig(
-    filename=log_filename,
+    filename=LOG_FILENAME,
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
@@ -17,53 +19,75 @@ logging.basicConfig(
 PORT = 8002
 HOST = "0.0.0.0"
 RESPONSE_BODY = "Hello, HTTP3!"
-RESPONSE = (
-    "HTTP/3 200 OK\r\n"
-    "Content-Type: text/plain\r\n"
-    f"Content-Length: {len(RESPONSE_BODY)}\r\n\r\n"
-    f"{RESPONSE_BODY}"
-)
+
+CERTFILE = Path("/cert/server.pem")
+KEYFILE = Path("/cert/server.pem")
 
 
 class Http3ServerProtocol(QuicConnectionProtocol):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.handshake_complete = False
+        # Create an HTTP/3 connection to manage HTTP/3 frames.
+        self._http = H3Connection(self._quic)
 
     def quic_event_received(self, event):
-        if isinstance(event, HandshakeCompleted):
-            self.handshake_complete = True
-            logging.info("Handshake completed with %s", self._quic.peer_address)
-
-        elif isinstance(event, StreamDataReceived):
-            stream_id = event.stream_id
-            try:
-                data = event.data.decode()
+        # Feed the event into the HTTP/3 connection.
+        http_events = self._http.handle_event(event)
+        for http_event in http_events:
+            if isinstance(http_event, HeadersReceived):
+                stream_id = http_event.stream_id
+                headers = [(name.decode(), value.decode()) for name, value in http_event.headers]
+                logging.info("Received headers on stream %d: %s", stream_id, headers)
+                # Prepare an HTTP/3 response.
+                response_headers = [
+                    (b":status", b"200"),
+                    (b"content-type", b"text/plain"),
+                    (b"content-length", str(len(RESPONSE_BODY)).encode()),
+                ]
+                self._http.send_headers(stream_id, response_headers)
+            elif isinstance(http_event, DataReceived):
+                stream_id = http_event.stream_id
+                data = http_event.data.decode(errors="replace")
                 logging.info("Received data on stream %d: %s", stream_id, data)
-
-                if self.handshake_complete:
-                    # Respond with a simple HTTP/3 response
-                    self._quic.send_stream_data(
-                        stream_id, RESPONSE.encode(), end_stream=True
-                    )
+                # For simplicity, we ignore request body data in this example.
+                if http_event.stream_ended:
+                    # Send the response body.
+                    self._http.send_data(stream_id, RESPONSE_BODY.encode(), end_stream=True)
                     logging.info("Sent response on stream %d", stream_id)
-            except Exception as e:
-                logging.error("Error handling stream %d: %s", stream_id, e)
+        # Transmit any pending data.
+        self.transmit()
 
 
 async def main():
-    configuration = QuicConfiguration(is_client=False)
+    configuration = QuicConfiguration(
+        is_client=False,
+        alpn_protocols=H3_ALPN,  # Ensure HTTP/3 ALPN is set
+    )
+    try:
+        configuration.load_cert_chain(certfile=CERTFILE, keyfile=KEYFILE)
+    except FileNotFoundError:
+        logging.error("Certificate or key file not found. Ensure the cert files exist.")
+        return
 
     logging.info("Starting HTTP/3 server on %s:%d", HOST, PORT)
+
     await serve(
-        (HOST, PORT),
+        HOST,
+        PORT,
         configuration=configuration,
         create_protocol=Http3ServerProtocol,
     )
 
-
 if __name__ == "__main__":
     try:
-        asyncio.run(main())
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+        loop.run_until_complete(main())
+        loop.run_forever()
     except KeyboardInterrupt:
         logging.info("Server stopped.")
+    except Exception as e:
+        logging.error("Unexpected error: %s", e)

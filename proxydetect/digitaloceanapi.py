@@ -3,6 +3,7 @@ from contextlib import contextmanager
 import time
 import pydo
 from pssh.clients import SSHClient
+import azure.core.exceptions
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -71,7 +72,16 @@ class Droplet:
             "droplet_id": self.id,
             "type": "assign"
         }
-        resp = CLIENT.reserved_ips_actions.post(reserved_ip=ip, body=req)
+        # used to avoid azure.core.exceptions.HttpResponseError: (None) Droplet already has a pending event.
+        for attempt in range(5):
+            try:
+                resp = CLIENT.reserved_ips_actions.post(reserved_ip=ip, body=req)
+                break
+            except azure.core.exceptions.HttpResponseError as e:
+                if "pending event" in str(e):
+                    time.sleep(2)
+                else:
+                    raise
         if 'action' not in resp:
             raise DigitalOceanException("Failed to assign IP to droplet.")
         action_id = resp['action']['id']

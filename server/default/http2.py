@@ -4,9 +4,9 @@ from hypercorn.config import Config
 from hypercorn.asyncio import serve
 import logging
 
-log_filename = "/output/server.log"
+LOG_FILENAME = "/output/server_http2.log"
 logging.basicConfig(
-    filename=log_filename,
+    filename=LOG_FILENAME,
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )

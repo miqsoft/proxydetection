@@ -3,7 +3,7 @@ Description=Simple HTTP/2 server
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/python3 /app/http2.py
+ExecStart=/root/venv/bin/python /app/http2.py
 WorkingDirectory=/app
 Restart=always
 User=root

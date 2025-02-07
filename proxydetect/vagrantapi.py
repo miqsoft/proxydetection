@@ -12,6 +12,7 @@ def render_vagrantfile(template: Path, output: Path, result_dir: Path, base_dir:
 
 
 class VagrantBox:
+    name = 'client'
     box: vagrant.Vagrant
 
     def __init__(self, path: Path):
@@ -28,7 +29,7 @@ class VagrantBox:
         self.ssh("sudo killall tcpdump")
 
     def ssh(self, command):
-        self.box.ssh('client', command)
+        self.box.ssh(self.name, command)
 
     def __enter__(self):
         self.box.up()

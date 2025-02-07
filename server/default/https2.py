@@ -4,7 +4,7 @@ from hypercorn.config import Config
 from hypercorn.asyncio import serve
 
 # Configure logging
-LOG_FILENAME = "/vagrant/results/server.log"
+LOG_FILENAME = "/output/server_https2.log"
 logging.basicConfig(
     filename=LOG_FILENAME,
     level=logging.INFO,
@@ -14,8 +14,8 @@ logging.basicConfig(
 # Constants
 PORT = 4001
 HOST = "0.0.0.0"
-CERTFILE = "/vagrant/server/cert/server.pem"  # Path to SSL certificate
-KEYFILE = "/vagrant/server/cert/server.pem"  # Path to SSL key
+CERTFILE = "/cert/server.pem"
+KEYFILE = "/cert/server.pem"
 
 # Create a Quart app
 app = Quart(__name__)

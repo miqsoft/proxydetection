@@ -1,9 +1,9 @@
 [Unit]
-Description=Simple WebSockets server
+Description=Simple secure WebSockets server
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/python3 /app/websockets.py
+ExecStart=/root/venv/bin/python /app/secure_websockets.py
 WorkingDirectory=/app
 Restart=always
 User=root

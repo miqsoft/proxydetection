@@ -1,9 +1,9 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import logging
 
-log_filename = "/output/server.log"
+LOG_FILENAME = "../server_http1.log"
 logging.basicConfig(
-    filename=log_filename,
+    filename=LOG_FILENAME,
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
@@ -18,8 +18,8 @@ class CustomHandler(BaseHTTPRequestHandler):
         response_body = RESPONSE.encode()
         self.send_response(200)
         self.send_header("Content-type", "text/html")
-        self.send_header("Content-Length", str(len(response_body)))  # 🔥 Add Content-Length
-        self.send_header("Connection", "keep-alive")
+        self.send_header("Content-Length", str(len(response_body)))
+        self.send_header("Connection", "close")
         self.end_headers()
         self.wfile.write(response_body)
 

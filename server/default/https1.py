@@ -4,7 +4,7 @@ import logging
 from socketserver import ThreadingMixIn
 
 # Configure logging
-LOG_FILENAME = "/output/server.log"
+LOG_FILENAME = "/output/server_https1.log"
 logging.basicConfig(
     filename=LOG_FILENAME,
     level=logging.INFO,
@@ -15,8 +15,8 @@ logging.basicConfig(
 RESPONSE = "Hello, HTTP1.1 with TLS!"
 HOST = "0.0.0.0"
 PORT = 4000
-CERTFILE = "/app/cert/server.pem"
-KEYFILE = "/app/cert/server.pem"
+CERTFILE = "/cert/server.pem"
+KEYFILE = "/cert/server.pem"
 
 
 class SimpleHTTPRequestHandler(http.server.BaseHTTPRequestHandler):

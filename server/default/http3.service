@@ -1,9 +1,9 @@
 [Unit]
-Description=Simple HTTP/2 server
+Description=Simple HTTP/3 server
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/python3 /app/http3.py
+ExecStart=/root/venv/bin/python /app/http3.py
 WorkingDirectory=/app
 Restart=always
 User=root
