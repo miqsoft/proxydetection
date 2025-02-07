@@ -14,3 +14,7 @@ ConnectionError
 2025-02-07 16:34:38,456 - ERROR - Future exception was never retrieved
 future: <Future finished exception=ConnectionError()>
 ConnectionError
+2025-02-07 18:10:35,954 - INFO - [71fbd8c4f932c07d] Connection close sent (code 0x0, reason )
+2025-02-07 18:10:36,556 - ERROR - Future exception was never retrieved
+future: <Future finished exception=ConnectionError()>
+ConnectionError

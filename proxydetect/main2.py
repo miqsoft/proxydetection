@@ -39,6 +39,7 @@ class TrafficCapture:
 def _test_client_server(server: str, output_dir: Path):
     server_app_dir = BASE_DIR/'server'/server
     render_vagrantfile(BASE_DIR/CLIENT_VAGRANTDIR_MAP[server], RUN_DIR/'Vagrantfile', output_dir, BASE_DIR)
+    return
     with VagrantBox(RUN_DIR) as client:
         with create_droplet(SERVER_DROPLET) as server:
             try:
