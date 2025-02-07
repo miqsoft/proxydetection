@@ -14,8 +14,8 @@ logging.basicConfig(
 # Constants
 PORT = 4001
 HOST = "0.0.0.0"
-CERTFILE = "/cert/server.pem"
-KEYFILE = "/cert/server.pem"
+CERTFILE = "/cert/cert.pem"
+KEYFILE = "/cert/key.pem"
 
 # Create a Quart app
 app = Quart(__name__)

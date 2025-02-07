@@ -13,8 +13,8 @@ logging.basicConfig(
 
 PORT = 8101
 HOST = "0.0.0.0"
-CERTFILE = "/app/cert/server.pem"
-KEYFILE = "/app/cert/server.pem"
+CERTFILE = "/cert/cert.pem"
+KEYFILE = "/cert/key.pem"
 
 ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
 ssl_context.load_cert_chain(certfile=CERTFILE, keyfile=KEYFILE)

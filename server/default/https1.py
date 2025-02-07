@@ -15,8 +15,8 @@ logging.basicConfig(
 RESPONSE = "Hello, HTTP1.1 with TLS!"
 HOST = "0.0.0.0"
 PORT = 4000
-CERTFILE = "/cert/server.pem"
-KEYFILE = "/cert/server.pem"
+CERTFILE = "/cert/cert.pem"
+KEYFILE = "/cert/key.pem"
 
 
 class SimpleHTTPRequestHandler(http.server.BaseHTTPRequestHandler):

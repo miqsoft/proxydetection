@@ -22,7 +22,7 @@ class TrafficCapture:
     def __init__(self, obj, interface, output_filename, log=None):
         self.obj = obj
         self.interface = interface
-        self.output_file = '/output/' + output_filename
+        self.output_file = f'/output/{output_filename}'
         self.log = log
 
     def __enter__(self):
@@ -165,13 +165,13 @@ def _test_client_server(server: str, output_dir: Path):
                         client.ssh(command)
 
             except Exception as e:
-                print(f'exception occurred')
+                print('exception occurred')
                 raise e
             finally:
                 server.scp_copy_dir('/output/', output_dir, direction='from')
                 # copy all files from within output_dir/output to output_dir and remove output_dir/output
                 output_subdir = output_dir / 'output'
-                if output_subdir.exists() and output_subdir.is_dir():
+                if output_subdir.is_dir():
                     # Collect file paths first
                     files = list(output_subdir.iterdir())
 
@@ -239,6 +239,9 @@ def run_experiment(server: str, relay: str = None, relay_local: bool = True):
 
 if __name__ == '__main__':
     _test_client_server('default', BASE_DIR/'test')
+    # with VagrantBox(RUN_DIR) as client:
+    #     input('Press enter to continue')
+
 
 
 

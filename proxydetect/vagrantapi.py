@@ -3,12 +3,12 @@ from pathlib import Path
 import jinja2
 
 
-def render_vagrantfile(template: Path, output: Path, result_dir: Path, base_dir: Path):
+def render_vagrantfile(template: Path, output: Path, result_dir: Path, base_dir: Path, client='default'):
     with open(template) as f:
         content = f.read()
         template = jinja2.Template(content)
         with open(output, 'w') as f:
-            f.write(template.render(result_dir=result_dir.absolute().as_posix(), base_dir=base_dir.absolute().as_posix()))
+            f.write(template.render(client=client, result_dir=result_dir.absolute().as_posix(), base_dir=base_dir.absolute().as_posix()))
 
 
 class VagrantBox:

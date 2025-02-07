@@ -9,44 +9,46 @@ from aioquic.quic.configuration import QuicConfiguration
 from aioquic.h3.connection import H3Connection, H3_ALPN
 from aioquic.h3.events import DataReceived, HeadersReceived
 
+
 class HTTP3Client(QuicConnectionProtocol):
+    """
+    HTTP/3 client that sends a GET request and prints any response headers and body.
+    """
     def __init__(self, quic_connection, host: str, path: str):
         super().__init__(quic_connection)
         self._host = host
         self._path = path
-        # Initialize HTTP/3: this will automatically create the client control stream and QPACK streams.
         self._http = H3Connection(self._quic)
         self._stream_id = None
-
-        # Attributes to store response data
         self.response_headers = None
         self.response_body = b""
 
     def quic_event_received(self, event) -> None:
-        # Process QUIC events through the HTTP/3 layer and get HTTP/3 events.
+        """Process incoming QUIC events and route HTTP/3 frames."""
         http_events = self._http.handle_event(event)
         for http_event in http_events:
-            print("HTTP event:", http_event)
             if isinstance(http_event, HeadersReceived):
-                # Decode headers from bytes to strings.
+                # Store or print received headers
                 self.response_headers = [
                     (name.decode(), value.decode()) for name, value in http_event.headers
                 ]
-                print("Headers:", self.response_headers)
+                print("Received Headers:", self.response_headers)
+
             elif isinstance(http_event, DataReceived):
-                # Append data to the response body.
                 self.response_body += http_event.data
-                print("Received data chunk:", http_event.data.decode(errors='replace'))
+                print("Received Data Chunk:", http_event.data.decode(errors='replace'))
+
                 if http_event.stream_ended:
-                    # The stream is finished; print the full response.
-                    print("\nFull response body:")
+                    print("\nFull Response Body:")
                     print(self.response_body.decode(errors='replace'))
-                    # Optionally, close the connection after receiving the full response.
+                    # Close the connection once we've received the full response
                     self._quic.close(error_code=0, reason_phrase="done")
 
     def send_request(self, data: bytes = None) -> None:
-        # Open a client-initiated bidirectional stream.
-        self._stream_id = self._quic.get_next_available_stream_id(is_unidirectional=False)
+        """Send an HTTP/3 GET request (optionally with a body)."""
+        if self._stream_id is None:
+            # Reserve a bidirectional stream
+            self._stream_id = self._quic.get_next_available_stream_id(is_unidirectional=False)
 
         headers = [
             (b":method", b"GET"),
@@ -55,42 +57,71 @@ class HTTP3Client(QuicConnectionProtocol):
             (b":path", self._path.encode()),
             (b"user-agent", b"aioquic-client"),
         ]
+        # Send request headers
         self._http.send_headers(self._stream_id, headers, end_stream=(data is None))
-        if data is not None:
-            # Send the request data and mark the stream as ended.
+
+        # If there's body data, send it and end the stream
+        if data:
             self._http.send_data(self._stream_id, data, end_stream=True)
+
+        # Actually send the QUIC packets
         self.transmit()
 
-async def http3_request(url: str, msg: bytes = None) -> None:
+
+async def http3_request(url: str, msg: bytes = None):
+    """Perform an HTTP/3 GET request to the given URL, optionally with a body."""
     parsed = urlparse(url)
     host = parsed.hostname
     port = parsed.port or 443
     path = parsed.path or "/"
 
-    # Configure QUIC with HTTP/3 ALPN.
     configuration = QuicConfiguration(is_client=True)
-    # Set ALPN to the HTTP/3 values (this ensures the server will negotiate HTTP/3).
+    # Use HTTP/3 ALPN
     configuration.alpn_protocols = H3_ALPN
-    # Optionally disable certificate verification for testing purposes:
+    # For testing with self-signed certs, disable verification
     configuration.verify_mode = ssl.CERT_NONE
 
-    async with connect(
-        host,
-        port,
-        configuration=configuration,
-        create_protocol=lambda quic_conn, **kwargs: HTTP3Client(quic_conn, host, path)
-    ) as client:
-        if msg:
+    try:
+        print(f"Connecting to {host}:{port} via QUIC...")
+        async with connect(
+            host,
+            port,
+            configuration=configuration,
+            create_protocol=lambda quic_conn, **kwargs: HTTP3Client(quic_conn, host, path)
+        ) as client:
             client.send_request(data=msg)
-        else:
-            client.send_request()
-        # Wait long enough to allow the response to arrive.
-        await asyncio.sleep(10)
+
+            # Give some time for the response to come back
+            # You might want to monitor events more robustly in a real app
+            await asyncio.sleep(5)
+    except ConnectionError as e:
+        print(f"❌ QUIC Connection failed: {e}")
+    except Exception as e:
+        print(f"❌ Unexpected error: {e}")
+
+
+def run_client(url: str, msg: bytes = None):
+    """Run the client in an event loop that works for Windows and Unix."""
+    if sys.platform == "win32":
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    try:
+        loop.run_until_complete(http3_request(url, msg))
+    except KeyboardInterrupt:
+        print("\nClient interrupted.")
+    finally:
+        loop.run_until_complete(loop.shutdown_asyncgens())
+        loop.close()
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python client.py https://example.com/path")
+        print("Usage: python client.py https://localhost:8002")
         sys.exit(1)
+
     url = sys.argv[1]
+    # Optional body data
     msg = b"X"
-    asyncio.run(http3_request(url, msg))
+    run_client(url, msg)
