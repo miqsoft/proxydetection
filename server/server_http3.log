@@ -5,3 +5,11 @@
 2025-02-07 14:33:48,869 - INFO - Starting HTTP/3 server on 0.0.0.0:8002
 2025-02-07 15:49:09,404 - INFO - Starting HTTP/3 server on 0.0.0.0:8002
 2025-02-07 15:53:38,063 - INFO - Starting HTTP/3 server on 0.0.0.0:8002
+2025-02-07 15:55:56,865 - INFO - Starting HTTP/3 server on 0.0.0.0:8002
+2025-02-07 15:56:15,787 - INFO - [0c36ab54cc724d36] Negotiated protocol version 0x00000001 (VERSION_1)
+2025-02-07 15:56:15,793 - INFO - [0c36ab54cc724d36] ALPN negotiated protocol h3
+2025-02-07 15:56:15,795 - INFO - Received headers on stream 0: [(':method', 'GET'), (':scheme', 'https'), (':authority', 'localhost'), (':path', '/'), ('user-agent', 'aioquic-client')]
+2025-02-07 15:56:15,795 - INFO - Received data on stream 0: X
+2025-02-07 15:56:15,795 - INFO - Sent response on stream 0
+2025-02-07 15:56:15,796 - INFO - [0c36ab54cc724d36] Connection close received (code 0x0, reason done)
+2025-02-07 15:56:27,798 - INFO - Server stopped via KeyboardInterrupt.

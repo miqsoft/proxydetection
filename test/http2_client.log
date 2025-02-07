@@ -11,19 +11,18 @@
 > HTTP2-Settings: AAMAAABkAAQAoAAAAAIAAAAA
 > 
 < HTTP/1.1 101 
-< date: Fri, 07 Feb 2025 13:08:42 GMT
+< date: Fri, 07 Feb 2025 15:14:44 GMT
 < server: hypercorn-h11
 < connection: upgrade
 < upgrade: h2c
 * Received 101, Switching to HTTP/2
-* Copied HTTP/2 data in stream buffer to connection buffer after upgrade: len=51
 < HTTP/2 200 
 < content-type: text/html; charset=utf-8
 < content-length: 13
-< date: Fri, 07 Feb 2025 13:08:42 GMT
+< date: Fri, 07 Feb 2025 15:14:44 GMT
 < server: hypercorn-h2
 < 
 { [13 bytes data]
-100    13  100    13    0     0    177      0 --:--:-- --:--:-- --:--:--   178
+100    13  100    13    0     0    194      0 --:--:-- --:--:-- --:--:--   196
 * Connection #0 to host 68.183.243.119 left intact
 Hello, HTTP2!
