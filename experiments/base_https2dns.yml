@@ -1,0 +1,10 @@
+client:
+  default
+server:
+  default
+tested_server:
+  https2
+commands:
+  connect:
+  traffic:
+    - client: "curl --http2 -k -v https://server.labforensic.de:4001"

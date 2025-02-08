@@ -43,6 +43,7 @@ def _test_client_server(server: str, output_dir: Path):
     with VagrantBox(RUN_DIR) as client:
         with create_droplet(SERVER_DROPLET) as server:
             try:
+                server.ssh('apt update && apt install -y tcpdump')
                 server.ssh('mkdir -p /app')
                 server.ssh('mkdir -p /cert')
                 server.ssh('mkdir -p /output')

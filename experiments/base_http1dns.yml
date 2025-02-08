@@ -1,0 +1,10 @@
+client:
+  default
+server:
+  default
+tested_server:
+  http1
+commands:
+  connect:
+  traffic:
+    - client: "curl -v http://server.labforensic.de:8000"

@@ -1,10 +1,17 @@
+from pathlib import Path
+import os
+
+from dotenv import load_dotenv
+load_dotenv()
+
+
 RESERVED_IP = {
-    'proxy': '104.248.101.195',
+    'relay': '104.248.101.195',
     'server': '68.183.243.119'
 }
 
 DNS = {
-    'proxy': 'proxy.labforensic.de',
+    'relay': 'proxy.labforensic.de',
     'server': 'server.labforensic.de'
 }
 
@@ -16,15 +23,17 @@ SERVER_DROPLET = {
     'region': 'fra1',
 }
 
-PROXY_DROPLET = {
-    'name': 'proxy',
-    'ip': RESERVED_IP['proxy'],
+RELAY_DROPLET = {
+    'name': 'relay',
+    'ip': RESERVED_IP['relay'],
     'ram': 4,
     'cpu': 2,
     'region': 'fra1',
 }
 
-CLIENT_VAGRANTDIR_MAP = {
-    'default': 'client/default/Vagrantfile',
-}
 
+BASE_DIR = Path(os.getenv('BASE_DIR'))
+RUN_DIR = BASE_DIR / 'run'
+CERT_DIR = BASE_DIR / 'cert'
+SETUP_DIR = BASE_DIR / 'setups'
+DATA_DIR = BASE_DIR / 'data'

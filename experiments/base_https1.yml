@@ -1,0 +1,10 @@
+client:
+  default
+server:
+  default
+tested_server:
+  https1
+commands:
+  connect:
+  traffic:
+    - client: "curl -k -v https://68.183.243.119:4000"
