@@ -1,136 +1,23 @@
-2025-02-08 21:40:20,417 - INFO - [25d9911e5db8f506] Connection close sent (code 0x0, reason )
-2025-02-08 21:40:21,018 - ERROR - Future exception was never retrieved
-future: <Future finished exception=ConnectionError()>
-ConnectionError
-2025-02-08 21:48:52,870 - INFO - [3a6d674e159e4933] Connection close sent (code 0x0, reason )
-2025-02-08 21:48:53,472 - ERROR - Future exception was never retrieved
-future: <Future finished exception=ConnectionError()>
-ConnectionError
-2025-02-08 21:49:17,539 - INFO - [2bf9020b5e93960a] Connection close sent (code 0x0, reason )
-2025-02-08 21:49:18,140 - ERROR - Future exception was never retrieved
-future: <Future finished exception=ConnectionError()>
-ConnectionError
-2025-02-08 22:01:17,812 - DEBUG - Using selector: EpollSelector
-2025-02-08 22:01:17,833 - DEBUG - [9568ebfa3088a2cb] TLS State.CLIENT_HANDSHAKE_START -> State.CLIENT_EXPECT_SERVER_HELLO
-2025-02-08 22:01:18,037 - DEBUG - [9568ebfa3088a2cb] Loss detection triggered
-2025-02-08 22:01:18,038 - DEBUG - [9568ebfa3088a2cb] Scheduled CRYPTO data for retransmission
-2025-02-08 22:01:18,443 - DEBUG - [9568ebfa3088a2cb] Loss detection triggered
-2025-02-08 22:01:18,444 - DEBUG - [9568ebfa3088a2cb] Scheduled CRYPTO data for retransmission
-2025-02-08 22:01:19,246 - DEBUG - [9568ebfa3088a2cb] Loss detection triggered
-2025-02-08 22:01:19,246 - DEBUG - [9568ebfa3088a2cb] Scheduled CRYPTO data for retransmission
-2025-02-08 22:01:20,849 - DEBUG - [9568ebfa3088a2cb] Loss detection triggered
-2025-02-08 22:01:20,850 - DEBUG - [9568ebfa3088a2cb] Scheduled CRYPTO data for retransmission
-2025-02-08 22:01:24,054 - DEBUG - [9568ebfa3088a2cb] Loss detection triggered
-2025-02-08 22:01:24,055 - DEBUG - [9568ebfa3088a2cb] Scheduled CRYPTO data for retransmission
-2025-02-08 22:01:30,462 - DEBUG - [9568ebfa3088a2cb] Loss detection triggered
-2025-02-08 22:01:30,463 - DEBUG - [9568ebfa3088a2cb] Scheduled CRYPTO data for retransmission
-2025-02-08 22:01:43,278 - DEBUG - [9568ebfa3088a2cb] Loss detection triggered
-2025-02-08 22:01:43,279 - DEBUG - [9568ebfa3088a2cb] Scheduled CRYPTO data for retransmission
-2025-02-08 22:02:08,908 - DEBUG - [9568ebfa3088a2cb] Loss detection triggered
-2025-02-08 22:02:08,909 - DEBUG - [9568ebfa3088a2cb] Scheduled CRYPTO data for retransmission
-2025-02-08 22:02:17,837 - DEBUG - [9568ebfa3088a2cb] Discarding epoch Epoch.INITIAL
-2025-02-08 22:02:17,838 - DEBUG - [9568ebfa3088a2cb] Discarding epoch Epoch.HANDSHAKE
-2025-02-08 22:02:17,839 - DEBUG - [9568ebfa3088a2cb] Discarding epoch Epoch.ONE_RTT
-2025-02-08 22:02:17,839 - DEBUG - [9568ebfa3088a2cb] QuicConnectionState.FIRSTFLIGHT -> QuicConnectionState.TERMINATED
-2025-02-08 22:02:17,840 - DEBUG - Received QUIC event: ConnectionTerminated(error_code=<QuicErrorCode.INTERNAL_ERROR: 1>, frame_type=<QuicFrameType.PADDING: 0>, reason_phrase='Idle timeout')
-2025-02-08 22:03:56,775 - DEBUG - Using selector: EpollSelector
-2025-02-08 22:03:56,788 - DEBUG - [0a3e6c6e29596444] TLS State.CLIENT_HANDSHAKE_START -> State.CLIENT_EXPECT_SERVER_HELLO
-2025-02-08 22:03:56,990 - DEBUG - [0a3e6c6e29596444] Loss detection triggered
-2025-02-08 22:03:56,991 - DEBUG - [0a3e6c6e29596444] Scheduled CRYPTO data for retransmission
-2025-02-08 22:03:57,394 - DEBUG - [0a3e6c6e29596444] Loss detection triggered
-2025-02-08 22:03:57,394 - DEBUG - [0a3e6c6e29596444] Scheduled CRYPTO data for retransmission
-2025-02-08 22:03:58,198 - DEBUG - [0a3e6c6e29596444] Loss detection triggered
-2025-02-08 22:03:58,198 - DEBUG - [0a3e6c6e29596444] Scheduled CRYPTO data for retransmission
-2025-02-08 22:03:59,802 - DEBUG - [0a3e6c6e29596444] Loss detection triggered
-2025-02-08 22:03:59,803 - DEBUG - [0a3e6c6e29596444] Scheduled CRYPTO data for retransmission
-2025-02-08 22:04:03,008 - DEBUG - [0a3e6c6e29596444] Loss detection triggered
-2025-02-08 22:04:03,009 - DEBUG - [0a3e6c6e29596444] Scheduled CRYPTO data for retransmission
-2025-02-08 22:04:09,418 - DEBUG - [0a3e6c6e29596444] Loss detection triggered
-2025-02-08 22:04:09,419 - DEBUG - [0a3e6c6e29596444] Scheduled CRYPTO data for retransmission
-2025-02-08 22:04:22,234 - DEBUG - [0a3e6c6e29596444] Loss detection triggered
-2025-02-08 22:04:22,234 - DEBUG - [0a3e6c6e29596444] Scheduled CRYPTO data for retransmission
-2025-02-08 22:04:34,679 - INFO - [0a3e6c6e29596444] Connection close sent (code 0x0, reason )
-2025-02-08 22:04:34,679 - DEBUG - [0a3e6c6e29596444] QuicConnectionState.FIRSTFLIGHT -> QuicConnectionState.CLOSING
-2025-02-08 22:04:35,281 - DEBUG - [0a3e6c6e29596444] Discarding epoch Epoch.INITIAL
-2025-02-08 22:04:35,282 - DEBUG - [0a3e6c6e29596444] Discarding epoch Epoch.HANDSHAKE
-2025-02-08 22:04:35,282 - DEBUG - [0a3e6c6e29596444] Discarding epoch Epoch.ONE_RTT
-2025-02-08 22:04:35,283 - DEBUG - [0a3e6c6e29596444] QuicConnectionState.CLOSING -> QuicConnectionState.TERMINATED
-2025-02-08 22:04:35,283 - DEBUG - Received QUIC event: ConnectionTerminated(error_code=<QuicErrorCode.NO_ERROR: 0>, frame_type=None, reason_phrase='')
-2025-02-08 22:04:35,284 - ERROR - Future exception was never retrieved
-future: <Future finished exception=ConnectionError()>
-ConnectionError
-2025-02-08 22:04:55,918 - DEBUG - Using selector: EpollSelector
-2025-02-08 22:04:55,930 - DEBUG - [585fda1ab89262ea] TLS State.CLIENT_HANDSHAKE_START -> State.CLIENT_EXPECT_SERVER_HELLO
-2025-02-08 22:04:56,134 - DEBUG - [585fda1ab89262ea] Loss detection triggered
-2025-02-08 22:04:56,135 - DEBUG - [585fda1ab89262ea] Scheduled CRYPTO data for retransmission
-2025-02-08 22:04:56,540 - DEBUG - [585fda1ab89262ea] Loss detection triggered
-2025-02-08 22:04:56,541 - DEBUG - [585fda1ab89262ea] Scheduled CRYPTO data for retransmission
-2025-02-08 22:04:57,432 - DEBUG - [585fda1ab89262ea] Loss detection triggered
-2025-02-08 22:04:57,433 - DEBUG - [585fda1ab89262ea] Scheduled CRYPTO data for retransmission
-2025-02-08 22:04:59,037 - DEBUG - [585fda1ab89262ea] Loss detection triggered
-2025-02-08 22:04:59,038 - DEBUG - [585fda1ab89262ea] Scheduled CRYPTO data for retransmission
-2025-02-08 22:05:02,244 - DEBUG - [585fda1ab89262ea] Loss detection triggered
-2025-02-08 22:05:02,245 - DEBUG - [585fda1ab89262ea] Scheduled CRYPTO data for retransmission
-2025-02-08 22:05:08,654 - DEBUG - [585fda1ab89262ea] Loss detection triggered
-2025-02-08 22:05:08,655 - DEBUG - [585fda1ab89262ea] Scheduled CRYPTO data for retransmission
-2025-02-08 22:05:21,470 - DEBUG - [585fda1ab89262ea] Loss detection triggered
-2025-02-08 22:05:21,472 - DEBUG - [585fda1ab89262ea] Scheduled CRYPTO data for retransmission
-2025-02-08 22:05:47,099 - DEBUG - [585fda1ab89262ea] Loss detection triggered
-2025-02-08 22:05:47,100 - DEBUG - [585fda1ab89262ea] Scheduled CRYPTO data for retransmission
-2025-02-08 22:05:51,195 - INFO - [585fda1ab89262ea] Connection close sent (code 0x0, reason )
-2025-02-08 22:05:51,195 - DEBUG - [585fda1ab89262ea] QuicConnectionState.FIRSTFLIGHT -> QuicConnectionState.CLOSING
-2025-02-08 22:05:51,797 - DEBUG - [585fda1ab89262ea] Discarding epoch Epoch.INITIAL
-2025-02-08 22:05:51,797 - DEBUG - [585fda1ab89262ea] Discarding epoch Epoch.HANDSHAKE
-2025-02-08 22:05:51,798 - DEBUG - [585fda1ab89262ea] Discarding epoch Epoch.ONE_RTT
-2025-02-08 22:05:51,798 - DEBUG - [585fda1ab89262ea] QuicConnectionState.CLOSING -> QuicConnectionState.TERMINATED
-2025-02-08 22:05:51,799 - DEBUG - Received QUIC event: ConnectionTerminated(error_code=<QuicErrorCode.NO_ERROR: 0>, frame_type=None, reason_phrase='')
-2025-02-08 22:05:51,799 - ERROR - Future exception was never retrieved
-future: <Future finished exception=ConnectionError()>
-ConnectionError
-2025-02-08 22:06:22,605 - DEBUG - Using selector: EpollSelector
-2025-02-08 22:06:22,616 - DEBUG - [5969e8d140b46264] TLS State.CLIENT_HANDSHAKE_START -> State.CLIENT_EXPECT_SERVER_HELLO
-2025-02-08 22:06:22,818 - DEBUG - [5969e8d140b46264] Loss detection triggered
-2025-02-08 22:06:22,819 - DEBUG - [5969e8d140b46264] Scheduled CRYPTO data for retransmission
-2025-02-08 22:06:23,232 - DEBUG - [5969e8d140b46264] Loss detection triggered
-2025-02-08 22:06:23,232 - DEBUG - [5969e8d140b46264] Scheduled CRYPTO data for retransmission
-2025-02-08 22:06:24,035 - DEBUG - [5969e8d140b46264] Loss detection triggered
-2025-02-08 22:06:24,036 - DEBUG - [5969e8d140b46264] Scheduled CRYPTO data for retransmission
-2025-02-08 22:06:25,640 - DEBUG - [5969e8d140b46264] Loss detection triggered
-2025-02-08 22:06:25,641 - DEBUG - [5969e8d140b46264] Scheduled CRYPTO data for retransmission
-2025-02-08 22:06:28,843 - DEBUG - [5969e8d140b46264] Loss detection triggered
-2025-02-08 22:06:28,843 - DEBUG - [5969e8d140b46264] Scheduled CRYPTO data for retransmission
-2025-02-08 22:06:35,244 - DEBUG - [5969e8d140b46264] Loss detection triggered
-2025-02-08 22:06:35,245 - DEBUG - [5969e8d140b46264] Scheduled CRYPTO data for retransmission
-2025-02-08 22:06:45,015 - INFO - [5969e8d140b46264] Connection close sent (code 0x0, reason )
-2025-02-08 22:06:45,016 - DEBUG - [5969e8d140b46264] QuicConnectionState.FIRSTFLIGHT -> QuicConnectionState.CLOSING
-2025-02-08 22:06:45,617 - DEBUG - [5969e8d140b46264] Discarding epoch Epoch.INITIAL
-2025-02-08 22:06:45,618 - DEBUG - [5969e8d140b46264] Discarding epoch Epoch.HANDSHAKE
-2025-02-08 22:06:45,618 - DEBUG - [5969e8d140b46264] Discarding epoch Epoch.ONE_RTT
-2025-02-08 22:06:45,618 - DEBUG - [5969e8d140b46264] QuicConnectionState.CLOSING -> QuicConnectionState.TERMINATED
-2025-02-08 22:06:45,619 - DEBUG - Received QUIC event: ConnectionTerminated(error_code=<QuicErrorCode.NO_ERROR: 0>, frame_type=None, reason_phrase='')
-2025-02-08 22:06:45,619 - ERROR - Future exception was never retrieved
-future: <Future finished exception=ConnectionError()>
-ConnectionError
-2025-02-08 22:13:08,516 - DEBUG - Using selector: EpollSelector
-2025-02-08 22:13:08,534 - DEBUG - [19e7f13f67c4d492] TLS State.CLIENT_HANDSHAKE_START -> State.CLIENT_EXPECT_SERVER_HELLO
-2025-02-08 22:13:08,736 - DEBUG - [19e7f13f67c4d492] Loss detection triggered
-2025-02-08 22:13:08,741 - DEBUG - [19e7f13f67c4d492] Scheduled CRYPTO data for retransmission
-2025-02-08 22:13:09,143 - DEBUG - [19e7f13f67c4d492] Loss detection triggered
-2025-02-08 22:13:09,143 - DEBUG - [19e7f13f67c4d492] Scheduled CRYPTO data for retransmission
-2025-02-08 22:13:09,958 - DEBUG - [19e7f13f67c4d492] Loss detection triggered
-2025-02-08 22:13:09,959 - DEBUG - [19e7f13f67c4d492] Scheduled CRYPTO data for retransmission
-2025-02-08 22:13:11,563 - DEBUG - [19e7f13f67c4d492] Loss detection triggered
-2025-02-08 22:13:11,565 - DEBUG - [19e7f13f67c4d492] Scheduled CRYPTO data for retransmission
-2025-02-08 22:13:14,771 - DEBUG - [19e7f13f67c4d492] Loss detection triggered
-2025-02-08 22:13:14,772 - DEBUG - [19e7f13f67c4d492] Scheduled CRYPTO data for retransmission
-2025-02-08 22:13:21,174 - DEBUG - [19e7f13f67c4d492] Loss detection triggered
-2025-02-08 22:13:21,174 - DEBUG - [19e7f13f67c4d492] Scheduled CRYPTO data for retransmission
-2025-02-08 22:13:33,989 - DEBUG - [19e7f13f67c4d492] Loss detection triggered
-2025-02-08 22:13:33,989 - DEBUG - [19e7f13f67c4d492] Scheduled CRYPTO data for retransmission
-2025-02-08 22:13:59,596 - DEBUG - [19e7f13f67c4d492] Loss detection triggered
-2025-02-08 22:13:59,597 - DEBUG - [19e7f13f67c4d492] Scheduled CRYPTO data for retransmission
-2025-02-08 22:14:08,531 - DEBUG - [19e7f13f67c4d492] Discarding epoch Epoch.INITIAL
-2025-02-08 22:14:08,532 - DEBUG - [19e7f13f67c4d492] Discarding epoch Epoch.HANDSHAKE
-2025-02-08 22:14:08,532 - DEBUG - [19e7f13f67c4d492] Discarding epoch Epoch.ONE_RTT
-2025-02-08 22:14:08,532 - DEBUG - [19e7f13f67c4d492] QuicConnectionState.FIRSTFLIGHT -> QuicConnectionState.TERMINATED
-2025-02-08 22:14:08,533 - DEBUG - Received QUIC event: ConnectionTerminated(error_code=<QuicErrorCode.INTERNAL_ERROR: 1>, frame_type=<QuicFrameType.PADDING: 0>, reason_phrase='Idle timeout')
+2025-02-08 22:38:07,102 - DEBUG - Using selector: EpollSelector
+2025-02-08 22:38:07,126 - DEBUG - [96e9eca5be2c6608] TLS State.CLIENT_HANDSHAKE_START -> State.CLIENT_EXPECT_SERVER_HELLO
+2025-02-08 22:38:07,327 - DEBUG - [96e9eca5be2c6608] Loss detection triggered
+2025-02-08 22:38:07,327 - DEBUG - [96e9eca5be2c6608] Scheduled CRYPTO data for retransmission
+2025-02-08 22:38:07,746 - DEBUG - [96e9eca5be2c6608] Loss detection triggered
+2025-02-08 22:38:07,747 - DEBUG - [96e9eca5be2c6608] Scheduled CRYPTO data for retransmission
+2025-02-08 22:38:08,550 - DEBUG - [96e9eca5be2c6608] Loss detection triggered
+2025-02-08 22:38:08,550 - DEBUG - [96e9eca5be2c6608] Scheduled CRYPTO data for retransmission
+2025-02-08 22:38:10,153 - DEBUG - [96e9eca5be2c6608] Loss detection triggered
+2025-02-08 22:38:10,154 - DEBUG - [96e9eca5be2c6608] Scheduled CRYPTO data for retransmission
+2025-02-08 22:38:13,360 - DEBUG - [96e9eca5be2c6608] Loss detection triggered
+2025-02-08 22:38:13,361 - DEBUG - [96e9eca5be2c6608] Scheduled CRYPTO data for retransmission
+2025-02-08 22:38:19,769 - DEBUG - [96e9eca5be2c6608] Loss detection triggered
+2025-02-08 22:38:19,770 - DEBUG - [96e9eca5be2c6608] Scheduled CRYPTO data for retransmission
+2025-02-08 22:38:32,583 - DEBUG - [96e9eca5be2c6608] Loss detection triggered
+2025-02-08 22:38:32,584 - DEBUG - [96e9eca5be2c6608] Scheduled CRYPTO data for retransmission
+2025-02-08 22:38:58,201 - DEBUG - [96e9eca5be2c6608] Loss detection triggered
+2025-02-08 22:38:58,201 - DEBUG - [96e9eca5be2c6608] Scheduled CRYPTO data for retransmission
+2025-02-08 22:39:07,133 - DEBUG - [96e9eca5be2c6608] Discarding epoch Epoch.INITIAL
+2025-02-08 22:39:07,134 - DEBUG - [96e9eca5be2c6608] Discarding epoch Epoch.HANDSHAKE
+2025-02-08 22:39:07,134 - DEBUG - [96e9eca5be2c6608] Discarding epoch Epoch.ONE_RTT
+2025-02-08 22:39:07,135 - DEBUG - [96e9eca5be2c6608] QuicConnectionState.FIRSTFLIGHT -> QuicConnectionState.TERMINATED
+2025-02-08 22:39:07,136 - DEBUG - Received QUIC event: ConnectionTerminated(error_code=<QuicErrorCode.INTERNAL_ERROR: 1>, frame_type=<QuicFrameType.PADDING: 0>, reason_phrase='Idle timeout')
