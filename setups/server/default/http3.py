@@ -1,12 +1,14 @@
+import argparse
 import asyncio
 import logging
-from pathlib import Path
+import time
+from email.utils import formatdate
 
-from aioquic.asyncio import QuicConnectionProtocol, serve
-from aioquic.h3.connection import H3Connection, H3_ALPN
-from aioquic.h3.events import H3Event, HeadersReceived
+from aioquic.asyncio import serve, QuicConnectionProtocol
+from aioquic.h3.connection import H3_ALPN, H3Connection
+from aioquic.h3.events import H3Event, HeadersReceived, DataReceived
 from aioquic.quic.configuration import QuicConfiguration
-from aioquic.quic.events import ProtocolNegotiated, QuicEvent
+from aioquic.quic.events import QuicEvent, ProtocolNegotiated
 
 LOG_FILENAME = "/output/server_http3.log"
 logging.basicConfig(
@@ -14,68 +16,109 @@ logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
-# Server configuration
-HOST = "0.0.0.0"
-PORT = 8002
-CERTFILE = Path("/cert/cert.pem")
-KEYFILE = Path("/cert/key.pem")
-
+SERVER_NAME = "aioquic/" + "version"  # Replace "version" with aioquic.__version__ if desired.
 
 class HttpServerProtocol(QuicConnectionProtocol):
     """
-    A very basic HTTP/3 protocol that replies to all requests with a plain text message.
+    A minimal HTTP/3 server protocol that responds to requests with a simple message.
     """
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._http = None  # Will hold the H3Connection once ALPN negotiation succeeds
+        self._http = None  # Will be set once ALPN negotiation completes.
 
-    def quic_event_received(self, event: QuicEvent):
-        log.debug(f"Received QUIC event: {event}")
+    def quic_event_received(self, event: QuicEvent) -> None:
+        # Once protocol negotiation is done, initialize the HTTP/3 layer.
         if isinstance(event, ProtocolNegotiated):
-            self._http = H3Connection(self._quic)
-
+            if event.alpn_protocol in H3_ALPN:
+                self._http = H3Connection(self._quic)
         if self._http is None:
             return
 
-        # Let the H3Connection convert QUIC events to HTTP/3 events.
+        # Pass the QUIC event to the HTTP/3 layer and handle resulting HTTP events.
         for http_event in self._http.handle_event(event):
-            self.handle_http_event(http_event)
+            self.http_event_received(http_event)
 
-    def handle_http_event(self, event: H3Event):
-        log.debug(f"Received HTTP/3 event: {event}")
+    def http_event_received(self, event: H3Event) -> None:
         if isinstance(event, HeadersReceived):
-            stream_id = event.stream_id
-            headers = [
-                (b":status", b"200"),
-                (b"content-type", b"text/plain"),
-            ]
-            log.debug(f"sending response headers: {headers}")
-            self._http.send_headers(stream_id=stream_id, headers=headers)
+            # (Optional) Extract method and path for logging.
+            method = None
+            path = None
+            for name, value in event.headers:
+                if name == b":method":
+                    method = value.decode()
+                elif name == b":path":
+                    path = value.decode()
+            logger.info("Received HTTP request: %s %s", method, path)
+
+            # Respond with a simple text message.
+            response_body = b"Hello, World!"
+            self._http.send_headers(
+                stream_id=event.stream_id,
+                headers=[
+                    (b":status", b"200"),
+                    (b"server", SERVER_NAME.encode()),
+                    (b"date", formatdate(time.time(), usegmt=True).encode()),
+                    (b"content-type", b"text/plain"),
+                ],
+            )
             self._http.send_data(
-                stream_id=stream_id, data=b"Hello, HTTP3!", end_stream=True
+                stream_id=event.stream_id,
+                data=response_body,
+                end_stream=True,
             )
             self.transmit()
-            log.debug(f"response sent on stream {stream_id}")
 
+        elif isinstance(event, DataReceived):
+            # (Optional) Handle request body data if needed.
+            pass
 
-async def main():
-    # Create and configure the QUIC configuration.
-    configuration = QuicConfiguration(is_client=False)
-    configuration.alpn_protocols = H3_ALPN  # Enable HTTP/3 ALPNs
-    configuration.load_cert_chain(CERTFILE, KEYFILE)
-
-    # Start the server. The serve() call returns after binding, so we wait forever.
+async def main(host: str, port: int, configuration: QuicConfiguration) -> None:
+    # Start the server and wait indefinitely.
     await serve(
-        HOST,
-        PORT,
+        host,
+        port,
         configuration=configuration,
         create_protocol=HttpServerProtocol,
     )
     await asyncio.Future()  # Run forever
 
-
 if __name__ == "__main__":
-    asyncio.run(main())
+    parser = argparse.ArgumentParser("Simple HTTP/3 Server")
+    parser.add_argument(
+        "--host",
+        type=str,
+        default="::",
+        help="Listen on the specified address (default: ::)",
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=4433,
+        help="Listen on the specified port (default: 4433)",
+    )
+    parser.add_argument(
+        "--certificate",
+        type=str,
+        required=True,
+        help="Path to the TLS certificate file (PEM format)",
+    )
+    parser.add_argument(
+        "--private-key",
+        type=str,
+        required=True,
+        help="Path to the TLS private key file (PEM format)",
+    )
+    args = parser.parse_args()
+
+    logging.basicConfig(level=logging.INFO)
+
+    # Create the QUIC configuration with HTTP/3 ALPN.
+    configuration = QuicConfiguration(
+        is_client=False,
+        alpn_protocols=H3_ALPN,
+    )
+    configuration.load_cert_chain(args.certificate, args.private_key)
+
+    asyncio.run(main(args.host, args.port, configuration))
