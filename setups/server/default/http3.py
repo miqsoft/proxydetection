@@ -11,6 +11,7 @@ from aioquic.quic.configuration import QuicConfiguration
 from aioquic.quic.events import QuicEvent, ProtocolNegotiated
 
 LOG_FILENAME = "/output/server_http3.log"
+LOG_FILENAME = "server_http3.log"
 logging.basicConfig(
     filename=LOG_FILENAME,
     level=logging.DEBUG,
@@ -68,6 +69,7 @@ class HttpServerProtocol(QuicConnectionProtocol):
                 data=response_body,
                 end_stream=True,
             )
+            logger.info(f'Sent response: {response_body.decode()}')
             self.transmit()
 
         elif isinstance(event, DataReceived):

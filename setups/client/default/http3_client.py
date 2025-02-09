@@ -1,6 +1,7 @@
 import argparse
 import asyncio
 import logging
+import ssl
 import time
 from collections import deque
 from urllib.parse import urlparse
@@ -15,6 +16,7 @@ from aioquic.quic.events import QuicEvent
 
 
 LOG_FILENAME = "/output/client_http3.log"
+LOG_FILENAME = "client_http3.log"
 logging.basicConfig(
     filename=LOG_FILENAME,
     level=logging.DEBUG,
@@ -125,7 +127,9 @@ async def main(args):
         alpn_protocols=H3_ALPN,
     )
     # Load the server certificate PEM for verifying the server.
-    configuration.load_verify_locations(args.server_cert)
+    #configuration.load_verify_locations(args.server_cert)
+    # disable certificate verification
+    configuration.verify_mode = ssl.CERT_NONE
 
     # Compose a URL to request (for example, GET /).
     url_str = f"https://{host}/"
@@ -141,6 +145,7 @@ async def main(args):
 
         # Build and send a GET request.
         request = HttpRequest(method="GET", url=url)
+        print(f"Request: {request.method} {request.url.full_path}")
         start = time.time()
         events = await client.request(request)
         elapsed = time.time() - start
@@ -150,6 +155,8 @@ async def main(args):
             for event in events
             if isinstance(event, DataReceived)
         )
+        data = b"".join(event.data for event in events if isinstance(event, DataReceived))
+        print(f'Response: {data.decode()}')
         logger.info("Response received: %d bytes in %.3f seconds", total_bytes, elapsed)
 
         # Close the connection.
