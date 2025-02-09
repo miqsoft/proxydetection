@@ -120,6 +120,14 @@ def run_experiment(args):
     pcap_dir.mkdir(parents=False, exist_ok=True)
     logs_dir.mkdir(parents=False, exist_ok=True)
 
+    # save ip from relay and server and save
+    with open(out_dir/'ips.txt', 'w') as f:
+        f.write(f"server_assigned: {server.get_ip()}\n")
+        f.write(f"server_reserved: {server.reserved_ip}\n")
+        if relay:
+            f.write(f"relay_assigned: {relay.get_ip()}\n")
+            f.write(f"relay_reserved: {relay.reserved_ip}\n")
+
     client.copy_output_file('client.pcap', pcap_dir)
     server.scp_copy_file('/output/server.pcap', (pcap_dir/'server.pcap').as_posix(), direction='from')
     if relay:

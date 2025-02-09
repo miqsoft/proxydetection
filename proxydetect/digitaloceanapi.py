@@ -166,6 +166,14 @@ class DigitalOceanMachine(Machine):
             -1,
         )
 
+    def get_ip(self):
+        if self.id == -1:
+            self.id = self.__get_id_by_name()
+        if self.id == -1:
+            return None
+        resp = CLIENT.droplets.get(self.id)
+        return resp['droplet']['networks']['v4'][0]['ip_address']
+
     def status(self):
         if self.id == -1:
             self.id = self.__get_id_by_name()
