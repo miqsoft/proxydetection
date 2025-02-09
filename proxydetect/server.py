@@ -21,6 +21,16 @@ def __setup_server(machine: DigitalOceanMachine, setup: str):
     machine.ssh(r"sed -i 's/\r$//' /app/setup.sh")
     machine.ssh('chmod +x /app/setup.sh && /app/setup.sh')
 
+def resetup_server(args):
+    log.info(f"Re-setting up server (with args: {args})")
+    name = f'{NAME}-{args.setup}'
+    machine = DigitalOceanMachine(config=CONFIG, name=name, ip=RESERVED_IP, domain=DNS)
+    if not machine.is_online():
+        log.error("Server is not online")
+        return
+    __setup_server(machine, args.setup)
+    log.info("Server re-setup completed")
+
 def start_server(args):
     log.info(f"Starting server (with args: {args})")
     name = f'{NAME}-{args.setup}'

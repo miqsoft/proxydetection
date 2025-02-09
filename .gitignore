@@ -5,3 +5,4 @@ poetry.lock
 **/cert
 **/__pycache__
 **/run
+**/__pycache__/**
