@@ -1,0 +1,10 @@
+client:
+  default
+server:
+  default
+tested_server:
+  ws
+commands:
+  connect:
+  traffic:
+    - client: "curl --dns-servers 68.183.243.119 https://www.example.com"

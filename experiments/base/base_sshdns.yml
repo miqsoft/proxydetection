@@ -1,0 +1,10 @@
+client:
+  default
+server:
+  default
+tested_server:
+  ws
+commands:
+  connect:
+  traffic:
+    - client: "ssh -i /cert/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 root@server.labforensic.de ls"

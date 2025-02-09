@@ -145,8 +145,7 @@ def run_experiment(args):
     if tested_relay:
         relay.scp_copy_file(f'/output/relay_{tested_relay}.log', (logs_dir/f'relay_{tested_relay}.log').as_posix(), direction='from')
 
-    logs = experiment.get('logs', None)
-    if logs:
+    if logs := experiment.get('logs', None):
         if 'client' in logs:
            for file in logs['client']:
                client.copy_output_file(file, logs_dir)

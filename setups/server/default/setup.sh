@@ -2,10 +2,13 @@
 
 apt-get update && apt upgrade -y
 apt-get install -y python3 python3-pip python3.12-venv
+apt-get install -y unbound
 apt install -y python3.12-venv
 python3 -m venv /root/venv
 source /root/venv/bin/activate
 pip3 install -r /app/requirements.txt
+
+# setup unbound dns server
 
 cp /app/http1.service /etc/systemd/system/http1.service
 cp /app/http2.service /etc/systemd/system/http2.service
@@ -27,6 +30,7 @@ systemctl enable wss.service
 systemctl enable https1.service
 systemctl enable https2.service
 systemctl enable ssh2.service
+systemctl enable unbound
 
 systemctl start http1.service
 systemctl start http2.service
@@ -36,3 +40,4 @@ systemctl start wss.service
 systemctl start https1.service
 systemctl start https2.service
 systemctl start ssh2.service
+systemctl start unbound
