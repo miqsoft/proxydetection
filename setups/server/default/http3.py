@@ -11,7 +11,6 @@ from aioquic.quic.configuration import QuicConfiguration
 from aioquic.quic.events import QuicEvent, ProtocolNegotiated
 
 LOG_FILENAME = "/output/server_http3.log"
-LOG_FILENAME = "server_http3.log"
 logging.basicConfig(
     filename=LOG_FILENAME,
     level=logging.DEBUG,
@@ -121,6 +120,7 @@ if __name__ == "__main__":
         is_client=False,
         alpn_protocols=H3_ALPN,
     )
+    configuration.max_datagram_frame_size = 1500
     configuration.load_cert_chain(args.certificate, args.private_key)
 
     asyncio.run(main(args.host, args.port, configuration))

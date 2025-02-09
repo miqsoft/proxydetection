@@ -2,7 +2,7 @@ import argparse
 import sys
 
 from proxydetect.client import start_client, stop_client, destroy_client, ssh_client
-from proxydetect.server import start_server, stop_server, destroy_server, ssh_server
+from proxydetect.server import start_server, stop_server, destroy_server, ssh_server, resetup_server
 from proxydetect.relay import start_relay, stop_relay, destroy_relay, ssh_relay
 from proxydetect.experiment import run_experiment
 
@@ -46,6 +46,10 @@ if __name__ == '__main__':
     # Server commands
     server_parser = subparsers.add_parser('server', help='server related commands')
     server_subparsers = server_parser.add_subparsers(help='server sub-command help')
+
+    server_resetup = server_subparsers.add_parser('resetup', help='Re-setups the server')
+    server_resetup.add_argument('setup', type=str, nargs='?', default='default', help='setup to use (default: default)')
+    server_resetup.set_defaults(func=resetup_server)
 
     server_start = server_subparsers.add_parser('start', help='Starts the server')
     server_start.add_argument('setup', type=str, nargs='?', default='default', help='setup to use (default: default)')
