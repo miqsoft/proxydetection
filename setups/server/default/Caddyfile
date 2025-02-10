@@ -1,0 +1,19 @@
+{
+    servers {
+        protocols h1 h2 h3
+    }
+}
+
+server.labforensic.de:4002 68.183.243.119:4002 {
+    tls internal
+    @only_get method GET
+    respond @only_get "Hello, HTTPS3!"
+
+    log {
+        output file /output/server_https3.log {
+            roll false
+        }
+    }
+
+    respond "Method Not Allowed" 405
+}

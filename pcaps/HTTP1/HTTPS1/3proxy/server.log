@@ -1,3 +1,0 @@
-2024-12-19 09:28:13,401 - INFO - SSL context created with certfile: /vagrant/server/cert/server.pem and keyfile: /vagrant/server/cert/server.pem
-2024-12-19 09:28:13,401 - INFO - Starting server on https://0.0.0.0:443
-2024-12-19 09:28:24,846 - INFO - Handled GET request from ('192.168.56.5', 49547)

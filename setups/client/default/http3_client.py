@@ -16,7 +16,6 @@ from aioquic.quic.events import QuicEvent
 
 
 LOG_FILENAME = "/output/client_http3.log"
-LOG_FILENAME = "client_http3.log"
 logging.basicConfig(
     filename=LOG_FILENAME,
     level=logging.DEBUG,

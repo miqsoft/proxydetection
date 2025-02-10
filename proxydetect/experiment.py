@@ -13,8 +13,8 @@ def run_experiment(args):
     log.info(f"Running experiment (with args: {args})")
     experiment_file = Path(args.file)
     if not args.out:
-        out_dir = DATA_DIR / experiment_file.stem
-        out_dir.mkdir(parents=False, exist_ok=True)
+        out_dir = DATA_DIR / experiment_file.parent / experiment_file.stem
+        out_dir.mkdir(parents=True, exist_ok=True)
         print(f'use {out_dir.as_posix()} as output directory')
     else:
         out_dir = Path(args.out)

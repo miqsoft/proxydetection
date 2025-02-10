@@ -1,8 +1,0 @@
-2024-12-19 09:33:35,483 - INFO - Hypercorn configured with SSL and HTTP/2.
-2024-12-19 09:33:35,483 - INFO - Starting HTTPS server on 0.0.0.0:443
-2024-12-19 09:33:35,487 - INFO - Running on https://0.0.0.0:443 (CTRL + C to quit)
-2024-12-19 09:33:46,211 - INFO - Root endpoint accessed.
-2024-12-19 09:37:36,872 - INFO - Root endpoint accessed.
-2024-12-19 09:38:16,646 - INFO - Root endpoint accessed.
-2024-12-19 09:39:09,639 - INFO - Root endpoint accessed.
-2024-12-19 09:39:20,865 - INFO - Root endpoint accessed.

@@ -1,0 +1,15 @@
+[Unit]
+Description=Simple HTTP/3 server
+After=network.target
+
+[Service]
+WorkingDirectory=/app
+ExecStart=caddy run
+ExecStop=/usr/bin/pkill -9 caddy
+Restart=always
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
+

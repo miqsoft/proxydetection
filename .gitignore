@@ -3,5 +3,5 @@
 .idea/
 poetry.lock
 **/cert
-**/__pycache__
+**/__pycache__/**git
 **/run

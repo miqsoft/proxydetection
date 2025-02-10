@@ -1,7 +1,5 @@
 # for http2 server
 hypercorn
 quart
-# for http3 server
-aioquic
 # for websockets
 websockets
