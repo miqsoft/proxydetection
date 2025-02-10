@@ -4,6 +4,7 @@ from proxydetect.client import get_client
 from proxydetect.server import get_server
 from proxydetect.relay import get_relay
 from proxydetect.config import DATA_DIR
+import argparse
 
 import logging
 log = logging.getLogger(__name__)
@@ -138,27 +139,42 @@ def run_experiment(args):
     if relay:
         relay.scp_copy_file('/output/tcpdump_relay.log', (logs_dir/'tcpdump_relay.log').as_posix(), direction='from')
 
-    tested_server = experiment.get('tested_server', None)
-    tested_relay = experiment.get('tested_relay', None)
-    if tested_server:
-        server.scp_copy_file(f'/output/server_{tested_server}.log', (logs_dir/f'server_{tested_server}.log').as_posix(), direction='from')
-    if tested_relay:
-        relay.scp_copy_file(f'/output/relay_{tested_relay}.log', (logs_dir/f'relay_{tested_relay}.log').as_posix(), direction='from')
-
     if logs := experiment.get('logs', None):
         if 'client' in logs:
            for file in logs['client']:
-               client.copy_output_file(file, logs_dir)
+               if client.ssh(f'test -e /output/{file}') == 0:
+                   client.copy_output_file(file, logs_dir)
+                   client.ssh(f'rm /output/{file}')
+               else:
+                     print(f"File {file} not found on client")
         if 'server' in logs:
             for file in logs['server']:
-                server.scp_copy_file(f'/output/{file}', (logs_dir/f'{file}').as_posix(), direction='from')
+                if server.ssh(f'test -e /output/{file}') == 0:
+                    server.scp_copy_file(f'/output/{file}', (logs_dir/f'{file}').as_posix(), direction='from')
+                    server.ssh(f'rm /output/{file}')
+                else:
+                    print(f"File {file} not found on server")
         if 'relay' in logs:
             for file in logs['relay']:
-                relay.scp_copy_file(f'/output/{file}', (logs_dir/f'{file}').as_posix(), direction='from')
+                if relay.ssh(f'test -e /output/{file}') == 0:
+                    relay.scp_copy_file(f'/output/{file}', (logs_dir/f'{file}').as_posix(), direction='from')
+                    relay.ssh(f'rm /output/{file}')
+                else:
+                    print(f"File {file} not found on relay")
 
 
+def run_experiments(args):
+    directory = Path(args.directory)
+    if not directory.is_dir():
+        print(f"Directory {directory} does not exist")
+        return
 
-
+    for file in directory.iterdir():
+        if file.suffix in ['.yaml', '.yml']:
+            namespace = argparse.Namespace(file=file.as_posix(), out=None)
+            run_experiment(namespace)
+        else:
+            print(f"Skipping {file} as it is not a yaml file")
         
     
 

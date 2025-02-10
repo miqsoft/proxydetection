@@ -5,19 +5,19 @@ LOG_FILENAME = "/output/server_http1.log"
 logging.basicConfig(
     filename=LOG_FILENAME,
     level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    filemode='w'
 )
-log = logging.getLogger(__name__)
 RESPONSE="Hello, HTTP1.1!"
 HOST = "0.0.0.0"
 PORT = 8000
 
 
 class CustomHandler(BaseHTTPRequestHandler):
-    protocol_version = "HTTP/1.1"  # 🔥 Use HTTP/1.1
+    protocol_version = "HTTP/1.1"
 
     def do_GET(self):
-        log.info(f"Received GET from {self.client_address}")
+        logging.info(f"Received GET from {self.client_address}")
         response_body = RESPONSE.encode()
         self.send_response(200)
         self.send_header("Content-type", "text/html")
@@ -25,7 +25,7 @@ class CustomHandler(BaseHTTPRequestHandler):
         self.send_header("Connection", "close")
         self.end_headers()
         self.wfile.write(response_body)
-        log.info(f"Sent data ({RESPONSE}) to {self.client_address}")
+        logging.info(f"Sent data ({RESPONSE}) to {self.client_address}")
 
 
 

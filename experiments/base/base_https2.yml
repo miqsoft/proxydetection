@@ -2,9 +2,13 @@ client:
   default
 server:
   default
-tested_server:
-  https2
+logs:
+    client:
+        - client_https2.log
+    server:
+        - server_https2.log
 commands:
   connect:
   traffic:
-    - client: "curl --http2 -k -v https://68.183.243.119:4001"
+    - client: "curl --http2 -k -v https://68.183.243.119:4001 2>&1 | tee /output/client_https2.log"
+    - server: "service https2 restart"

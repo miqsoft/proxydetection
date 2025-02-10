@@ -24,7 +24,7 @@ def __setup_server(machine: DigitalOceanMachine, setup: str):
 def resetup_server(args):
     log.info(f"Re-setting up server (with args: {args})")
     name = f'{NAME}-{args.setup}'
-    machine = DigitalOceanMachine(config=CONFIG, name=name, ip=RESERVED_IP, domain=DNS)
+    machine = DigitalOceanMachine(config=CONFIG, name=name, reserved_ip=RESERVED_IP, domain=DNS)
     if not machine.is_online():
         log.error("Server is not online")
         return
@@ -49,7 +49,7 @@ def start_server(args):
 def stop_server(args):
     log.info(f"Stopping server (with args: {args})")
     name = f'{NAME}-{args.setup}'
-    machine = DigitalOceanMachine(config=CONFIG, name=name, ip=RESERVED_IP, domain=DNS)
+    machine = DigitalOceanMachine(config=CONFIG, name=name, reserved_ip=RESERVED_IP, domain=DNS)
     machine.stop()
     log.info("Server stopped")
 
@@ -57,18 +57,18 @@ def stop_server(args):
 def destroy_server(args):
     log.info(f"Destroying server (with args: {args})")
     name = f'{NAME}-{args.setup}'
-    machine = DigitalOceanMachine(config=CONFIG, name=name, ip=RESERVED_IP, domain=DNS)
+    machine = DigitalOceanMachine(config=CONFIG, name=name, reserved_ip=RESERVED_IP, domain=DNS)
     machine.destroy()
     log.info("Server destroyed")
 
 def ssh_server(args):
     log.info(f"Running SSH command on server (with args: {args})")
     name = f'{NAME}-{args.setup}'
-    machine = DigitalOceanMachine(config=CONFIG, name=name, ip=RESERVED_IP, domain=DNS)
+    machine = DigitalOceanMachine(config=CONFIG, name=name, reserved_ip=RESERVED_IP, domain=DNS)
     machine.ssh(args.cmd)
     log.info("SSH command run on server")
 
 
 def get_server(setup):
     name = f'{NAME}-{setup}'
-    return DigitalOceanMachine(config=CONFIG, name=name, ip=RESERVED_IP, domain=DNS)
+    return DigitalOceanMachine(config=CONFIG, name=name, reserved_ip=RESERVED_IP, domain=DNS)

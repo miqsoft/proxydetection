@@ -2,9 +2,13 @@ client:
   default
 server:
   default
-tested_server:
-  http1
+logs:
+  client:
+    - client_http1.log
+  server:
+    - server_http1.log
 commands:
   connect:
   traffic:
-    - client: "curl -v http://server.labforensic.de:8000"
+    - client: "curl -v http://server.labforensic.de:8000 2>&1 | tee /output/client_http1.log"
+    - server: "service http1 restart"

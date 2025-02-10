@@ -2,9 +2,12 @@ client:
   default
 server:
   default
-tested_server:
-  ws
+logs:
+  client:
+    - client_ssh.log
 commands:
   connect:
   traffic:
-    - client: "ssh -i /cert/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 root@68.183.243.119 ls"
+    - server: "cat /cert/id_rsa.pub >> ~/.ssh2/authorized_keys && service ssh2 restart"
+    - client: "ssh -v -i /cert/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 root@68.183.243.119 ls 2>&1 | tee /output/client_ssh.log"
+    - server: "rm ~/.ssh2/authorized_keys && touch ~/.ssh2/authorized_keys && service ssh2 restart"

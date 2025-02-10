@@ -2,10 +2,26 @@
     servers {
         protocols h1 h2 h3
     }
+    default_sni server.labforensic.de
 }
 
-server.labforensic.de:4002 68.183.243.119:4002 {
-    tls internal
+server.labforensic.de:4002 {
+    tls /cert/cert.pem /cert/key.pem
+    @only_get method GET
+    respond @only_get "Hello, HTTPS3!"
+
+    log {
+        output file /output/server_https3.log {
+            roll false
+            append true
+        }
+    }
+
+    respond "Method Not Allowed" 405
+}
+
+68.183.243.119:4002 {
+    tls /cert/cert.pem /cert/key.pem
     @only_get method GET
     respond @only_get "Hello, HTTPS3!"
 

@@ -2,9 +2,12 @@ client:
   default
 server:
   default
-tested_server:
-  https1
+logs:
+    client:
+        - client_https1.log
+    server:
+        - server_https1.log
 commands:
   connect:
   traffic:
-    - client: "curl -k -v https://68.183.243.119:4000"
+    - client: "curl -k -v https://68.183.243.119:4000 2>&1 | tee /output/client_https1.log"

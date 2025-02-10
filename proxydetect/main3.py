@@ -4,7 +4,7 @@ import sys
 from proxydetect.client import start_client, stop_client, destroy_client, ssh_client
 from proxydetect.server import start_server, stop_server, destroy_server, ssh_server, resetup_server
 from proxydetect.relay import start_relay, stop_relay, destroy_relay, ssh_relay
-from proxydetect.experiment import run_experiment
+from proxydetect.experiment import run_experiment, run_experiments
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -17,6 +17,7 @@ def default_function(args):
     print("No function assigned. Showing help.")
     args.parser.print_help()
     sys.exit(1)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Detects if a proxy is being used')
@@ -97,6 +98,9 @@ if __name__ == '__main__':
     experiment.add_argument('--out', type=str, help='output directory')
     experiment.set_defaults(func=run_experiment)
 
+    experiments = subparsers.add_parser('experiments', help='Experiment related commands')
+    experiments.add_argument('directory', type=str, help='directory with experiment files')
+    experiments.set_defaults(func=run_experiments)
 
     # Ensure a function is always executed, or show help if no function was provided
     args = parser.parse_args()

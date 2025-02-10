@@ -13,6 +13,12 @@ curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --d
 curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
 apt update
 apt install -y caddy
+pkill -9 caddy
+
+#
+mkdir -p ~/.ssh2/
+touch ~/.ssh2/authorized_keys
+chmod -R 700 ~/.ssh2/
 
 
 cp /app/http1.service /etc/systemd/system/http1.service

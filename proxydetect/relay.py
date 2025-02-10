@@ -39,7 +39,7 @@ def start_relay(args):
 def stop_relay(args):
     log.info(f"Stopping relay (with args: {args})")
     name = f'{NAME}-{args.setup}'
-    machine = DigitalOceanMachine(config=CONFIG, name=name, ip=RESERVED_IP, domain=DNS)
+    machine = DigitalOceanMachine(config=CONFIG, name=name, reserved_ip=RESERVED_IP, domain=DNS)
     machine.stop()
     log.info("Server stopped")
 
@@ -47,18 +47,18 @@ def stop_relay(args):
 def destroy_relay(args):
     log.info(f"Destroying relay (with args: {args})")
     name = f'{NAME}-{args.setup}'
-    machine = DigitalOceanMachine(config=CONFIG, name=name, ip=RESERVED_IP, domain=DNS)
+    machine = DigitalOceanMachine(config=CONFIG, name=name, reserved_ip=RESERVED_IP, domain=DNS)
     machine.destroy()
     log.info("Server destroyed")
 
 def ssh_relay(args):
     log.info(f"Running SSH command on relay (with args: {args})")
     name = f'{NAME}-{args.setup}'
-    machine = DigitalOceanMachine(config=CONFIG, name=name, ip=RESERVED_IP, domain=DNS)
+    machine = DigitalOceanMachine(config=CONFIG, name=name, reserved_ip=RESERVED_IP, domain=DNS)
     machine.ssh(args.cmd)
     log.info("SSH command run on relay")
 
 
 def get_relay(setup):
     name = f'{NAME}-{setup}'
-    return DigitalOceanMachine(config=CONFIG, name=name, ip=RESERVED_IP, domain=DNS)
+    return DigitalOceanMachine(config=CONFIG, name=name, reserved_ip=RESERVED_IP, domain=DNS)

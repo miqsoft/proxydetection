@@ -2,8 +2,6 @@ client:
   default
 server:
   default
-tested_server:
-  ws
 commands:
   connect:
   traffic:

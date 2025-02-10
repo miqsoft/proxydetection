@@ -123,8 +123,8 @@ class DigitalOceanMachine(Machine):
     ram: int
     cpu: int
 
-    def __init__(self, config: dict, name: str,reserved_ip: str = None, ip: str = None, domain: str = None, output_dir: Path = Path('/output'), app_dir: Path = Path('/app')):
-        super().__init__(name, ip, domain, output_dir, app_dir)
+    def __init__(self, config: dict, name: str, reserved_ip: str = None, domain: str = None, output_dir: Path = Path('/output'), app_dir: Path = Path('/app')):
+        super().__init__(name, reserved_ip, domain, output_dir, app_dir)
         # check if ram, cpu, region are in config (if not raise error)
         self.id = -1
         self.reserved_ip = reserved_ip
@@ -153,7 +153,7 @@ class DigitalOceanMachine(Machine):
             raise DigitalOceanException("Failed to create droplet.")
         self.id = resp['droplet']['id']
         if self.reserved_ip is not None:
-            self.assign_reserved_ip(self.reserved_ip)
+            self.assign_reserved_ip()
 
     def __get_id_by_name(self):
         droplets = CLIENT.droplets.list()
@@ -185,7 +185,9 @@ class DigitalOceanMachine(Machine):
     def is_online(self):
         return self.status() == 'active'
 
-    def assign_reserved_ip(self, ip: str):
+    def assign_reserved_ip(self):
+        if not self.reserved_ip:
+            raise ValueError("Reserved IP not set.")
         req = {
             "droplet_id": self.id,
             "type": "assign"
@@ -194,7 +196,7 @@ class DigitalOceanMachine(Machine):
         resp = None
         for _ in range(10):
             try:
-                resp = CLIENT.reserved_ips_actions.post(reserved_ip=ip, body=req)
+                resp = CLIENT.reserved_ips_actions.post(reserved_ip=self.reserved_ip, body=req)
                 break
             except azure.core.exceptions.HttpResponseError as e:
                 if "pending event" in str(e):
@@ -205,7 +207,6 @@ class DigitalOceanMachine(Machine):
             raise DigitalOceanException("Failed to assign IP to droplet.")
         action_id = resp['action']['id']
         _wait_for_action(action_id)
-        self.reserved_ip = ip
 
     def destroy(self):
         resp = CLIENT.droplets.destroy(droplet_id=self.id)
@@ -226,6 +227,7 @@ class DigitalOceanMachine(Machine):
             print(f'\t {line}')
         for line in host_output.stderr:
             print(f'\tX {line}')
+        return host_output.exit_code
 
 
     def scp_copy_file(self, source: str, dest: str, direction: str = 'to'):

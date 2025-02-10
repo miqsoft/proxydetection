@@ -15,7 +15,7 @@ from aioquic.quic.configuration import QuicConfiguration
 from aioquic.quic.events import QuicEvent
 
 
-LOG_FILENAME = "/output/client_http3.log"
+LOG_FILENAME = "/output/client_https3.log"
 logging.basicConfig(
     filename=LOG_FILENAME,
     level=logging.DEBUG,
@@ -169,12 +169,6 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--port", type=int, default=443, help="Server port (default: 443)"
-    )
-    parser.add_argument(
-        "--server_cert",
-        type=str,
-        required=True,
-        help="Path to the server certificate PEM file",
     )
     args = parser.parse_args()
     asyncio.run(main(args))

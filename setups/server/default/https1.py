@@ -8,7 +8,8 @@ LOG_FILENAME = "/output/server_https1.log"
 logging.basicConfig(
     filename=LOG_FILENAME,
     level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    filemode='w'
 )
 
 # Constants

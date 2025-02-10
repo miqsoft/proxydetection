@@ -2,9 +2,13 @@ client:
   default
 server:
   default
-tested_server:
-  wss
+logs:
+    client:
+        - client_wss.log
+    server:
+        - server_wss.log
 commands:
   connect:
   traffic:
-    - client: "source /home/vagrant/venv/bin/activate && python3 /app/ws_client.py wss://server.labforensic.de:8101 true"
+    - client: "source /home/vagrant/venv/bin/activate && python3 /app/ws_client.py wss://server.labforensic.de:8101 true 2>&1 | tee /output/client_wss.log"
+    - server: "service https1 restart"

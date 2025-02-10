@@ -56,6 +56,7 @@ class VagrantMachine(Machine):
             print(f'\t {line}')
         for line in host_output.stderr:
             print(f'\tX {line}')
+        return host_output.exit_code
 
 
     def start(self):
