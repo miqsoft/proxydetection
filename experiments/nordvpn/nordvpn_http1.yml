@@ -1,0 +1,11 @@
+client:
+  nordvpn
+server:
+  default
+tested_server:
+  http1
+commands:
+  connect:
+    - client : "WAIT"
+  traffic:
+    - client: "curl -v http://68.183.243.119:8000"
