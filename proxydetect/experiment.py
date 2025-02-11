@@ -10,6 +10,14 @@ import logging
 log = logging.getLogger(__name__)
 
 
+def __get_public_ip():
+    import requests
+    response = requests.get("https://api64.ipify.org?format=json")
+    public_ip = response.json()["ip"]
+
+    return public_ip
+
+
 def run_experiment(args):
     log.info(f"Running experiment (with args: {args})")
     experiment_file = Path(args.file)
@@ -123,6 +131,7 @@ def run_experiment(args):
 
     # save ip from relay and server and save
     with open(out_dir/'ips.txt', 'w') as f:
+        f.write(f"client: {client.get_ip()}\n")
         f.write(f"server_assigned: {server.get_ip()}\n")
         f.write(f"server_reserved: {server.reserved_ip}\n")
         if relay:

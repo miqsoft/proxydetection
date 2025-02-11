@@ -2,7 +2,13 @@ client:
   default
 server:
   default
+logs:
+  client:
+    - client_dns.log
+  server:
+    - server_dns.log
 commands:
   connect:
   traffic:
-    - client: "curl --dns-servers 68.183.243.119 https://www.example.com"
+    - client: "systemd-resolve --flush-caches"
+    - client: "curl-new -v --dns-servers 68.183.243.119 https://www.example.com 2>&1 | tee -a client_dns.log"
