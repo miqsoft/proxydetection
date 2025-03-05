@@ -1,1 +1,0 @@
-- squid does not allow HTTP2 and downgrades to HTTP1.1

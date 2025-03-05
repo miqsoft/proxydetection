@@ -1,0 +1,5 @@
+---
+- name: "Setup machine"
+  hosts: "{{ target }}"
+  roles:
+    - role: setup

@@ -1,0 +1,70 @@
+---
+- name: Create a new user 'proxy' with home directory
+  user:
+    name: proxy
+    home: /home/proxy
+    shell: /bin/bash
+    password: "{{ 'proxy' | password_hash('sha512') }}"
+
+- name: Update APT packages
+  apt:
+    update_cache: yes
+
+- name: Install dependencies
+  apt:
+    name:
+      - gcc
+      - make
+      - git
+    state: present
+
+- name: Clone 3proxy repository
+  git:
+    repo: "https://github.com/z3apa3a/3proxy"
+    dest: /home/proxy/3proxy
+    update: yes
+
+- name: Compile 3proxy
+  command: make -f Makefile.Linux
+  args:
+    chdir: /home/proxy/3proxy
+
+- name: Install 3proxy
+  command: make -f Makefile.Linux install
+  args:
+    chdir: /home/proxy/3proxy
+
+- name: Change ownership of 3proxy directory
+  file:
+    path: /usr/local/3proxy
+    owner: proxy
+    group: proxy
+    recurse: yes
+
+- name: Modify 3proxy configuration (chroot)
+  replace:
+    path: /usr/local/3proxy/conf/3proxy.cfg
+    regexp: 'chroot /usr/local/3proxy proxy proxy'
+    replace: 'chroot /usr/local/3proxy root root'
+
+- name: Modify 3proxy authentication to none
+  replace:
+    path: /usr/local/3proxy/conf/3proxy.cfg
+    regexp: 'auth strong'
+    replace: 'auth none'
+
+- name: Ensure add3proxyuser.sh is executable
+  file:
+    path: /usr/local/3proxy/conf/add3proxyuser.sh
+    mode: '0755'
+
+- name: Add a proxy user
+  command: /usr/local/3proxy/conf/add3proxyuser.sh proxy proxy
+
+- name: Enable 3proxy service at startup
+  command: update-rc.d 3proxy defaults
+
+- name: Start 3proxy service
+  service:
+    name: 3proxy
+    state: started

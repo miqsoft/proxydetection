@@ -1,0 +1,33 @@
+experiment_tasks:
+  - host: client
+    task:
+      name: Remove existing [ProxyList] section
+      shell: "sed '/^\\[ProxyList\\]/q' /etc/proxychains.conf > /tmp/file && mv /tmp/file /etc/proxychains.conf"
+      args:
+        executable: /bin/bash
+  - host: client
+    task:
+      name: Insert a new line after [ProxyList] header
+      lineinfile:
+        path: /etc/proxychains.conf
+        line: socks5 {{ hostvars['relay']['reserved_ip'] }} 1080
+        insertafter: '^\[ProxyList\]'
+  - host: client
+    task:
+      name: "Send ftp traffic to the server"
+      shell:
+        cmd: "source /home/vagrant/venv/bin/activate && proxychains python3 /app/ftp_client.py --host {{ hostvars['server']['reserved_ip'] }} --port 21 2>&1 | tee /output/client_ftp.log"
+      args:
+        executable: /bin/bash
+  - host: client
+    task:
+      name: "Save the ftp client log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+        src: "/output/client_ftp.log"
+        dst: "{{ playbook_dir }}/{{ log_dir }}/client_ftp.log"
+  - host: server
+    task:
+      name: "Restart the server"
+      shell:
+        cmd: "service vsftpd restart"

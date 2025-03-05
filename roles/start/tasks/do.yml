@@ -1,0 +1,49 @@
+- name: "Gather information about DigitalOcean SSH keys"
+  community.digitalocean.digital_ocean_sshkey_info:
+    oauth_token: "{{ do_api_token }}"
+  register: ssh_keys
+
+- name: "Set SSH key ID for DigitalOcean droplets"
+  set_fact:
+    matched_ssh_keys: "{{ ssh_keys.data | json_query(myquery) }}"
+  vars:
+    myquery: "[?name=='{{ do_ssh_key_name }}'].id | [0]"
+
+
+- name: "Start DigitalOcean droplet"
+  community.digitalocean.digital_ocean_droplet:
+    state: present
+    oauth_token: "{{ do_api_token }}"
+    name: "{{ machine.name }}"
+    region: "{{ machine.region }}"
+    size: "{{ machine.size }}"
+    image: "{{ machine.image }}"
+    ssh_keys: [ "{{ matched_ssh_keys }}" ]
+    wait_timeout: 500
+  register: do_result
+
+- name: "Attach reserved IP to the droplet"
+  community.digitalocean.digital_ocean_floating_ip:
+    state: attached
+    ip: "{{ machine.reserved_ip }}"
+    droplet_id: "{{ do_result.data.droplet.id }}"
+    oauth_token: "{{ do_api_token }}"
+  when: do_result.data.droplet is defined
+
+- name: Add dynamic host to [digital_ocean] group
+  ini_file:
+    dest: inventory/hosts.ini
+    section: digital_ocean
+    option: "{{ machine.name }}"
+    value: >-
+      ansible_host={{ machine.reserved_ip }}
+      ansible_user=root
+      droplet_id={{ do_result.data.droplet.id }}
+      reserved_ip={{ machine.reserved_ip }}
+      private_ip={{ do_result.data.droplet.networks.v4 | selectattr('type', 'equalto', 'private') | map(attribute='ip_address') | first | default('N/A') }}
+      public_ip={{ do_result.data.droplet.networks.v4 | selectattr('type', 'equalto', 'public') | map(attribute='ip_address') | first | default('N/A') }}
+      dns={{ machine.dns }}
+      ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+    state: present
+  when: do_result.data.droplet is defined
+

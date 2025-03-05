@@ -1,4 +1,0 @@
-# for websockets client
-websockets
-# for http3 client
-aioquic

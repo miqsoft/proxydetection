@@ -1,0 +1,12 @@
+- name: "Destroy droplets for selected machine"
+  community.digitalocean.digital_ocean_droplet:
+    state: absent
+    oauth_token: "{{ do_api_token }}"
+    id: "{{ host.droplet_id }}"
+
+- name: Remove a host from [digital_ocean] group
+  ini_file:
+    dest: inventory/hosts.ini
+    section: digital_ocean
+    option: "{{ machine.name }}"
+    state: absent

@@ -1,0 +1,27 @@
+---
+- name: "Set dynamic task"
+  ansible.builtin.set_fact:
+    task_definition:
+      - "{{ task_item.task }}"
+
+  delegate_to: localhost
+  become: false
+
+- name: "Save task definition"
+  ansible.builtin.copy:
+    content: "{{ task_definition | to_nice_yaml(indent=2, width=120) | trim }}"
+    dest: "tmp/task_definition_{{ task_item.task.name | trim }}.yml"
+  delegate_to: localhost
+  become: false
+
+- name: "Execute task on the remote host"
+  ansible.builtin.include_tasks: "tmp/task_definition_{{ task_item.task.name | trim }}.yml"
+  vars:
+    log_dir: "{{ log_dir }}"
+
+- name: "Remove task definition"
+  ansible.builtin.file:
+    path: "tmp/task_definition_{{ task_item.task.name | trim }}.yml"
+    state: absent
+  delegate_to: localhost
+  become: false

@@ -1,0 +1,259 @@
+---
+- name: Copy App dir to host
+  synchronize:
+      src: setup/server/default/app
+      dest: /
+  delegate_to: localhost
+  become: false
+
+- name: Copy App dir to host
+  synchronize:
+   src: setup/cert
+   dest: /
+  delegate_to: localhost
+  become: false
+
+- name: Create Output dir
+  file:
+    path: /output
+    state: directory
+    mode: '0755'
+
+- name: Update and upgrade apt packages
+  apt:
+    update_cache: yes
+    upgrade: dist
+
+- name: Install required packages
+  apt:
+    name:
+      - python3
+      - python3-pip
+      - python3.12-venv
+      - debian-keyring
+      - debian-archive-keyring
+      - apt-transport-https
+      - curl
+      - bind9-utils
+      - dnsutils
+      - net-tools
+      - unbound
+      - vsftpd
+    state: present
+
+- name: Setup Python virtual environment
+  command: python3 -m venv /root/venv
+
+- name: Activate virtual environment and install dependencies
+  shell: |
+    source /root/venv/bin/activate && pip3 install -r /app/requirements.txt
+  args:
+    executable: /bin/bash
+
+- name: Install Caddy
+  block:
+    - name: Check if Caddy GPG key exists
+      stat:
+        path: /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+      register: caddy_gpg
+
+    - name: Add Caddy GPG key
+      shell: curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+      when: not caddy_gpg.stat.exists
+
+    - name: Add Caddy repository
+      shell: curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
+
+    - name: Update and install Caddy
+      apt:
+        update_cache: yes
+        name: caddy
+        state: present
+
+    - name: Stop Caddy service
+      command: pkill -9 caddy
+      ignore_errors: yes
+
+- name: Create log file for Unbound
+  file:
+    path: /output/server_dns.log
+    state: touch
+    owner: unbound
+    group: unbound
+    mode: '0644'
+
+- name: Add rule to AppArmor profile for Unbound
+  blockinfile:
+    path: "/etc/apparmor.d/usr.sbin.unbound"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    insertbefore: "^}$"
+    block: |
+      /output/server_dns.log rw,
+
+- name: Reload AppArmor
+  command: "apparmor_parser -r /etc/apparmor.d/usr.sbin.unbound"
+  become: yes
+
+- name: Restart AppArmor
+  command: "service apparmor restart"
+  become: yes
+
+- name: Copy Unbound config file
+  copy:
+    src: /app/unbound.conf
+    dest: /etc/unbound/unbound.conf.d/myunbound.conf
+    remote_src: yes
+
+- name: Copy VSFTPD config files
+  copy:
+    src: "/app/{{ item }}"
+    dest: "/etc/{{ item }}"
+    remote_src: yes
+  loop:
+    - vsftpd.conf
+    - vsftpd2.conf
+
+- name: Setup SSH directory and permissions
+  file:
+    path: ~/.ssh2/
+    state: directory
+    mode: '0700'
+
+- name: Create authorized_keys file
+  file:
+    path: ~/.ssh2/authorized_keys
+    state: touch
+    mode: '0700'
+
+- name: Setup FTP user
+  user:
+    name: ftpuser
+    password: "{{ 'ultra!secret!password' | password_hash('sha512') }}"
+    home: /home/ftpuser/ftp
+    shell: /bin/bash
+
+- name: Set FTP directory permissions
+  file:
+    path: /home/ftpuser/ftp
+    state: directory
+    owner: ftpuser
+    group: ftpuser
+    mode: '0755'
+
+- name: Ensure vsftpd userlist file exists
+  file:
+    path: /etc/vsftpd.userlist
+    state: touch
+    mode: '0644'
+
+- name: Add FTP user to vsftpd userlist
+  lineinfile:
+    path: /etc/vsftpd.userlist
+    line: "ftpuser"
+    create: yes
+
+- name: Create test FTP file
+  copy:
+    content: "Hello FTP"
+    dest: /home/ftpuser/ftp/test.txt
+    owner: ftpuser
+    group: ftpuser
+    mode: '0644'
+
+- name: Copy systemd service files
+  copy:
+    src: "/app/{{ item }}"
+    dest: "/etc/systemd/system/{{ item }}"
+    remote_src: yes
+  loop:
+    - http1.service
+    - http2.service
+    - ws.service
+    - wss.service
+    - https1.service
+    - https2.service
+    - https3.service
+    - sshd2.service
+    - vsftpd2.service
+
+- name: Copy SSH keys and config
+  copy:
+    src: /cert/id_rsa.pub
+    dest: /etc/ssh/id_rsa.pub
+    remote_src: yes
+
+- name: Copy SSHD config file
+  copy:
+    src: /app/sshd_config2
+    dest: /etc/ssh/sshd_config2
+    remote_src: yes
+
+- name: Disable systemd-resolve
+  systemd:
+      name: systemd-resolved
+      enabled: no
+      state: stopped
+
+- name: Reload systemd daemon
+  command: systemctl daemon-reload
+
+- name: Enable services
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+  loop:
+    - http1.service
+    - http2.service
+    - ws.service
+    - wss.service
+    - https1.service
+    - https2.service
+    - https3.service
+    - sshd2.service
+    - unbound
+    - vsftpd
+    - vsftpd2
+
+- name: Start services
+  systemd:
+    name: "{{ item }}"
+    state: started
+  loop:
+    - http1.service
+    - http2.service
+    - ws.service
+    - wss.service
+    - https1.service
+    - https2.service
+    - https3.service
+    - sshd2.service
+    - unbound
+    - vsftpd
+    - vsftpd2
+
+- name: Restart Unbound
+  command: service unbound restart
+
+- name: Stop and disable systemd-resolved
+  systemd:
+    name: systemd-resolved
+    state: stopped
+    enabled: no
+    masked: yes
+
+- name: Remove existing resolv.conf if it's a symlink
+  file:
+    path: /etc/resolv.conf
+    state: absent
+
+- name: Create new /etc/resolv.conf
+  copy:
+    dest: /etc/resolv.conf
+    content: |
+      nameserver 127.0.0.1  # Use Unbound
+      nameserver 8.8.8.8    # Fallback to Google DNS
+      nameserver 1.1.1.1    # Fallback to Cloudflare DNS
+      options edns0
+    owner: root
+    group: root
+    mode: '0644'

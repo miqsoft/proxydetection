@@ -1,0 +1,5 @@
+- name: "Start machine"
+  hosts: localhost
+  gather_facts: no
+  roles:
+    - start

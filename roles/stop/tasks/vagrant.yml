@@ -1,0 +1,16 @@
+- name: "Destroy Vagrant machines"
+  command: "vagrant destroy -f"
+  args:
+    chdir: "{{ host.vagrant_dir }}"
+
+- name: "Remove Vagrant file"
+  file:
+    path: "{{ host.vagrant_dir }}/Vagrantfile"
+    state: absent
+
+- name: Remove a host from [digital_ocean] group
+  ini_file:
+    dest: inventory/hosts.ini
+    section: vagrant
+    option: "{{ machine.name }}"
+    state: absent

@@ -1,0 +1,25 @@
+experiment_tasks:
+  - host: client
+    task:
+      name: "Curl the server"
+      ansible.builtin.shell:
+          cmd: "export ALL_PROXY=socks4://{{ hostvars['relay']['reserved_ip'] }}:1080 && curl-new --http2 -v http://{{ hostvars['server']['reserved_ip'] }}:8001 2>&1 | tee -a /output/client_curl.log"
+  - host: client
+    task:
+      name: "Save the curl log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+          src: "/output/client_curl.log"
+          dst: "{{ playbook_dir }}/{{ log_dir }}/client_curl.log"
+  - host: server
+    task:
+      name: "Save the server log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+        src: "/output/server_http2.log"
+        dst: "{{ playbook_dir }}/{{ log_dir }}/server_http2.log"
+  - host: server
+    task:
+      name: "Restart the server"
+      ansible.builtin.shell:
+        cmd: "service http2 restart"

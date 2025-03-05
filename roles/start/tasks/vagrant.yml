@@ -1,0 +1,50 @@
+- name: "Generate Vagrantfile with shared folders"
+  template:
+    src: "{{ machine.dir }}/Vagrantfile.j2"
+    dest: "{{ machine.dir }}/Vagrantfile"
+  vars:
+    machine_shared_dirs: "{{ machine.shared_dirs | default([]) }}"
+
+- name: "Get public IP of host"
+  command: "curl https://api64.ipify.org"
+  register: localhost_public_ip
+  delegate_to: localhost
+
+- name: "Start Vagrant machine"
+  command: "vagrant up"
+  args:
+    chdir: "{{ machine.dir }}"
+  register: vagrant_result
+
+- name: "Get vagrant ssh-config"
+  command: "vagrant ssh-config"
+  args:
+    chdir: "{{ machine.dir }}"
+  register: vagrant_ssh_result
+
+- name: "print vagrant ssh-config"
+  debug:
+    var: vagrant_ssh_result
+
+- name: "Ensure [vagrant] group exists in inventory"
+  blockinfile:
+    path: "inventory/hosts.ini"
+    marker: "# {mark} VAGRANT HOSTS"
+    block: |
+      [vagrant]
+    create: yes
+    state: present
+
+- name: "Persist dynamic host to inventory within vagrant group"
+  ini_file:
+    dest: inventory/hosts.ini
+    section: vagrant
+    option: "{{ machine.name }}"
+    value: >-
+      ansible_host={{ vagrant_ssh_result.stdout_lines | map('trim') | select('search', '^\s*HostName\s+') | map('regex_replace', '^\s*HostName\s+(\S+)', '\1') | first | default('') }}
+      ansible_user=vagrant
+      ansible_ssh_private_key_file={{ vagrant_ssh_result.stdout_lines | map('trim') | select('search', '^\s*IdentityFile\s+') | map('regex_replace', '^\s*IdentityFile\s+(.+)', '\1') | first | default('') }}
+      ansible_port={{ vagrant_ssh_result.stdout_lines | map('trim') | select('search', '^\s*Port\s+') | map('regex_replace', '^\s*Port\s+(\d+)', '\1') | first | default('22') }}
+      vagrant_dir={{ machine.dir | default('') }}
+      local_machine_public_ip={{ localhost_public_ip.stdout }}
+    state: present

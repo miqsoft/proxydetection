@@ -1,0 +1,5 @@
+- name: Stop machine (Shutdown & Destroy)
+  hosts: localhost
+  gather_facts: no
+  roles:
+    - stop

@@ -1,0 +1,24 @@
+ProxyChains-3.1 (http://proxychains.sf.net)
+|S-chain|-<>-104.248.101.195:1080-<><>-68.183.243.119:990-<><>-OK
+|S-chain|-<>-104.248.101.195:1080-<><>-104.248.101.195:10190-<><>-OK
+Traceback (most recent call last):
+  File "/app/ftp_client.py", line 49, in <module>
+    ftps.retrbinary(f"RETR {REMOTE_FILE}", f.write)
+  File "/usr/lib/python3.12/ftplib.py", line 436, in retrbinary
+    with self.transfercmd(cmd, rest) as conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/ftplib.py", line 393, in transfercmd
+    return self.ntransfercmd(cmd, rest)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/ftplib.py", line 771, in ntransfercmd
+    conn, size = super().ntransfercmd(cmd, rest)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/ftplib.py", line 359, in ntransfercmd
+    resp = self.sendcmd(cmd)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/ftplib.py", line 281, in sendcmd
+    return self.getresp()
+           ^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/ftplib.py", line 252, in getresp
+    raise error_temp(resp)
+ftplib.error_temp: 425 Failed to establish connection.

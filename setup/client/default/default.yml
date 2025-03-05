@@ -1,0 +1,21 @@
+---
+- name: Copy App dir to host
+  synchronize:
+      src: setup/client/default/app
+      dest: /
+  become: yes
+- name: Install requirements in the virtual environment
+  shell:
+    cmd: "source /home/vagrant/venv/bin/activate && pip3 install -r /app/requirements.txt"
+  args:
+    executable: /bin/bash
+  become: yes
+- name: Copy ssh key to host
+  copy:
+       src: setup/cert/id_rsa
+       dest: /home/vagrant/.ssh/id_rsa
+- name: Install proxychains
+  apt:
+    name: proxychains
+    state: present
+  become: yes

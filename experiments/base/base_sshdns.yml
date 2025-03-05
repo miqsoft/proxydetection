@@ -1,13 +1,29 @@
-client:
-  default
-server:
-  default
-logs:
-  client:
-    - client_ssh.log
-commands:
-  connect:
-  traffic:
-    - server: "cat /cert/id_rsa.pub >> ~/.ssh2/authorized_keys && service ssh2 restart"
-    - client: "ssh -v -i /cert/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 root@server.labforensic.de ls 2>&1 | tee /output/client_ssh.log"
-    - server: "rm ~/.ssh2/authorized_keys && touch ~/.ssh2/authorized_keys && service ssh2 restart"
+experiment_tasks:
+  - host: server
+    task:
+      name: "Add the client's public key to the server's authorized keys"
+      ansible.builtin.shell:
+          cmd: "cat /cert/id_rsa.pub >> ~/.ssh2/authorized_keys && service sshd2 restart"
+  - host: client
+    task:
+      name: "SSH to the server"
+      ansible.builtin.shell:
+          cmd: "ssh -v -i /cert/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 root@{{ hostvars['server']['dns'] }} ls 2>&1 | tee -a /output/client_ssh.log"
+  - host: server
+    task:
+      name: "Remove the client's public key from the server's authorized keys"
+      ansible.builtin.shell:
+          cmd: "rm ~/.ssh2/authorized_keys && touch ~/.ssh2/authorized_keys"
+  - host: client
+    task:
+      name: "Save the ssh client log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+          src: "/output/client_ssh.log"
+          dst: "{{ playbook_dir }}/{{ log_dir }}/client_ssh.log"
+  - host: server
+    task:
+      name: "Restart the server"
+      ansible.builtin.shell:
+        cmd: "service sshd2 restart"
+

@@ -1,0 +1,5 @@
+2025-03-05 14:54:20,772 - INFO - Logged in to FTP server with TLS
+2025-03-05 14:54:20,800 - INFO - Secured data connection
+2025-03-05 14:54:20,873 - INFO - Downloaded file
+2025-03-05 14:54:20,879 - INFO - Closed connection
+2025-03-05 14:54:20,879 - INFO - Deleted local file

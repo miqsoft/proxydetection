@@ -1,0 +1,61 @@
+[1740646878] unbound[19544:0] info: service stopped (unbound 1.19.2).
+[1740646878] unbound[19544:0] debug: stop threads
+[1740646878] unbound[19544:0] debug: cleanup.
+[1740646878] unbound[19544:0] debug: comm_point_close of 5: event_del
+[1740646878] unbound[19544:0] info: server stats for thread 0: 9 queries, 6 answers from cache, 3 recursions, 0 prefetch, 0 rejected by ip ratelimiting
+[1740646878] unbound[19544:0] info: server stats for thread 0: requestlist max 2 avg 0.666667 exceeded 0 jostled 0
+[1740646878] unbound[19544:0] info: mesh has 0 recursion states (0 with reply, 0 detached), 0 waiting replies, 3 recursion replies sent, 0 replies dropped, 0 states jostled out
+[1740646878] unbound[19544:0] info: average recursion processing time 0.282240 sec
+[1740646878] unbound[19544:0] info: histogram of recursion processing times
+[1740646878] unbound[19544:0] info: [25%]=0 median[50%]=0 [75%]=0
+[1740646878] unbound[19544:0] info: lower(secs) upper(secs) recursions
+[1740646878] unbound[19544:0] info:    0.131072    0.262144 2
+[1740646878] unbound[19544:0] info:    0.524288    1.000000 1
+[1740646878] unbound[19544:0] debug: cache memory msg=66104 rrset=66104 infra=25790 val=70050 subnet=74536
+[1740646878] unbound[19544:0] debug: comm_point_close of 3: event_del
+[1740646878] unbound[19544:0] debug: comm_point_close of 4: event_del
+[1740646878] unbound[19544:0] debug: comm_point_close of 7: event_del
+[1740646878] unbound[19544:0] debug: Exit cleanup.
+[1740646878] unbound[19544:0] debug: switching log to stderr
+[1740646878] unbound[19866:0] debug: module config: "subnetcache validator iterator"
+[1740646878] unbound[19866:0] notice: init module 0: subnetcache
+[1740646878] unbound[19866:0] debug: subnetcache: option registered (8)
+[1740646878] unbound[19866:0] notice: init module 1: validator
+[1740646878] unbound[19866:0] debug: reading autotrust anchor file /var/lib/unbound/root.key
+[1740646878] unbound[19866:0] info: trust point . : 1
+[1740646878] unbound[19866:0] info: assembled 0 DS and 2 DNSKEYs
+[1740646878] unbound[19866:0] info: DNSKEY:: .	3600	IN	DNSKEY	257 3 8 AwEAAa96jeuknZlaeSrvyAJj6ZHv28hhOKkx3rLGXVaC6rXTsDc449/cidltpkyGwCJNnOAlFNKF2jBosZBU5eeHspaQWOmOElZsjICMQMC3aeHbGiShvZsx4wMYSjH8e7Vrhbu6irwCzVBApESjbUdpWWmEnhathWu1jo+siFUiRAAxm9qyJNg/wOZqqzL/dL/q8PkcRU5oUKEpUge71M3ej2/7CPqpdVwuMoTvoB+ZOT4YeGyxMvHmbrxlFzGOHOijtzN+u1TQNatX2XBuzZNQ1K+s2CXkPIZo7s6JgZyvaBevYtxPvYLw4z9mR7K2vaF18UYH9Z9GNUUeayffKC73PYc= ;{id = 38696 (ksk), size = 2048b}
+
+[1740646878] unbound[19866:0] info: DNSKEY:: .	3600	IN	DNSKEY	257 3 8 AwEAAaz/tAm8yTn4Mfeh5eyI96WSVexTBAvkMgJzkKTOiW1vkIbzxeF3+/4RgWOq7HrxRixHlFlExOLAJr5emLvN7SWXgnLh4+B5xQlNVz8Og8kvArMtNROxVQuCaSnIDdD5LKyWbRd2n9WGe2R8PzgCmr3EgVLrjyBxWezF0jLHwVN8efS3rCj/EWgvIWgb9tarpVUDK/b58Da+sqqls3eNbuv7pr+eoZG+SrDK6nWeL3c6H5Apxz7LjVc1uTIdsIXxuOLYA4/ilBmSVIzuDWfdRUfhHdY6+cn8HFRm+2hM8AnXGXws9555KrUB5qihylGa8subX2Nn6UwNR1AkUTV74bU= ;{id = 20326 (ksk), size = 2048b}
+
+[1740646878] unbound[19866:0] info: file /var/lib/unbound/root.key
+[1740646878] unbound[19866:0] info: last_queried: 1740646862 Thu Feb 27 09:01:02 2025
+[1740646878] unbound[19866:0] info: last_success: 1740646862 Thu Feb 27 09:01:02 2025
+[1740646878] unbound[19866:0] info: next_probe_time: 1740688854 Thu Feb 27 20:40:54 2025
+[1740646878] unbound[19866:0] info: query_interval: 43200
+[1740646878] unbound[19866:0] info: retry_time: 8640
+[1740646878] unbound[19866:0] info: query_failed: 0
+[1740646878] unbound[19866:0] info: [  VALID  ] .	3600	IN	DNSKEY	257 3 8 AwEAAa96jeuknZlaeSrvyAJj6ZHv28hhOKkx3rLGXVaC6rXTsDc449/cidltpkyGwCJNnOAlFNKF2jBosZBU5eeHspaQWOmOElZsjICMQMC3aeHbGiShvZsx4wMYSjH8e7Vrhbu6irwCzVBApESjbUdpWWmEnhathWu1jo+siFUiRAAxm9qyJNg/wOZqqzL/dL/q8PkcRU5oUKEpUge71M3ej2/7CPqpdVwuMoTvoB+ZOT4YeGyxMvHmbrxlFzGOHOijtzN+u1TQNatX2XBuzZNQ1K+s2CXkPIZo7s6JgZyvaBevYtxPvYLw4z9mR7K2vaF18UYH9Z9GNUUeayffKC73PYc= ;{id = 38696 (ksk), size = 2048b} ;;state:2 ;;pending_count:0 last:Thu Feb 27 08:58:07 2025
+[1740646878] unbound[19866:0] info: [  VALID  ] .	3600	IN	DNSKEY	257 3 8 AwEAAaz/tAm8yTn4Mfeh5eyI96WSVexTBAvkMgJzkKTOiW1vkIbzxeF3+/4RgWOq7HrxRixHlFlExOLAJr5emLvN7SWXgnLh4+B5xQlNVz8Og8kvArMtNROxVQuCaSnIDdD5LKyWbRd2n9WGe2R8PzgCmr3EgVLrjyBxWezF0jLHwVN8efS3rCj/EWgvIWgb9tarpVUDK/b58Da+sqqls3eNbuv7pr+eoZG+SrDK6nWeL3c6H5Apxz7LjVc1uTIdsIXxuOLYA4/ilBmSVIzuDWfdRUfhHdY6+cn8HFRm+2hM8AnXGXws9555KrUB5qihylGa8subX2Nn6UwNR1AkUTV74bU= ;{id = 20326 (ksk), size = 2048b} ;;state:2 ;;pending_count:0 last:Thu Feb 27 08:58:07 2025
+[1740646878] unbound[19866:0] debug: validator nsec3cfg keysz 1024 mxiter 150
+[1740646878] unbound[19866:0] debug: validator nsec3cfg keysz 2048 mxiter 150
+[1740646878] unbound[19866:0] debug: validator nsec3cfg keysz 4096 mxiter 150
+[1740646878] unbound[19866:0] notice: init module 2: iterator
+[1740646878] unbound[19866:0] debug: target fetch policy for level 0 is 3
+[1740646878] unbound[19866:0] debug: target fetch policy for level 1 is 2
+[1740646878] unbound[19866:0] debug: target fetch policy for level 2 is 1
+[1740646878] unbound[19866:0] debug: target fetch policy for level 3 is 0
+[1740646878] unbound[19866:0] debug: target fetch policy for level 4 is 0
+[1740646878] unbound[19866:0] debug: donotq: 127.0.0.0/8
+[1740646878] unbound[19866:0] debug: donotq: ::1
+[1740646878] unbound[19866:0] debug: EDNS known options:
+[1740646878] unbound[19866:0] debug:   Code:    Bypass_cache_stage: Aggregate_mesh:
+[1740646878] unbound[19866:0] debug:   edns-cli NO                  NO             
+[1740646878] unbound[19866:0] debug: total of 59446 outgoing ports available
+[1740646878] unbound[19866:0] debug: start threads
+[1740646878] unbound[19866:0] debug: libevent 2.1.12-stable uses epoll method.
+[1740646878] unbound[19866:0] debug: no config, using builtin root hints.
+[1740646878] unbound[19866:0] debug: cache memory msg=66104 rrset=66104 infra=7952 val=66384 subnet=74536
+[1740646878] unbound[19866:0] info: start of service (unbound 1.19.2).
+[1740646878] unbound[19866:0] debug: autotrust probe timer callback
+[1740646878] unbound[19866:0] debug: autotrust probe timer 0 callbacks done

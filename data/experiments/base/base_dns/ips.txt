@@ -1,2 +1,0 @@
-server_assigned: 165.22.29.60
-server_reserved: 68.183.243.119

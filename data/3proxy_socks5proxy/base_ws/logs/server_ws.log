@@ -1,0 +1,19 @@
+2025-03-05 14:22:11,590 - INFO - server listening on 0.0.0.0:8100
+2025-03-05 14:22:11,591 - INFO - WebSocket server started on ws://0.0.0.0:8100
+2025-03-05 15:00:34,447 - INFO - connection rejected (426 Upgrade Required)
+2025-03-05 15:00:34,605 - ERROR - opening handshake failed
+Traceback (most recent call last):
+  File "/root/venv/lib/python3.12/site-packages/websockets/asyncio/server.py", line 356, in conn_handler
+    await connection.handshake(
+  File "/root/venv/lib/python3.12/site-packages/websockets/asyncio/server.py", line 207, in handshake
+    raise self.protocol.handshake_exc
+  File "/root/venv/lib/python3.12/site-packages/websockets/server.py", line 138, in accept
+    ) = self.process_request(request)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/venv/lib/python3.12/site-packages/websockets/server.py", line 233, in process_request
+    raise InvalidUpgrade(
+websockets.exceptions.InvalidUpgrade: invalid Connection header: close
+2025-03-05 15:07:06,484 - INFO - connection rejected (426 Upgrade Required)
+2025-03-05 15:31:25,456 - INFO - connection open
+2025-03-05 15:31:25,467 - INFO - Received: Hello, Server!
+2025-03-05 15:31:25,468 - INFO - Sent: Echo: Hello, Server!

@@ -1,0 +1,24 @@
+---
+- name: "Determine target type"
+  set_fact:
+    target_type: >-
+      {% if target in (vagrant_machines | map(attribute='name') | list) %}vagrant{% elif target in (do_machines | map(attribute='name') | list) %}do{% else %}None{% endif %}
+    machine: >-
+      {{ (vagrant_machines + do_machines) | selectattr('name', 'equalto', target) | list | first | default(None) }}
+  delegate_to: localhost
+
+- name: "print target type"
+  debug:
+      msg: "Target type is '{{ target_type }}'"
+
+- fail:
+    msg: "Target machine '{{ target }}' not found!"
+  when: machine is none
+
+- name: "Setup Do Machines"
+  include_tasks: "do.yml"
+  when: target_type == 'do'
+
+- name: "Run provided setup tasks"
+  include_tasks: "{{ setup }}"
+  when: setup is defined

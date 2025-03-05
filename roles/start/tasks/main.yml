@@ -1,0 +1,13 @@
+- name: "Detect type of target"
+  set_fact:
+    target_type: "{{ 'vagrant' if target in vagrant_machines | map(attribute='name') else 'do' if target in do_machines | map(attribute='name') else None }}"
+    machine: "{{ (vagrant_machines + do_machines) | selectattr('name', 'equalto', target) | first }}"
+
+- name: "Start Vagrant machine"
+  include_tasks: vagrant.yml
+  when: target_type == 'vagrant'
+
+- name: "Start DigitalOcean droplet"
+  include_tasks: do.yml
+  when: target_type == 'do'
+
