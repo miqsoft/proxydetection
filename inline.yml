@@ -3,7 +3,6 @@
   ansible.builtin.set_fact:
     task_definition:
       - "{{ task_item.task }}"
-
   delegate_to: localhost
   become: false
 

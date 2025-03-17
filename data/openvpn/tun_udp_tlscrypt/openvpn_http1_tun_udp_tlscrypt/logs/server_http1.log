@@ -1,0 +1,10 @@
+2025-03-15 15:15:29,830 - INFO - Received GET
+2025-03-15 15:15:29,831 - INFO - Sent data (Hello, HTTP1.1!)
+2025-03-15 15:15:33,486 - INFO - Received GET
+2025-03-15 15:15:33,487 - INFO - Sent data (Hello, HTTP1.1!)
+2025-03-15 15:15:34,238 - INFO - Received GET
+2025-03-15 15:15:34,238 - INFO - Sent data (Hello, HTTP1.1!)
+2025-03-15 15:15:38,578 - INFO - Received GET
+2025-03-15 15:15:38,579 - INFO - Sent data (Hello, HTTP1.1!)
+2025-03-15 15:21:59,943 - INFO - Received GET
+2025-03-15 15:21:59,943 - INFO - Sent data (Hello, HTTP1.1!)

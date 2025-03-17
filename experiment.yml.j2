@@ -1,0 +1,87 @@
+- name: Run experiments on all provisioned machines
+  hosts: all
+  become: yes
+  tasks:
+    - name: "Set base dir relative to hosts.ini"
+      set_fact:
+        base_dir: "<<< base_dir >>>"
+    - name: "Generate local Pcap Directory based on experiment file"
+      set_fact:
+        pcap_dir: "<<< output_dir >>>/pcaps"
+
+    - name: "Generate local Log Directory based on experiment file"
+      set_fact:
+          log_dir: "<<< output_dir >>>/logs"
+
+    - name: "Create Output Directory and possibly parent directories"
+      command: "mkdir -p <<< output_dir >>>/"
+      delegate_to: localhost
+      become: false
+      run_once: true
+
+    - name: "Create Pcap Directory"
+      command: "mkdir -p {{ pcap_dir }}"
+      delegate_to: localhost
+      become: false
+      run_once: true
+
+    - name: "Create Log Directory"
+      command: "mkdir -p {{ log_dir }}"
+      delegate_to: localhost
+      become: false
+      run_once: true
+
+    - name: "Generate Output Directory"
+      command: "sudo mkdir -p /output"
+
+    - name: "Start tcpdump capture"
+      shell: >
+        nohup tcpdump -i eth0 not port 22 -w /output/capture_{{ inventory_hostname }}.pcap  > /output/tcpdump_{{ inventory_hostname }}.log 2>&1 &
+      async: 1
+      poll: 0
+
+    - name: "Pause briefly to ensure tcpdump starts"
+      pause:
+        seconds: 2
+
+    # actual experiment tasks (dynamically generated)
+<<< experiment_tasks >>>
+
+    # cleanup tasks
+    - name: "Stop tcpdump capture"
+      shell: "sudo killall tcpdump"
+      ignore_errors: yes
+
+    - name: "Pause to allow capture file to be written"
+      pause:
+        seconds: 1
+
+    - name: "Restart systemd-resolved to clear DNS cache on relay"
+      shell: "sudo resolvectl flush-caches"
+      become: yes
+      when: inventory_hostname == 'relay'
+
+    - name: "Restart systemd-resolved to clear DNS cache on client"
+      shell: "sudo resolvectl flush-caches"
+      become: yes
+      when: inventory_hostname == 'client'
+
+    - name: "Fetch capture file"
+      fetch:
+        src: "/output/capture_{{ inventory_hostname }}.pcap"
+        dest: "{{ pcap_dir }}/{{ inventory_hostname }}.pcap"
+        flat: yes
+
+    - name: "Fetch tcpdump log file"
+      fetch:
+        src: "/output/tcpdump_{{ inventory_hostname }}.log"
+        dest: "{{ log_dir }}/tcpdump_{{ inventory_hostname }}.log"
+        flat: yes
+
+    - name: "copy inventory/hosts.ini to output directory"
+      copy:
+          src: "{{ inventory_dir }}/hosts.ini"
+          dest: "<<< output_dir >>>"
+      delegate_to: localhost
+      become: false
+      run_once: true

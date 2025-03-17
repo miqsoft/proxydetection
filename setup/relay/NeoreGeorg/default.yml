@@ -1,0 +1,55 @@
+---
+- name: Create Output directory
+  ansible.builtin.command:
+    cmd: mkdir -p /output
+  become: yes
+- name: Ensure necessary packages are installed
+  ansible.builtin.apt:
+    name:
+      - python3-venv
+      - git
+    state: present
+  become: yes
+- name: Install Go
+  ansible.builtin.command:
+      cmd: snap install --classic go
+  args:
+      creates: /snap/bin/go
+  become: yes
+- name: Check if Neo-reGeorg directory exists
+  ansible.builtin.stat:
+    path: /opt/Neo-reGeorg
+  register: neoreg_dir
+
+- name: Clone Neo-reGeorg repository
+  ansible.builtin.git:
+    repo: https://github.com/L-codes/Neo-reGeorg.git
+    dest: /opt/Neo-reGeorg
+  when: not neoreg_dir.stat.exists
+
+- name: Create a Python virtual environment
+  ansible.builtin.command:
+    cmd: python3 -m venv /opt/Neo-reGeorg/venv
+  args:
+    creates: /opt/Neo-reGeorg/venv/bin/activate
+
+- name: Install requests in the virtual environment
+  ansible.builtin.command:
+    cmd: /opt/Neo-reGeorg/venv/bin/pip install requests[socks]
+  args:
+    creates: /opt/Neo-reGeorg/venv/lib/python3.*/site-packages/requests
+
+- name: Generate Neo-reGeorg server-side scripts
+  ansible.builtin.command:
+    cmd: /opt/Neo-reGeorg/venv/bin/python neoreg.py generate -k fakepassword123
+    chdir: /opt/Neo-reGeorg
+  register: generate_output
+
+- name: Build tunnel with go
+  ansible.builtin.command:
+    cmd: go build neoreg_servers/tunnel.go
+    chdir: /opt/Neo-reGeorg
+  args:
+    creates: /opt/Neo-reGeorg/tunnel
+
+

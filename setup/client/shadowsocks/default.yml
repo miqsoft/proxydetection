@@ -1,0 +1,43 @@
+---
+# install websocat
+- name: Download websocat binary
+  ansible.builtin.get_url:
+    url: https://github.com/vi/websocat/releases/download/v1.14.0/websocat_max.x86_64-unknown-linux-musl
+    dest: /usr/local/bin/websocat
+  become: yes
+- name: Ensure websocat is executable
+  ansible.builtin.file:
+    path: /usr/local/bin/websocat
+    mode: '0755'
+    owner: root
+    group: root
+    state: file
+  become: yes
+# install shadowsocks
+- name: Install Go
+  ansible.builtin.command:
+      cmd: snap install --classic go
+  args:
+      creates: /snap/bin/go
+  become: yes
+- name: Install shadowsocks
+  ansible.builtin.command:
+      cmd: go install github.com/shadowsocks/go-shadowsocks2@latest
+  become: yes
+- name: Deploy shadowsocks client systemd service file
+  template:
+    src: setup/client/shadowsocks/shadowsocksclient.service.j2
+    dest: /etc/systemd/system/shadowsocksclient.service
+    owner: vagrant
+    group: vagrant
+    mode: '0644'
+  vars:
+    relay: "{{ hostvars['relay']['reserved_ip'] }}"
+    password: "fakepassword123"
+  become: yes
+- name: Enable service
+  systemd:
+    name: shadowsocksclient.service
+    enabled: yes
+    daemon_reload: yes
+  become: yes

@@ -1,0 +1,24 @@
+● openvpn-client@client.service - OpenVPN tunnel for client
+     Loaded: loaded (/usr/lib/systemd/system/openvpn-client@.service; enabled; preset: enabled)
+     Active: active (running) since Sat 2025-03-15 21:23:06 UTC; 5s ago
+       Docs: man:openvpn(8)
+             https://openvpn.net/community-resources/reference-manual-for-openvpn-2-6/
+             https://community.openvpn.net/openvpn/wiki/HOWTO
+   Main PID: 67348 (openvpn)
+     Status: "Initialization Sequence Completed"
+      Tasks: 1 (limit: 9461)
+     Memory: 1.5M (peak: 2.0M)
+        CPU: 29ms
+     CGroup: /system.slice/system-openvpn\x2dclient.slice/openvpn-client@client.service
+             └─67348 /usr/sbin/openvpn --suppress-timestamps --nobind --config client.conf
+
+Mar 15 21:23:06 vagrant openvpn[67348]: Incoming dynamic tls-crypt: Using 256 bit message hash 'SHA256' for HMAC authentication
+Mar 15 21:23:06 vagrant openvpn[67348]: Outgoing Data Channel: Cipher 'AES-256-GCM' initialized with 256 bit key
+Mar 15 21:23:06 vagrant openvpn[67348]: Incoming Data Channel: Cipher 'AES-256-GCM' initialized with 256 bit key
+Mar 15 21:23:06 vagrant openvpn[67348]: UID set to nobody
+Mar 15 21:23:06 vagrant openvpn[67348]: GID set to nogroup
+Mar 15 21:23:06 vagrant openvpn[67348]: Capabilities retained: CAP_NET_ADMIN
+Mar 15 21:23:06 vagrant openvpn[67348]: Initialization Sequence Completed
+Mar 15 21:23:06 vagrant openvpn[67348]: Data Channel: cipher 'AES-256-GCM', peer-id: 0
+Mar 15 21:23:06 vagrant openvpn[67348]: Timers: ping 10, ping-restart 120
+Mar 15 21:23:06 vagrant openvpn[67348]: Protocol options: protocol-flags cc-exit tls-ekm dyn-tls-crypt

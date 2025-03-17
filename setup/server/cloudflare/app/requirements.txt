@@ -1,0 +1,5 @@
+# for http2 server
+hypercorn
+quart
+# for websockets
+websockets

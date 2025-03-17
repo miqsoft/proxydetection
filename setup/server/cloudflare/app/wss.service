@@ -1,0 +1,13 @@
+[Unit]
+Description=Simple secure WebSockets server
+After=network.target
+
+[Service]
+ExecStart=/root/venv/bin/python /app/secure_websockets.py
+WorkingDirectory=/app
+Restart=always
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target

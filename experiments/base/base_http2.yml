@@ -1,4 +1,4 @@
-experiment_tasks:
+tasks:
   - host: client
     task:
       name: "Curl the server"
@@ -10,14 +10,14 @@ experiment_tasks:
       include_tasks: "commands/fetch_and_empty.yml"
       vars:
           src: "/output/client_curl.log"
-          dst: "{{ playbook_dir }}/{{ log_dir }}/client_curl.log"
+          dst: "{{ log_dir }}/client_curl.log"
   - host: server
     task:
       name: "Save the server log"
       include_tasks: "commands/fetch_and_empty.yml"
       vars:
         src: "/output/server_http2.log"
-        dst: "{{ playbook_dir }}/{{ log_dir }}/server_http2.log"
+        dst: "{{ log_dir }}/server_http2.log"
   - host: server
     task:
       name: "Restart the server"

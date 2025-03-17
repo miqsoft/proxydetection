@@ -1,0 +1,25 @@
+tasks:
+  - host: all
+    task:
+      name: Stop Network Captures
+      include_tasks: "commands/pcap_stop.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+  - host: client
+    task:
+      name: Stop Venom Admin tmux session
+      ansible.builtin.shell: |
+        sudo tmux kill-session -t venom_session
+      become: yes
+  - host: relay
+    task:
+      name: kill all venom agent pids
+      block:
+        - name: Get PIDs of venom agent
+          ansible.builtin.shell: "pgrep agent_linux_x64"
+          register: pid
+          ignore_errors: yes
+
+        - name: Kill second PID if multiple, otherwise kill first
+          ansible.builtin.shell: "kill {{ (pid.stdout_lines[1] | default(pid.stdout_lines[0], true)) }}"
+          when: pid.stdout_lines | length > 0

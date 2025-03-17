@@ -1,0 +1,29 @@
+* Uses proxy env variable http_proxy == '104.248.101.195:3128'
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 104.248.101.195:3128...
+* Connected to 104.248.101.195 (104.248.101.195) port 3128
+* using HTTP/1.x
+> GET http://68.183.243.119:8001/ HTTP/1.1
+> Host: 68.183.243.119:8001
+> User-Agent: curl/8.12.1-DEV
+> Accept: */*
+> Proxy-Connection: Keep-Alive
+> Connection: Upgrade, HTTP2-Settings
+> Upgrade: h2c
+> HTTP2-Settings: AAMAAABkAAQAAQAAAAIAAAAA
+> 
+* Request completely sent off
+< HTTP/1.1 200 OK
+< Content-Type: text/html; charset=utf-8
+< Content-Length: 13
+< Date: Thu, 13 Mar 2025 12:27:48 GMT
+< Server: hypercorn-h11
+< Cache-Status: relay;detail=mismatch
+< Via: 1.1 relay (squid/6.10)
+< Connection: keep-alive
+< 
+{ [13 bytes data]
+100    13  100    13    0     0    363      0 --:--:-- --:--:-- --:--:--   371
+* Connection #0 to host 104.248.101.195 left intact
+Hello, HTTP2!

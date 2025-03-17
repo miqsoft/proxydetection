@@ -1,0 +1,63 @@
+2025-03-13 17:22:11,002 - INFO - server listening on 0.0.0.0:8101
+2025-03-13 17:22:11,002 - INFO - WebSocket server started on wss://0.0.0.0:8101
+2025-03-13 17:23:28,488 - INFO - connection open
+2025-03-13 17:23:28,844 - INFO - Received: Hello Server
+
+2025-03-13 17:23:29,066 - ERROR - connection handler failed
+Traceback (most recent call last):
+  File "/root/venv/lib/python3.12/site-packages/websockets/asyncio/server.py", line 376, in conn_handler
+    await self.handler(connection)
+  File "/app/secure_websockets.py", line 26, in echo
+    await websocket.send(f"Echo: {message}")
+  File "/root/venv/lib/python3.12/site-packages/websockets/asyncio/connection.py", line 476, in send
+    async with self.send_context():
+  File "/usr/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/venv/lib/python3.12/site-packages/websockets/asyncio/connection.py", line 957, in send_context
+    raise self.protocol.close_exc from original_exc
+websockets.exceptions.ConnectionClosedOK: received 1005 (no status received [internal]); then sent 1005 (no status received [internal])
+2025-03-13 17:23:50,632 - INFO - connection open
+2025-03-13 17:23:50,927 - INFO - Received: Hello Server
+
+2025-03-13 17:23:51,143 - ERROR - connection handler failed
+Traceback (most recent call last):
+  File "/root/venv/lib/python3.12/site-packages/websockets/asyncio/server.py", line 376, in conn_handler
+    await self.handler(connection)
+  File "/app/secure_websockets.py", line 26, in echo
+    await websocket.send(f"Echo: {message}")
+  File "/root/venv/lib/python3.12/site-packages/websockets/asyncio/connection.py", line 476, in send
+    async with self.send_context():
+  File "/usr/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/venv/lib/python3.12/site-packages/websockets/asyncio/connection.py", line 957, in send_context
+    raise self.protocol.close_exc from original_exc
+websockets.exceptions.ConnectionClosedOK: received 1005 (no status received [internal]); then sent 1005 (no status received [internal])
+2025-03-13 17:24:19,615 - INFO - connection open
+2025-03-13 17:24:29,258 - INFO - Received: Hellor Server
+
+2025-03-13 17:24:29,258 - INFO - Sent: Echo: Hellor Server
+
+2025-03-13 17:24:33,120 - ERROR - connection handler failed
+Traceback (most recent call last):
+  File "/root/venv/lib/python3.12/site-packages/websockets/asyncio/server.py", line 376, in conn_handler
+    await self.handler(connection)
+  File "/app/secure_websockets.py", line 24, in echo
+    async for message in websocket:
+  File "/root/venv/lib/python3.12/site-packages/websockets/asyncio/connection.py", line 242, in __aiter__
+    yield await self.recv()
+          ^^^^^^^^^^^^^^^^^
+  File "/root/venv/lib/python3.12/site-packages/websockets/asyncio/connection.py", line 322, in recv
+    raise self.protocol.close_exc from self.recv_exc
+websockets.exceptions.ConnectionClosedError: no close frame received or sent
+2025-03-13 17:25:01,172 - INFO - connection open
+2025-03-13 17:25:01,399 - INFO - Received: Hello Server
+
+2025-03-13 17:25:01,400 - INFO - Sent: Echo: Hello Server
+
+2025-03-13 17:25:42,278 - INFO - connection open
+2025-03-13 17:25:42,542 - INFO - Received: Hello Server
+
+2025-03-13 17:25:42,542 - INFO - Sent: Echo: Hello Server
+

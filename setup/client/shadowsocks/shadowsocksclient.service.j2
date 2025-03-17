@@ -1,0 +1,12 @@
+[Unit]
+Description=Shadowsocks client service
+After=network.target
+
+[Service]
+ExecStart=/root/go/bin/go-shadowsocks2 -c ss://AEAD_CHACHA20_POLY1305:{{ password }}@{{ relay }}:8488 -verbose -socks :1080 -u -udptun :8053=8.8.8.8:53,:8054=8.8.4.4:53 -tcptun :8053=8.8.8.8:53,:8054=8.8.4.4:53
+User=root
+StandardOutput=append:/output/shadowsocksclient.log
+StandardError=append:/output/shadowsocksclient.log
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,54 @@
+---
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Ensure necessary packages are installed
+  ansible.builtin.apt:
+    name:
+      - wireguard
+    state: present
+  become: yes
+
+- name: Ensure IP forwarding is enabled
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    state: present
+    sysctl_set: yes
+    reload: yes
+
+- name: Ensure IPv6 forwarding is enabled
+  sysctl:
+    name: net.ipv6.conf.all.forwarding
+    value: '1'
+    state: present
+    sysctl_set: yes
+    reload: yes
+
+- name: Load private key from file
+  set_fact:
+    private_server: "{{ lookup('file', 'setup/relay/wireguard/cert/private_server') }}"
+
+- name: Load public client key from file
+  set_fact:
+    public_client: "{{ lookup('file', 'setup/relay/wireguard/cert/public_client') }}"
+
+- name: Create Config with template
+  template:
+    src: setup/relay/wireguard/wg0.conf.j2
+    dest: /etc/wireguard/wg0.conf
+    mode: '0600'
+  vars:
+    private_server: "{{ private_server }}"
+
+- name: Enable and start WireGuard service
+  systemd:
+    name: wg-quick@wg0
+    enabled: yes
+    state: started
+  become: yes
+
+- name: Add client public key to server
+  command: "wg set wg0 peer {{ public_client }} allowed-ips 10.8.0.2/32"
+  become: yes

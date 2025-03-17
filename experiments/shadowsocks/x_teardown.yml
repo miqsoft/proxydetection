@@ -1,0 +1,37 @@
+tasks:
+  # stop all tcpdump processes and collect the pcap files
+  - host: all
+    tasks:
+      - name: Find PID of data_capture_....pcap
+        shell: ps aux | grep 'data_capture_{{ inventory_hostname }}.pcap' | grep -v grep | awk '{print $2}'
+        register: pid_result
+        ignore_errors: true
+
+      - name: Kill the process if found
+        shell: sudo kill {{ pid_result.stdout }}
+        when: pid_result.stdout != ""
+
+
+  - host: localhost
+    task:
+      name: "Pause to allow capture file to be written"
+      pause:
+        seconds: 2
+  - host: all
+    task:
+      name: "Fetch capture file"
+      fetch:
+        src: "/output/data_capture_{{ inventory_hostname }}.pcap"
+        dest: "{{ pcap_dir }}/data_capture_{{ inventory_hostname }}.pcap"
+        flat: yes
+
+  # stop the shadowsocks client service
+  - host: client
+    task:
+      name: "Stop the shadowsocks client service"
+      systemd:
+        name: shadowsocksclient.service
+        state: stopped
+        enabled: no
+        daemon_reload: yes
+      become: yes

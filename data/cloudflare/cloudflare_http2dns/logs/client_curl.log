@@ -1,0 +1,48 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Host server.labforensic.de:8080 was resolved.
+* IPv6: 2606:4700:3030::6815:3001, 2606:4700:3030::6815:2001, 2606:4700:3030::6815:5001, 2606:4700:3030::6815:6001, 2606:4700:3030::6815:7001, 2606:4700:3030::6815:4001, 2606:4700:3030::6815:1001
+* IPv4: 104.21.112.1, 104.21.32.1, 104.21.80.1, 104.21.96.1, 104.21.16.1, 104.21.64.1, 104.21.48.1
+*   Trying [2606:4700:3030::6815:3001]:8080...
+* Immediate connect fail for 2606:4700:3030::6815:3001: Network is unreachable
+*   Trying [2606:4700:3030::6815:2001]:8080...
+* Immediate connect fail for 2606:4700:3030::6815:2001: Network is unreachable
+*   Trying [2606:4700:3030::6815:5001]:8080...
+* Immediate connect fail for 2606:4700:3030::6815:5001: Network is unreachable
+*   Trying [2606:4700:3030::6815:6001]:8080...
+* Immediate connect fail for 2606:4700:3030::6815:6001: Network is unreachable
+*   Trying [2606:4700:3030::6815:7001]:8080...
+* Immediate connect fail for 2606:4700:3030::6815:7001: Network is unreachable
+*   Trying [2606:4700:3030::6815:4001]:8080...
+* Immediate connect fail for 2606:4700:3030::6815:4001: Network is unreachable
+*   Trying [2606:4700:3030::6815:1001]:8080...
+* Immediate connect fail for 2606:4700:3030::6815:1001: Network is unreachable
+*   Trying 104.21.112.1:8080...
+* Connected to server.labforensic.de (104.21.112.1) port 8080
+* using HTTP/1.x
+> GET / HTTP/1.1
+> Host: server.labforensic.de:8080
+> User-Agent: curl/8.12.1-DEV
+> Accept: */*
+> Connection: Upgrade, HTTP2-Settings
+> Upgrade: h2c
+> HTTP2-Settings: AAMAAABkAAQAAQAAAAIAAAAA
+> 
+* Request completely sent off
+< HTTP/1.1 200 
+< Date: Mon, 17 Mar 2025 14:07:01 GMT
+< Content-Type: text/html; charset=utf-8
+< Transfer-Encoding: chunked
+< Connection: keep-alive
+< cf-cache-status: DYNAMIC
+< Report-To: {"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=S5IWx3GW0NtDxrbDjTO4MmmVEMRHixL%2BGA6w0F2Sxe%2FeAAokrc8vMkjI%2BBvmv%2FozxvDPK%2FIYdCklglRwNIkn2xaxyOhfMHyujDKvbFimPHWlGnhTAZGKKg6L%2FarZYaDfS%2FO5TvWbZVSLHCp2zA%3D%3D"}],"group":"cf-nel","max_age":604800}
+< NEL: {"success_fraction":0,"report_to":"cf-nel","max_age":604800}
+< Server: cloudflare
+< CF-RAY: 921d0de14dbc199e-FRA
+< alt-svc: h3=":443"; ma=86400
+< server-timing: cfL4;desc="?proto=TCP&rtt=4019&min_rtt=4019&rtt_var=2009&sent=1&recv=3&lost=0&retrans=0&sent_bytes=0&recv_bytes=187&delivery_rate=0&cwnd=30&unsent_bytes=0&cid=0000000000000000&ts=0&x=0"
+< 
+{ [23 bytes data]
+100    13    0    13    0     0    327      0 --:--:-- --:--:-- --:--:--   333
+* Connection #0 to host server.labforensic.de left intact
+Hello, HTTP2!

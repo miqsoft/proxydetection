@@ -1,26 +1,26 @@
-- name: "Fetch and empty the {{ src }} file (dst: {{ dst }})"
+- name: Fetch and empty
   block:
-    - name: Check if {{ src }} exists
+    - name: Check if <<< src >>> exists
       stat:
-        path: "{{ src }}"
+        path: "<<< src >>>"
+      become: yes
+      delegate_facts: true
       register: src_stat
 
     - name: Fetch the log file from remote
       fetch:
-        src: "{{ src }}"
-        dest: "{{ dst }}"
+        src: "<<< src >>>"
+        dest: "<<< dst >>>"
         flat: yes
       become: yes
-      when: src_stat.stat.exists
+      when: src_stat.stat.exists | bool
+
+    - name: Skipping since <<< src >>> does not exist
+      debug:
+        msg: "Skipping since <<< src >>> does not exist"
+      when: not (src_stat.stat.exists | bool)
 
     - name: Empty the log file on remote server
-      command: "sudo truncate -s 0 {{ src }}"
+      command: "sudo truncate -s 0 <<< src >>>"
       become: yes
-      when: src_stat.stat.exists
-
-    - name: "Skipping since {{ src }} does not exist"
-      debug:
-        msg: "Skipping since {{ src }} does not exist"
-      when: not src_stat.stat.exists
-  when: src is defined and dst is defined
-
+      when: src_stat.stat.exists | bool

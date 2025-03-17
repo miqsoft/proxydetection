@@ -1,0 +1,13 @@
+[Unit]
+Description=Simple HTTP/1.1 server
+After=network.target
+
+[Service]
+ExecStart=/root/venv/bin/python /app/http1.py
+WorkingDirectory=/app
+Restart=always
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target

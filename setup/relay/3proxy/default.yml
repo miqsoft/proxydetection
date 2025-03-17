@@ -41,17 +41,13 @@
     group: proxy
     recurse: yes
 
-- name: Modify 3proxy configuration (chroot)
-  replace:
-    path: /usr/local/3proxy/conf/3proxy.cfg
-    regexp: 'chroot /usr/local/3proxy proxy proxy'
-    replace: 'chroot /usr/local/3proxy root root'
-
-- name: Modify 3proxy authentication to none
-  replace:
-    path: /usr/local/3proxy/conf/3proxy.cfg
-    regexp: 'auth strong'
-    replace: 'auth none'
+- name: copy 3proxy configuration file
+  copy:
+      src: setup/relay/3proxy/3proxy.cfg
+      dest: /usr/local/3proxy/conf/3proxy.cfg
+      owner: proxy
+      group: proxy
+      mode: '0644'
 
 - name: Ensure add3proxyuser.sh is executable
   file:

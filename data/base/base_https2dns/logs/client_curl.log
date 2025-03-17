@@ -55,10 +55,10 @@
 < HTTP/2 200 
 < content-type: text/html; charset=utf-8
 < content-length: 23
-< date: Sun, 16 Feb 2025 13:32:12 GMT
+< date: Thu, 13 Mar 2025 12:11:13 GMT
 < server: hypercorn-h2
 < 
 { [5 bytes data]
-100    23  100    23    0     0    293      0 --:--:-- --:--:-- --:--:--   294
+100    23  100    23    0     0    456      0 --:--:-- --:--:-- --:--:--   469
 * Connection #0 to host server.labforensic.de left intact
 Hello, HTTP/2 with TLS!

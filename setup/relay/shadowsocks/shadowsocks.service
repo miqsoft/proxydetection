@@ -1,0 +1,16 @@
+[Unit]
+Description=Shadowsocks Relay Server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/root/go/bin/go-shadowsocks2 -s ss://AEAD_CHACHA20_POLY1305:fakepassword123@:8488 -verbose
+Restart=always
+RestartSec=3
+Type=simple
+User=root
+StandardOutput=append:/output/shadowsocks.log
+StandardError=append:/output/shadowsocks.log
+
+[Install]
+WantedBy=multi-user.target

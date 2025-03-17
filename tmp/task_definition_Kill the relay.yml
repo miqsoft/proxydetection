@@ -1,0 +1,3 @@
+- ansible.builtin.shell:
+    cmd: pkill -f tunnel
+  name: Kill the relay

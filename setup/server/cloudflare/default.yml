@@ -1,0 +1,116 @@
+---
+- name: Copy App dir to host
+  synchronize:
+      src: setup/server/cloudflare/app
+      dest: /
+  delegate_to: localhost
+  become: false
+
+- name: Copy App dir to host
+  synchronize:
+   src: setup/cert
+   dest: /
+  delegate_to: localhost
+  become: false
+
+- name: Create Output dir
+  file:
+    path: /output
+    state: directory
+    mode: '0755'
+
+- name: Update and upgrade apt packages
+  apt:
+    update_cache: yes
+    upgrade: dist
+
+- name: Install required packages
+  apt:
+    name:
+      - python3
+      - python3-pip
+      - python3.12-venv
+      - debian-keyring
+      - debian-archive-keyring
+      - apt-transport-https
+      - curl
+      - bind9-utils
+      - dnsutils
+      - net-tools
+    state: present
+
+- name: Setup Python virtual environment
+  command: python3 -m venv /root/venv
+
+- name: Activate virtual environment and install dependencies
+  shell: |
+    source /root/venv/bin/activate && pip3 install -r /app/requirements.txt
+  args:
+    executable: /bin/bash
+
+- name: Install Caddy
+  block:
+    - name: Check if Caddy GPG key exists
+      stat:
+        path: /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+      register: caddy_gpg
+
+    - name: Add Caddy GPG key
+      shell: curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+      when: not caddy_gpg.stat.exists
+
+    - name: Add Caddy repository
+      shell: curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
+
+    - name: Update and install Caddy
+      apt:
+        update_cache: yes
+        name: caddy
+        state: present
+
+    - name: Stop Caddy service
+      command: pkill -9 caddy
+      ignore_errors: yes
+
+- name: Copy systemd service files
+  copy:
+    src: "/app/{{ item }}"
+    dest: "/etc/systemd/system/{{ item }}"
+    remote_src: yes
+  loop:
+    - http1.service
+    - http2.service
+    - ws.service
+    - wss.service
+    - https1.service
+    - https2.service
+    - https3.service
+
+- name: Reload systemd daemon
+  command: systemctl daemon-reload
+
+- name: Enable services
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+  loop:
+    - http1.service
+    - http2.service
+    - ws.service
+    - wss.service
+    - https1.service
+    - https2.service
+    - https3.service
+
+- name: Start services
+  systemd:
+    name: "{{ item }}"
+    state: started
+  loop:
+    - http1.service
+    - http2.service
+    - ws.service
+    - wss.service
+    - https1.service
+    - https2.service
+    - https3.service

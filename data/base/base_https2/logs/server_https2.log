@@ -1,4 +1,4 @@
-2025-02-16 12:52:57,305 - INFO - Hypercorn configured with SSL and HTTP/2.
-2025-02-16 12:52:57,305 - INFO - Starting HTTPS server on 0.0.0.0:4001
-2025-02-16 12:52:57,309 - INFO - Running on https://0.0.0.0:4001 (CTRL + C to quit)
-2025-02-16 13:30:04,193 - INFO - Root endpoint accessed.
+2025-03-13 12:11:20,051 - INFO - Hypercorn configured with SSL and HTTP/2.
+2025-03-13 12:11:20,051 - INFO - Starting HTTPS server on 0.0.0.0:4001
+2025-03-13 12:11:20,056 - INFO - Running on https://0.0.0.0:4001 (CTRL + C to quit)
+2025-03-13 12:11:34,746 - INFO - Root endpoint accessed.

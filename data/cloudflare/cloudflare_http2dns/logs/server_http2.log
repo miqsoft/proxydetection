@@ -1,0 +1,3 @@
+2025-03-17 14:02:53,613 - INFO - Running on http://0.0.0.0:8080 (CTRL + C to quit)
+2025-03-17 14:07:01,346 - INFO - Received request: GET /
+2025-03-17 14:07:01,347 - INFO - Response Status: 200 OK

@@ -17,7 +17,7 @@ class CustomHandler(BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"
 
     def do_GET(self):
-        logging.info(f"Received GET from {self.client_address}")
+        logging.info(f"Received GET")
         response_body = RESPONSE.encode()
         self.send_response(200)
         self.send_header("Content-type", "text/html")
@@ -25,7 +25,7 @@ class CustomHandler(BaseHTTPRequestHandler):
         self.send_header("Connection", "close")
         self.end_headers()
         self.wfile.write(response_body)
-        logging.info(f"Sent data ({RESPONSE}) to {self.client_address}")
+        logging.info(f"Sent data ({RESPONSE})")
 
 
 

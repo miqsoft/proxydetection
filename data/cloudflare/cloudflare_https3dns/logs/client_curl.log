@@ -1,0 +1,63 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Host server.labforensic.de:2096 was resolved.
+* IPv6: 2606:4700:3030::6815:5001, 2606:4700:3030::6815:6001, 2606:4700:3030::6815:7001, 2606:4700:3030::6815:2001, 2606:4700:3030::6815:1001, 2606:4700:3030::6815:4001, 2606:4700:3030::6815:3001
+* IPv4: 104.21.96.1, 104.21.32.1, 104.21.80.1, 104.21.16.1, 104.21.112.1, 104.21.64.1, 104.21.48.1
+*   Trying [2606:4700:3030::6815:5001]:2096...
+* Immediate connect fail for 2606:4700:3030::6815:5001: Network is unreachable
+*   Trying [2606:4700:3030::6815:6001]:2096...
+* Immediate connect fail for 2606:4700:3030::6815:6001: Network is unreachable
+*   Trying [2606:4700:3030::6815:7001]:2096...
+* Immediate connect fail for 2606:4700:3030::6815:7001: Network is unreachable
+*   Trying [2606:4700:3030::6815:2001]:2096...
+* Immediate connect fail for 2606:4700:3030::6815:2001: Network is unreachable
+*   Trying [2606:4700:3030::6815:1001]:2096...
+* Immediate connect fail for 2606:4700:3030::6815:1001: Network is unreachable
+*   Trying [2606:4700:3030::6815:4001]:2096...
+* Immediate connect fail for 2606:4700:3030::6815:4001: Network is unreachable
+*   Trying [2606:4700:3030::6815:3001]:2096...
+* Immediate connect fail for 2606:4700:3030::6815:3001: Network is unreachable
+*   Trying 104.21.96.1:2096...
+* Server certificate:
+*  subject: CN=labforensic.de
+*  start date: Mar 17 11:57:52 2025 GMT
+*  expire date: Jun 15 12:56:09 2025 GMT
+*  issuer: C=US; O=Google Trust Services; CN=WE1
+*  SSL certificate verify result: unable to get local issuer certificate (20), continuing anyway.
+*   Certificate level 0: Public key type EC/prime256v1 (256/128 Bits/secBits), signed using ecdsa-with-SHA256
+*   Certificate level 1: Public key type EC/prime256v1 (256/128 Bits/secBits), signed using ecdsa-with-SHA384
+*   Certificate level 2: Public key type EC/secp384r1 (384/192 Bits/secBits), signed using sha256WithRSAEncryption
+* Connected to server.labforensic.de (104.21.96.1) port 2096
+* using HTTP/3
+* [HTTP/3] [0] OPENED stream for https://server.labforensic.de:2096/
+* [HTTP/3] [0] [:method: GET]
+* [HTTP/3] [0] [:scheme: https]
+* [HTTP/3] [0] [:authority: server.labforensic.de:2096]
+* [HTTP/3] [0] [:path: /]
+* [HTTP/3] [0] [user-agent: curl/8.12.1-DEV]
+* [HTTP/3] [0] [accept: */*]
+> GET / HTTP/3
+> Host: server.labforensic.de:2096
+> User-Agent: curl/8.12.1-DEV
+> Accept: */*
+> 
+* Request completely sent off
+< HTTP/3 200 
+< date: Mon, 17 Mar 2025 14:07:44 GMT
+< content-type: text/plain; charset=utf-8
+< content-length: 14
+< alt-svc: h3=":2096"; ma=86400
+< cf-cache-status: DYNAMIC
+< priority: u=3,i=?0
+< report-to: {"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=ogr2ejy62JQuTIC0R0Ivi2Ti54%2F2NPBSNbP%2BXUpXCbYEOuTHL%2FJAYGzFeFRr0HsLhlsesjcmzS6qFbFXQ%2B4nhYyprKyee38re9l0OfHH7ZRWgCjqaBoeixbDL3ieM4Wf1m%2FcXxverEraBKaZTg%3D%3D"}],"group":"cf-nel","max_age":604800}
+< nel: {"success_fraction":0,"report_to":"cf-nel","max_age":604800}
+< server: cloudflare
+< cf-ray: 921d0eebeeebbb3b-FRA
+< server-timing: cfL4;desc="?proto=QUIC&rtt=6446&min_rtt=5045&rtt_var=2322&sent=11&recv=8&lost=0&retrans=0&sent_bytes=4010&recv_bytes=5378&delivery_rate=137541&cwnd=12000&unsent_bytes=0&cid=3e2a6c2511ab34d7&ts=30&x=1"
+< server-timing: cfExtPri
+< server-timing: cfHdrFlush;dur=0
+< 
+{ [14 bytes data]
+100    14  100    14    0     0    332      0 --:--:-- --:--:-- --:--:--   341
+* Connection #0 to host server.labforensic.de left intact
+Hello, HTTPS3!

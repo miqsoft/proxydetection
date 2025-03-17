@@ -3,7 +3,7 @@
 ; (1 server found)
 ;; global options: +cmd
 ;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 57593
+;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 35353
 ;; flags: qr rd ra ad; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
 
 ;; OPT PSEUDOSECTION:
@@ -12,10 +12,10 @@
 ;https://www.example.com.	IN	A
 
 ;; AUTHORITY SECTION:
-example.com.		3600	IN	SOA	ns.icann.org. noc.dns.icann.org. 2025011555 7200 3600 1209600 3600
+example.com.		3600	IN	SOA	ns.icann.org. noc.dns.icann.org. 2025011572 7200 3600 1209600 3600
 
-;; Query time: 585 msec
+;; Query time: 329 msec
 ;; SERVER: 68.183.243.119#53(68.183.243.119) (UDP)
-;; WHEN: Thu Feb 27 09:01:13 UTC 2025
+;; WHEN: Thu Mar 13 12:07:16 UTC 2025
 ;; MSG SIZE  rcvd: 108
 

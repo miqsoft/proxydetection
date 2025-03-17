@@ -1,0 +1,13 @@
+[Unit]
+Description=Simple WebSockets server
+After=network.target
+
+[Service]
+ExecStart=/root/venv/bin/python /app/websockets_server.py
+WorkingDirectory=/app
+Restart=always
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target

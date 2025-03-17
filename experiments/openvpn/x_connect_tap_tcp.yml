@@ -1,0 +1,29 @@
+tasks:
+  - host: client
+    task:
+      name: Upload OpenVPN certificates and keys
+      copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: root
+        group: root
+        mode: '0600'
+      become: yes
+      with_items:
+        - { src: "{{ base_dir }}/setup/relay/openvpn/cert/pki/ca.crt", dest: "/etc/openvpn/client/ca.crt" }
+        - { src: "{{ base_dir }}/setup/relay/openvpn/cert/pki/issued/client.crt", dest: "/etc/openvpn/client/client.crt" }
+        - { src: "{{ base_dir }}/setup/relay/openvpn/cert/pki/private/client.key", dest: "/etc/openvpn/client/client.key" }
+        - { src: "{{ base_dir }}/setup/relay/openvpn/cert/pki/ta.key", dest: "/etc/openvpn/client/ta.key" }
+  - host: client
+    task:
+      name: Upload OpenVPN client configuration
+      template:
+        src: "{{ base_dir }}/setup/client/openvpn/tap_tcp.ovpn.j2"
+        dest: "/etc/openvpn/client/client.conf"
+        owner: root
+        group: root
+        mode: '0644'
+      vars:
+        relay: "{{ hostvars['relay']['reserved_ip'] }}"
+      become: yes
+

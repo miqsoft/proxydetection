@@ -1,0 +1,27 @@
+---
+- name: Setup SSH directory and permissions
+  file:
+    path: ~/.ssh2/
+    state: directory
+    mode: '0700'
+
+- name: Create authorized_keys file
+  file:
+    path: ~/.ssh2/authorized_keys
+    state: touch
+    mode: '0700'
+
+- name: Copy systemd service file
+  copy:
+    src: "sshd2.service"
+    dest: "/etc/systemd/system/sshd2.service"
+
+- name: Copy SSH keys and config
+  copy:
+    src: cert/id_rsa.pub
+    dest: ~/id_rsa.pub
+
+- name: Copy SSHD config file
+  copy:
+    src: sshd_config2
+    dest: /etc/ssh/sshd_config2

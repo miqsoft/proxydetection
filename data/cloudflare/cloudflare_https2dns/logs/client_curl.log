@@ -1,0 +1,85 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Host server.labforensic.de:8443 was resolved.
+* IPv6: 2606:4700:3030::6815:5001, 2606:4700:3030::6815:1001, 2606:4700:3030::6815:6001, 2606:4700:3030::6815:4001, 2606:4700:3030::6815:2001, 2606:4700:3030::6815:3001, 2606:4700:3030::6815:7001
+* IPv4: 104.21.32.1, 104.21.16.1, 104.21.112.1, 104.21.96.1, 104.21.48.1, 104.21.80.1, 104.21.64.1
+*   Trying [2606:4700:3030::6815:5001]:8443...
+* Immediate connect fail for 2606:4700:3030::6815:5001: Network is unreachable
+*   Trying [2606:4700:3030::6815:1001]:8443...
+* Immediate connect fail for 2606:4700:3030::6815:1001: Network is unreachable
+*   Trying [2606:4700:3030::6815:6001]:8443...
+* Immediate connect fail for 2606:4700:3030::6815:6001: Network is unreachable
+*   Trying [2606:4700:3030::6815:4001]:8443...
+* Immediate connect fail for 2606:4700:3030::6815:4001: Network is unreachable
+*   Trying [2606:4700:3030::6815:2001]:8443...
+* Immediate connect fail for 2606:4700:3030::6815:2001: Network is unreachable
+*   Trying [2606:4700:3030::6815:3001]:8443...
+* Immediate connect fail for 2606:4700:3030::6815:3001: Network is unreachable
+*   Trying [2606:4700:3030::6815:7001]:8443...
+* Immediate connect fail for 2606:4700:3030::6815:7001: Network is unreachable
+*   Trying 104.21.32.1:8443...
+* ALPN: curl offers h2,http/1.1
+} [5 bytes data]
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+} [512 bytes data]
+* TLSv1.3 (IN), TLS handshake, Server hello (2):
+{ [122 bytes data]
+* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+{ [19 bytes data]
+* TLSv1.3 (IN), TLS handshake, Certificate (11):
+{ [2539 bytes data]
+* TLSv1.3 (IN), TLS handshake, CERT verify (15):
+{ [80 bytes data]
+* TLSv1.3 (IN), TLS handshake, Finished (20):
+{ [52 bytes data]
+* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+} [1 bytes data]
+* TLSv1.3 (OUT), TLS handshake, Finished (20):
+} [52 bytes data]
+* SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384 / X25519 / id-ecPublicKey
+* ALPN: server accepted h2
+* Server certificate:
+*  subject: CN=labforensic.de
+*  start date: Mar 17 11:57:52 2025 GMT
+*  expire date: Jun 15 12:56:09 2025 GMT
+*  issuer: C=US; O=Google Trust Services; CN=WE1
+*  SSL certificate verify result: unable to get local issuer certificate (20), continuing anyway.
+*   Certificate level 0: Public key type EC/prime256v1 (256/128 Bits/secBits), signed using ecdsa-with-SHA256
+*   Certificate level 1: Public key type EC/prime256v1 (256/128 Bits/secBits), signed using ecdsa-with-SHA384
+*   Certificate level 2: Public key type EC/secp384r1 (384/192 Bits/secBits), signed using sha256WithRSAEncryption
+* Connected to server.labforensic.de (104.21.32.1) port 8443
+* using HTTP/2
+* [HTTP/2] [1] OPENED stream for https://server.labforensic.de:8443/
+* [HTTP/2] [1] [:method: GET]
+* [HTTP/2] [1] [:scheme: https]
+* [HTTP/2] [1] [:authority: server.labforensic.de:8443]
+* [HTTP/2] [1] [:path: /]
+* [HTTP/2] [1] [user-agent: curl/8.12.1-DEV]
+* [HTTP/2] [1] [accept: */*]
+} [5 bytes data]
+> GET / HTTP/2
+> Host: server.labforensic.de:8443
+> User-Agent: curl/8.12.1-DEV
+> Accept: */*
+> 
+* Request completely sent off
+{ [5 bytes data]
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+{ [230 bytes data]
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+{ [230 bytes data]
+< HTTP/2 200 
+< date: Mon, 17 Mar 2025 14:07:30 GMT
+< content-type: text/html; charset=utf-8
+< cf-cache-status: DYNAMIC
+< report-to: {"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=d%2FYVq62vOZh3F5EBpKrNyseGpI5A%2FDE2%2B6no7LHDC62XMglIgKfnb%2Fk4Z%2Bu5KRHmhDDXx9hrshYvpGAQIHydTJ4zVNyIjsazB3im96ee7T6%2BqHiabns7dyGO6QaJzsZOMKmV7gp9m2FY7SjQkQ%3D%3D"}],"group":"cf-nel","max_age":604800}
+< nel: {"success_fraction":0,"report_to":"cf-nel","max_age":604800}
+< server: cloudflare
+< cf-ray: 921d0e958b2637de-FRA
+< alt-svc: h3=":8443"; ma=86400
+< server-timing: cfL4;desc="?proto=TCP&rtt=4190&min_rtt=4013&rtt_var=1444&sent=5&recv=8&lost=0&retrans=0&sent_bytes=3420&recv_bytes=766&delivery_rate=624407&cwnd=34&unsent_bytes=0&cid=fa5ce557658af2ce&ts=48&x=0"
+< 
+{ [5 bytes data]
+100    23    0    23    0     0    236      0 --:--:-- --:--:-- --:--:--   239
+* Connection #0 to host server.labforensic.de left intact
+Hello, HTTP/2 with TLS!

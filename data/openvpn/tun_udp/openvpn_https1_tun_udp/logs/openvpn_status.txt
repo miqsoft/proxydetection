@@ -1,0 +1,24 @@
+● openvpn-client@client.service - OpenVPN tunnel for client
+     Loaded: loaded (/usr/lib/systemd/system/openvpn-client@.service; enabled; preset: enabled)
+     Active: active (running) since Sat 2025-03-15 12:34:14 UTC; 340ms ago
+       Docs: man:openvpn(8)
+             https://openvpn.net/community-resources/reference-manual-for-openvpn-2-6/
+             https://community.openvpn.net/openvpn/wiki/HOWTO
+   Main PID: 20636 (openvpn)
+     Status: "Initialization Sequence Completed"
+      Tasks: 1 (limit: 9461)
+     Memory: 1.6M (peak: 2.0M)
+        CPU: 24ms
+     CGroup: /system.slice/system-openvpn\x2dclient.slice/openvpn-client@client.service
+             └─20636 /usr/sbin/openvpn --suppress-timestamps --nobind --config client.conf
+
+Mar 15 12:34:14 vagrant openvpn[20636]: net_route_v4_add: 104.248.101.195/32 via 10.0.2.2 dev [NULL] table 0 metric -1
+Mar 15 12:34:14 vagrant openvpn[20636]: net_route_v4_add: 0.0.0.0/1 via 10.8.0.1 dev [NULL] table 0 metric -1
+Mar 15 12:34:14 vagrant openvpn[20636]: net_route_v4_add: 128.0.0.0/1 via 10.8.0.1 dev [NULL] table 0 metric -1
+Mar 15 12:34:14 vagrant openvpn[20636]: UID set to nobody
+Mar 15 12:34:14 vagrant openvpn[20636]: GID set to nogroup
+Mar 15 12:34:14 vagrant openvpn[20636]: Capabilities retained: CAP_NET_ADMIN
+Mar 15 12:34:14 vagrant openvpn[20636]: Initialization Sequence Completed
+Mar 15 12:34:14 vagrant openvpn[20636]: Data Channel: cipher 'AES-256-GCM', peer-id: 1
+Mar 15 12:34:14 vagrant openvpn[20636]: Timers: ping 10, ping-restart 120
+Mar 15 12:34:14 vagrant openvpn[20636]: Protocol options: protocol-flags cc-exit tls-ekm dyn-tls-crypt

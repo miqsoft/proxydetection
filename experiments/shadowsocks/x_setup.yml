@@ -1,0 +1,21 @@
+tasks:
+  - host: client
+    task:
+      name: "Start shadowsocks client service"
+      systemd:
+        name: shadowsocksclient.service
+        state: started
+      become: yes
+
+  # start pcap capture on all hosts for data only
+  - host: all
+    task:
+      name: Start Data Only Pcap ({{ inventory_hostname }})
+      shell: nohup tcpdump -i eth0 not port 22 -w /output/data_capture_{{ inventory_hostname }}.pcap  > /output/data_tcpdump_{{ inventory_hostname }}.log 2>&1 &
+      async: 1
+      poll: 0
+  - host: localhost
+    task:
+      name: "Pause briefly to ensure tcpdump starts"
+      pause:
+        seconds: 2

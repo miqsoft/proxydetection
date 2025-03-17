@@ -1,0 +1,106 @@
+experiment_tasks:
+  - host: relay
+    task:
+      name: Install tunnel service
+      template:
+        src: setup/relay/NeoreGeorg/tunnel.service
+        dest: /etc/systemd/system/tunnel.service
+        mode: '0644'
+  - host: relay
+    task:
+      name: Reload systemd to recognize updated unit files
+      systemd:
+        daemon_reload: yes
+  - host: relay
+    task:
+      name: Enable and restart tunnel service
+      systemd:
+        name: tunnel.service
+        enabled: yes
+        state: started
+      become: yes
+  - host: client
+    task:
+      name: "Pause briefly to ensure tunnel is started"
+      pause:
+        seconds: 2
+  - host: client
+    task:
+      name: Deploy Neoregeorg client systemd service file
+      template:
+        src: setup/client/neoregeorg/neoregeorgclient.service.j2
+        dest: /etc/systemd/system/neoregeorg.service
+        owner: vagrant
+        group: vagrant
+        mode: '0644'
+      vars:
+        relay: "{{ hostvars['relay']['reserved_ip'] }}"
+      become: yes
+  - host: client
+    task:
+      name: Enable service
+      systemd:
+        name: neoregeorg.service
+        enabled: yes
+        daemon_reload: yes
+    become: yes
+  - host: client
+    task:
+      name: Start service
+      systemd:
+        name: neoregeorg.service
+        state: started
+    become: yes
+  - host: client
+    task:
+      name: "Curl the server"
+      ansible.builtin.shell:
+          cmd: "export ALL_PROXY=socks5://localhost:1080 && curl-new -v -k --http2 https://{{ hostvars['server']['reserved_ip'] }}:4001 2>&1 | tee -a /output/client_curl.log"
+  - host: client
+    task:
+      name: "Save the curl log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+          src: "/output/client_curl.log"
+          dst: "{{ playbook_dir }}/{{ log_dir }}/client_curl.log"
+  - host: server
+    task:
+      name: "Save the server log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+        src: "/output/server_https2.log"
+        dst: "{{ playbook_dir }}/{{ log_dir }}/server_https2.log"
+  - host: relay
+    task:
+      name: "Save the relay log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+        src: "/output/neoregeorg.log"
+        dst: "{{ playbook_dir }}/{{ log_dir }}/neoregeorg.log"
+  - host: server
+    task:
+      name: "Restart the server"
+      ansible.builtin.shell:
+        cmd: "service https2 restart"
+  - host: relay
+    task:
+      name: "Stop the tunnel service"
+      systemd:
+          name: tunnel.service
+          state: stopped
+          enabled: no
+          daemon_reload: yes
+  - host: client
+    task:
+      name: "Stop the neoreg service"
+      systemd:
+        name: neoregeorg.service
+        state: stopped
+        enabled: no
+        daemon_reload: yes
+      become: yes
+  - host: relay
+    task:
+      name: "Empty the relay log"
+      ansible.builtin.shell:
+          cmd: "echo '' >> /output/neoregeorg.log"

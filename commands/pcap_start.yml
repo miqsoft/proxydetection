@@ -1,0 +1,9 @@
+- name: Start Traffic Capture
+  block:
+    - name: Start Pcap
+      shell: nohup tcpdump -i eth0 not port 22 -w /output/<<< file >>>  > /output/<<< log >>> 2>&1 &
+      async: 1
+      poll: 0
+    - name: "Pause briefly to ensure tcpdump starts"
+      pause:
+        seconds: 2

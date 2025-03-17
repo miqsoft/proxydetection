@@ -1,0 +1,50 @@
+tasks:
+  - host: relay
+    task:
+      name: Restart WireGuard service
+      systemd:
+        name: "wg-quick@wg0"
+        state: restarted
+
+  - host: client
+    task:
+      name: "Pause briefly to ensure wireguard is started on server"
+      pause:
+        seconds: 2
+
+  - host: client
+    task:
+      name: "start wireguard tunnel"
+      ansible.builtin.command: "wg-quick up wg0"
+      become: yes
+
+  - host: client
+    task:
+      name: "Pause briefly to ensure wireguard client is started"
+      pause:
+        seconds: 2
+
+  - host: client
+    task:
+      name: Verify network interfaces
+      shell: "ip a > /output/ip_a.txt"
+      register: ip_a
+      changed_when: false
+      become: yes
+
+  - host: client
+    task:
+      name: Save network interfaces
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+        src: "/output/ip_a.txt"
+        dst: "{{ log_dir }}/ip_a.txt"
+      become: yes
+
+  - host: all
+    task:
+      name: Start Network Captures (data only)
+      include_tasks: "commands/pcap_start.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+        log: "data_capture_{{ inventory_hostname }}.log"

@@ -1,0 +1,42 @@
+---
+# default installation
+- name: Copy ssh key to host
+  copy:
+       src: setup/cert/id_rsa
+       dest: /home/vagrant/.ssh/id_rsa
+- name: Copy ssh key to host
+  copy:
+       src: setup/cert/id_rsa
+       dest: /root/.ssh/id_rsa
+       mode: 0600
+  become: yes
+- name: Install lftp
+  apt:
+    name: lftp
+    state: present
+  become: yes
+- name: Download websocat binary
+  ansible.builtin.get_url:
+    url: https://github.com/vi/websocat/releases/download/v1.14.0/websocat_max.x86_64-unknown-linux-musl
+    dest: /usr/local/bin/websocat
+  become: yes
+- name: Ensure websocat is executable
+  ansible.builtin.file:
+    path: /usr/local/bin/websocat
+    mode: '0755'
+    owner: root
+    group: root
+    state: file
+  become: yes
+# sshuttle installation
+- name: Install sshuttle
+  apt:
+    name: sshuttle
+    state: present
+  become: yes
+- name: Copy sshkey for sshuttle
+  copy:
+       src: setup/relay/sshuttle/cert/id_rsa
+       dest: /root/id_rsa
+       mode: 0600
+  become: yes

@@ -1,0 +1,23 @@
+tasks:
+  - host: all
+    task:
+      name: Stop Network Captures
+      include_tasks: "commands/pcap_stop.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+  - host: client
+    task:
+      name: read pid from /home/vagrant/sshuttle.pid and kill the process
+      ansible.builtin.shell:
+          cmd: "kill -9 $(cat /root/sshuttle.pid)"
+      become: yes
+  - host: relay
+    task:
+      name: stop sshd2 service
+      systemd:
+        name: "sshd2"
+        state: stopped
+  - host: relay
+    task:
+      name: Empty authorized_keys
+      ansible.builtin.command: "echo '' > ~/.ssh2/authorized_keys"

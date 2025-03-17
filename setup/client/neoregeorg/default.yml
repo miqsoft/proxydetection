@@ -1,0 +1,68 @@
+---
+- name: Copy ssh key to host
+  copy:
+       src: setup/cert/id_rsa
+       dest: /home/vagrant/.ssh/id_rsa
+- name: Copy ssh key to host
+  copy:
+       src: setup/cert/id_rsa
+       dest: /root/.ssh/id_rsa
+       mode: 0600
+  become: yes
+- name: Install proxychains
+  apt:
+    name: proxychains
+    state: present
+  become: yes
+- name: Install lftp
+  apt:
+    name: lftp
+    state: present
+  become: yes
+- name: Download websocat binary
+  ansible.builtin.get_url:
+    url: https://github.com/vi/websocat/releases/download/v1.14.0/websocat_max.x86_64-unknown-linux-musl
+    dest: /usr/local/bin/websocat
+  become: yes
+- name: Ensure websocat is executable
+  ansible.builtin.file:
+    path: /usr/local/bin/websocat
+    mode: '0755'
+    owner: root
+    group: root
+    state: file
+  become: yes
+- name: Ensure necessary packages are installed
+  ansible.builtin.apt:
+    name:
+      - python3-venv
+      - git
+    state: present
+  become: yes
+
+- name: Check if Neo-reGeorg directory exists
+  ansible.builtin.stat:
+    path: /opt/Neo-reGeorg
+  register: neoreg_dir
+  become: yes
+
+- name: Clone Neo-reGeorg repository
+  ansible.builtin.git:
+    repo: https://github.com/L-codes/Neo-reGeorg.git
+    dest: /opt/Neo-reGeorg
+  when: not neoreg_dir.stat.exists
+  become: yes
+
+- name: Create a Python virtual environment
+  ansible.builtin.command:
+    cmd: python3 -m venv /opt/Neo-reGeorg/venv
+  args:
+    creates: /opt/Neo-reGeorg/venv/bin/activate
+  become: yes
+
+- name: Install requests in the virtual environment
+  ansible.builtin.command:
+    cmd: /opt/Neo-reGeorg/venv/bin/pip install requests[socks]
+  args:
+    creates: /opt/Neo-reGeorg/venv/lib/python3.*/site-packages/requests
+  become: yes

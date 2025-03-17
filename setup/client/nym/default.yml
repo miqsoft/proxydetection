@@ -1,0 +1,41 @@
+---
+- name: Copy App dir to host
+  synchronize:
+      src: setup/client/default/app
+      dest: /
+  become: yes
+- name: Install requirements in the virtual environment
+  shell:
+    cmd: "source /home/vagrant/venv/bin/activate && pip3 install -r /app/requirements.txt"
+  args:
+    executable: /bin/bash
+  become: yes
+- name: Copy ssh key to host
+  copy:
+       src: setup/cert/id_rsa
+       dest: /home/vagrant/.ssh/id_rsa
+- name: Install proxychains
+  apt:
+    name: proxychains
+    state: present
+  become: yes
+# install Nym Client
+- name: Download nym-repo-setup .deb package
+  get_url:
+    url: https://apt.nymtech.net/pool/main/n/nym-repo-setup/nym-repo-setup_1.0.1_amd64.deb
+    dest: /tmp/nym-repo-setup_1.0.1_amd64.deb
+    mode: '0644'
+  become: yes
+- name: Install nym-repo-setup .deb package
+  apt:
+    deb: /tmp/nym-repo-setup_1.0.1_amd64.deb
+  become: yes
+- name: Update apt cache
+  apt:
+    update_cache: yes
+  become: yes
+- name: Install nym-vpn package
+  apt:
+    name: nym-vpn
+    state: present
+  become: yes

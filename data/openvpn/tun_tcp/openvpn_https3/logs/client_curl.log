@@ -1,0 +1,35 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 68.183.243.119:4002...
+* Server certificate:
+*  subject: C=US; ST=Some-State; L=Some-City; O=MyOrganization; OU=MyOrganizationalUnit; CN=server.labforensic.de
+*  start date: Feb 10 14:07:55 2025 GMT
+*  expire date: Mar 12 14:07:55 2025 GMT
+*  issuer: C=US; ST=Some-State; L=Some-City; O=MyOrganization; OU=MyOrganizationalUnit; CN=server.labforensic.de
+*  SSL certificate verify result: self-signed certificate (18), continuing anyway.
+*   Certificate level 0: Public key type RSA (2048/112 Bits/secBits), signed using sha256WithRSAEncryption
+* Connected to 68.183.243.119 (68.183.243.119) port 4002
+* using HTTP/3
+* [HTTP/3] [0] OPENED stream for https://68.183.243.119:4002/
+* [HTTP/3] [0] [:method: GET]
+* [HTTP/3] [0] [:scheme: https]
+* [HTTP/3] [0] [:authority: 68.183.243.119:4002]
+* [HTTP/3] [0] [:path: /]
+* [HTTP/3] [0] [user-agent: curl/8.12.1-DEV]
+* [HTTP/3] [0] [accept: */*]
+> GET / HTTP/3
+> Host: 68.183.243.119:4002
+> User-Agent: curl/8.12.1-DEV
+> Accept: */*
+> 
+* Request completely sent off
+< HTTP/3 200 
+< server: Caddy
+< content-type: text/plain; charset=utf-8
+< date: Sat, 15 Mar 2025 20:57:52 GMT
+< content-length: 14
+< 
+{ [14 bytes data]
+100    14  100    14    0     0    180      0 --:--:-- --:--:-- --:--:--   181
+* Connection #0 to host 68.183.243.119 left intact
+Hello, HTTPS3!

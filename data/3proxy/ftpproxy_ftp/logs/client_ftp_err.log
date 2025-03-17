@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/app/ftp_client.py", line 75, in <module>
+    ftp.retrbinary(f"RETR {REMOTE_FILE}", f.write, blocksize=1024)
+  File "/usr/lib/python3.12/ftplib.py", line 437, in retrbinary
+    while data := conn.recv(blocksize):
+                  ^^^^^^^^^^^^^^^^^^^^
+TimeoutError: timed out

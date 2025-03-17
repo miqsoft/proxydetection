@@ -1,0 +1,37 @@
+tasks:
+  - host: relay
+    task:
+      name: Run Agent
+      shell:
+        cmd: "/root/Venom/agent_linux_x64 -lport 1234"
+      async: 3600
+      poll: 0
+
+  - host: client
+    task:
+      name: Start Venom Admin in tmux session
+      ansible.builtin.shell: |
+        tmux new-session -d -s venom_session "/root/Venom/admin_linux_x64 -rport 1234 -rhost {{ hostvars['relay']['reserved_ip'] }}"
+      become: yes
+
+  - host: client
+    task:
+      name: Send 'goto 1' command to Venom Admin
+      ansible.builtin.shell: |
+        tmux send-keys -t venom_session "goto 1" C-m
+      become: yes
+
+  - host: client
+    task:
+      name: Send 'socks 777' command to Venom Admin
+      ansible.builtin.shell: |
+        tmux send-keys -t venom_session "socks 1080" C-m
+      become: yes
+
+  - host: all
+    task:
+      name: Start Network Captures (data only)
+      include_tasks: "commands/pcap_start.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+        log: "data_capture_{{ inventory_hostname }}.log"

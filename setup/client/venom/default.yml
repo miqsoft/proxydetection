@@ -1,0 +1,61 @@
+---
+- name: Copy ssh key to host
+  copy:
+       src: setup/cert/id_rsa
+       dest: /home/vagrant/.ssh/id_rsa
+- name: Copy ssh key to host
+  copy:
+       src: setup/cert/id_rsa
+       dest: /root/.ssh/id_rsa
+       mode: 0600
+  become: yes
+- name: Install proxychains
+  apt:
+    name: proxychains
+    state: present
+  become: yes
+- name: Install lftp
+  apt:
+    name: lftp
+    state: present
+  become: yes
+- name: Download websocat binary
+  ansible.builtin.get_url:
+    url: https://github.com/vi/websocat/releases/download/v1.14.0/websocat_max.x86_64-unknown-linux-musl
+    dest: /usr/local/bin/websocat
+  become: yes
+- name: Ensure websocat is executable
+  ansible.builtin.file:
+    path: /usr/local/bin/websocat
+    mode: '0755'
+    owner: root
+    group: root
+    state: file
+  become: yes
+# install venom proxy
+- name: Install 7z
+  apt:
+    name: p7zip-full
+    state: present
+  become: yes
+- name: Download Venom Proxy
+  get_url:
+      url: "https://github.com/Dliv3/Venom/releases/download/v1.1.0/Venom.v1.1.0.7z"
+      dest: /root/Venom.7z
+  become: yes
+- name: Delete /root/Venom if it exists
+  file:
+    path: /root/Venom
+    state: absent
+  become: yes
+- name: Extract Venom Proxy
+  shell:
+    cmd: "7z x /root/Venom.7z -o/root/Venom -y"
+  become: yes
+- name: Take all content from /root/Venom/Venom v1.1.0 to /root/Venom
+  shell: "mv '/root/Venom/Venom v1.1.0/'* /root/Venom"
+  become: yes
+- name: Remove the Venom directory
+  shell:
+    cmd: "rm -r '/root/Venom/Venom v1.1.0'"
+  become: yes

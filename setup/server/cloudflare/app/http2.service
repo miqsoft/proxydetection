@@ -1,0 +1,13 @@
+[Unit]
+Description=Simple HTTP/2 server
+After=network.target
+
+[Service]
+ExecStart=/root/venv/bin/python /app/http2.py
+WorkingDirectory=/app
+Restart=always
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target

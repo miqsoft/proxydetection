@@ -1,0 +1,29 @@
+---
+- name: Create Output directory
+  ansible.builtin.command:
+    cmd: mkdir -p /output
+  become: yes
+- name: Install Go
+  ansible.builtin.command:
+    cmd: snap install --classic go
+  args:
+    creates: /snap/bin/go
+  become: yes
+- name: Install shadowsocks
+  ansible.builtin.command:
+    cmd: go install github.com/shadowsocks/go-shadowsocks2@latest
+  become: yes
+- name: Install shadowsocks service
+  template:
+    src: setup/relay/shadowsocks/shadowsocks.service
+    dest: /etc/systemd/system/shadowsocks.service
+    mode: '0644'
+- name: Reload systemd to recognize updated unit files
+  systemd:
+    daemon_reload: yes
+- name: Enable and restart shadowsocks service
+  systemd:
+    name: shadowsocks.service
+    enabled: yes
+    state: started
+  become: yes

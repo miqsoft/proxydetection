@@ -1,9 +1,9 @@
-experiment_tasks:
+tasks:
   - host: client
     task:
-      name: "Send websocket traffic to the server"
+      name: "Send websocket traffic with message using websocat"
       shell:
-        cmd: "source /home/vagrant/venv/bin/activate && python3 /app/ws_client.py wss://{{ hostvars['server']['dns'] }}:8101 true 2>&1 | tee /output/client_wss.log"
+        cmd: "(echo 'Hello Server'; sleep 5) | websocat --insecure wss://{{ hostvars['server']['dns'] }}:8101 2>&1 | tee /output/client_ws.log"
       args:
         executable: /bin/bash
   - host: client
@@ -11,15 +11,15 @@ experiment_tasks:
       name: "Save the websocket client log"
       include_tasks: "commands/fetch_and_empty.yml"
       vars:
-        src: "/output/client_wss.log"
-        dst: "{{ playbook_dir }}/{{ log_dir }}/client_wss.log"
+        src: "/output/client_ws.log"
+        dst: "{{ log_dir }}/client_ws.log"
   - host: server
     task:
       name: "Save the websocket server log"
       include_tasks: "commands/fetch_and_empty.yml"
       vars:
         src: "/output/server_wss.log"
-        dst: "{{ playbook_dir }}/{{ log_dir }}/server_wss.log"
+        dst: "{{ log_dir }}/server_wss.log"
   - host: server
     task:
       name: "Restart the server"

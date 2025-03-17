@@ -1,0 +1,94 @@
+---
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Ensure necessary packages are installed
+  ansible.builtin.apt:
+    name:
+      - openvpn
+    state: present
+  become: yes
+
+- name: Create OpenVPN key directory
+  file:
+    path: "/etc/openvpn/server"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Create 'openvpn' group
+  group:
+    name: openvpn
+
+- name: Create 'openvpn' user
+  user:
+    name: openvpn
+    group: openvpn
+    system: true
+    shell: /usr/sbin/nologin
+
+- name: Copy server keys and certificates to OpenVPN directory
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/openvpn/server/"
+    owner: root
+    group: root
+    mode: '0600'
+  with_items:
+    - "setup/relay/openvpn/cert/pki/ca.crt"
+    - "setup/relay/openvpn/cert/pki/issued/server.crt"
+    - "setup/relay/openvpn/cert/pki/private/server.key"
+    - "setup/relay/openvpn/cert/pki/dh.pem"
+
+- name: Generate tls-crypt pre-shared key
+  command: openvpn --genkey secret /etc/openvpn/server/ta.key
+  args:
+    creates: /etc/openvpn/server/ta.key
+
+- name: Make ta.key accessible to user nobody for OpenVPN
+  ansible.builtin.file:
+    path: /etc/openvpn/server/ta.key
+    owner: openvpn
+    group: openvpn
+    mode: '0600'
+
+- name: Fetch tls-crypt pre-shared key
+  fetch:
+    src: "/etc/openvpn/server/ta.key"
+    dest: "setup/relay/openvpn/cert/pki/"
+    flat: yes
+
+- name: Copy OpenVPN server configuration
+  template:
+    src: "server.conf"
+    dest: "/etc/openvpn/server/server.conf"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Enable and start OpenVPN service
+  systemd:
+    name: openvpn-server@server
+    enabled: yes
+    state: started
+
+# Add IP forwarding
+- name: Ensure IP forwarding is enabled
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    state: present
+    sysctl_set: yes
+    reload: yes
+
+# Add NAT rule for VPN subnet to access internet
+- name: Add iptables NAT rule for VPN subnet
+  iptables:
+    table: nat
+    chain: POSTROUTING
+    out_interface: eth0
+    source: "10.8.0.0/24"
+    jump: MASQUERADE
+    state: present

@@ -1,0 +1,14 @@
+tasks:
+  - host: all
+    task:
+      name: Stop Network Captures
+      include_tasks: "commands/pcap_stop.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+  - host: client
+    task:
+      name: Ensure OpenVPN client service is enabled and started
+      systemd:
+        name: "openvpn-client@client"
+        enabled: yes
+        state: stopped

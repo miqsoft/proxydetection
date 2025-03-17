@@ -1,0 +1,58 @@
+---
+# default setup
+- name: Copy ssh key to host
+  copy:
+       src: setup/cert/id_rsa
+       dest: /home/vagrant/.ssh/id_rsa
+- name: Copy ssh key to host
+  copy:
+       src: setup/cert/id_rsa
+       dest: /root/.ssh/id_rsa
+       mode: 0600
+  become: yes
+- name: Install lftp
+  apt:
+    name: lftp
+    state: present
+  become: yes
+- name: Download websocat binary
+  ansible.builtin.get_url:
+    url: https://github.com/vi/websocat/releases/download/v1.14.0/websocat_max.x86_64-unknown-linux-musl
+    dest: /usr/local/bin/websocat
+  become: yes
+- name: Ensure websocat is executable
+  ansible.builtin.file:
+    path: /usr/local/bin/websocat
+    mode: '0755'
+    owner: root
+    group: root
+    state: file
+  become: yes
+# install openvpn
+- name: Install OpenVPN
+  apt:
+    name: openvpn
+    state: present
+    update_cache: yes
+  become: yes
+- name: Create OpenVPN client directory
+  file:
+    path: /etc/openvpn/client
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  become: yes
+
+- name: Upload OpenVPN certificates and keys
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: '0600'
+  become: yes
+  with_items:
+    - { src: "setup/relay/openvpn/cert/pki/ca.crt", dest: "/etc/openvpn/client/ca.crt" }
+    - { src: "setup/relay/openvpn/cert/pki/issued/client.crt", dest: "/etc/openvpn/client/client.crt" }
+    - { src: "setup/relay/openvpn/cert/pki/private/client.key", dest: "/etc/openvpn/client/client.key" }

@@ -1,0 +1,59 @@
+---
+# default setup
+- name: Copy ssh key to host
+  copy:
+       src: setup/cert/id_rsa
+       dest: /home/vagrant/.ssh/id_rsa
+- name: Copy ssh key to host
+  copy:
+       src: setup/cert/id_rsa
+       dest: /root/.ssh/id_rsa
+       mode: 0600
+  become: yes
+- name: Install lftp
+  apt:
+    name: lftp
+    state: present
+  become: yes
+- name: Download websocat binary
+  ansible.builtin.get_url:
+    url: https://github.com/vi/websocat/releases/download/v1.14.0/websocat_max.x86_64-unknown-linux-musl
+    dest: /usr/local/bin/websocat
+  become: yes
+- name: Ensure websocat is executable
+  ansible.builtin.file:
+    path: /usr/local/bin/websocat
+    mode: '0755'
+    owner: root
+    group: root
+    state: file
+  become: yes
+# install wireguard
+- name: Ensure necessary packages are installed
+  ansible.builtin.apt:
+    name:
+      - wireguard
+    state: present
+  become: yes
+
+- name: Load private key from file
+  set_fact:
+    private_client: "{{ lookup('file', 'setup/relay/wireguard/cert/private_client') }}"
+
+- name: Load public server key from file
+  set_fact:
+    public_server: "{{ lookup('file', 'setup/relay/wireguard/cert/public_server') }}"
+
+- name: Create Config with template
+  become: yes
+  template:
+      src: setup/client/wireguard/wg0.conf.j2
+      dest: /etc/wireguard/wg0.conf
+      mode: '0600'
+  vars:
+    private_client: "{{ private_key }}"
+    public_server: "{{ public_server }}"
+    relay: "{{ hostvars['relay']['reserved_ip'] }}"
+
+
+

@@ -1,0 +1,46 @@
+client
+dev tun
+proto udp
+remote {{ relay }} 1194
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+
+# Certificates and Keys
+ca /etc/openvpn/client/ca.crt
+cert /etc/openvpn/client/client.crt
+key /etc/openvpn/client/client.key
+
+# TLS Key (use tls-crypt for added security)
+tls-crypt /etc/openvpn/client/ta.key
+
+# Cipher and Authentication
+cipher AES-256-GCM
+auth SHA256
+
+# Set the same topology as server
+topology subnet
+
+# Redirect all client traffic through the VPN
+redirect-gateway def1 bypass-dhcp
+
+# Optional: DNS (if pushed by server or you can add manually)
+# dhcp-option DNS 8.8.8.8
+# dhcp-option DNS 8.8.4.4
+
+# Keepalive settings to maintain connection
+keepalive 10 120
+
+# Security settings
+remote-cert-tls server
+
+# Downgrade privileges (Linux only)
+user nobody
+group nogroup
+
+# Logging verbosity (optional)
+verb 4
+
+# Optional: Silence repeating messages
+;mute 20

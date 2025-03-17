@@ -1,0 +1,33 @@
+before:
+  - x_setup.yml
+  - x_setup_socks5_proxychain.yml
+after:
+  - x_teardown.yml
+tasks:
+  - host: server
+    task:
+      name: "Add the client's public key to the server's authorized keys"
+      ansible.builtin.shell:
+          cmd: "cat /cert/id_rsa.pub >> ~/.ssh2/authorized_keys && service sshd2 restart"
+  - host: client
+    task:
+      name: "SSH to the server"
+      ansible.builtin.shell:
+          cmd: "proxychains ssh -v -i /home/vagrant/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 root@{{ hostvars['server']['reserved_ip'] }} ls 2>&1 | tee -a /output/client_ssh.log"
+  - host: server
+    task:
+      name: "Remove the client's public key from the server's authorized keys"
+      ansible.builtin.shell:
+          cmd: "rm ~/.ssh2/authorized_keys && touch ~/.ssh2/authorized_keys"
+  - host: client
+    task:
+      name: "Save the ssh client log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+          src: "/output/client_ssh.log"
+          dst: "{{ log_dir }}/client_ssh.log"
+  - host: server
+    task:
+      name: "Restart the server"
+      ansible.builtin.shell:
+        cmd: "service sshd2 restart"

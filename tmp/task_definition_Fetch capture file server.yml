@@ -1,0 +1,5 @@
+- fetch:
+    dest: data/shadowsocks/custom_http1/pcaps/data_capture_server.pcap
+    flat: true
+    src: /output/data_capture_server.pcap
+  name: Fetch capture file server

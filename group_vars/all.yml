@@ -12,5 +12,5 @@ vagrant_machines:
   - name: "client"
     dir: "vagrant/client"
     shared_dirs:
-      - { host: "../../../cert", guest: "/cert" }
+      - { host: "../../setup/cert", guest: "/cert" }
 
