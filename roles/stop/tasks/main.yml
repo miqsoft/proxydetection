@@ -1,7 +1,12 @@
 - name: "Detect type of target"
   set_fact:
-    target_type: "{{ 'vagrant' if target in vagrant_machines | map(attribute='name') else 'do' if target in do_machines | map(attribute='name') else None }}"
-    machine: "{{ (vagrant_machines + do_machines) | selectattr('name', 'equalto', target) | first }}"
+    target_type: >-
+      {% if target in vagrant_machines.keys() %}vagrant{% elif target in do_machines.keys() %}do{% else %}None{% endif %}
+    machine: >-
+      {{ (vagrant_machines | dict2items + do_machines | dict2items) 
+      | selectattr('key', 'equalto', target) 
+      | map(attribute='value') 
+      | first }}
 
 - name: "Check if target exists"
   fail:

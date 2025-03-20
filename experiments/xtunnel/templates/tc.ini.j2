@@ -1,0 +1,50 @@
+[common]
+server_ip = {{ relay }}
+server_port = {{ port }}
+password = {{ password }}
+log_path = /root/xtunnel_server.log
+
+[ssh]
+local_ip = 127.0.0.1
+local_port = 2222
+remote_port = 2222
+
+[http1]
+local_ip = 127.0.0.1
+local_port = 8000
+remote_port = 8000
+
+[http2]
+local_ip = 127.0.0.1
+local_port = 8001
+remote_port = 8001
+
+[https1]
+local_ip = 127.0.0.1
+local_port = 4000
+remote_port = 4000
+
+[https2]
+local_ip = 127.0.0.1
+local_port = 4001
+remote_port = 4001
+
+[ws]
+local_ip = 127.0.0.1
+local_port = 8100
+remote_port = 8100
+
+[wss]
+local_ip = 127.0.0.1
+local_port = 8101
+remote_port = 8101
+
+[ftp]
+local_ip = 127.0.0.1
+local_port = 21
+remote_port = 21
+
+[ftps]
+local_ip = 127.0.0.1
+local_port = 990
+remote_port = 990

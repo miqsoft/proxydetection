@@ -5,11 +5,24 @@ cpu: 2
 ram: 4
 
 do_machines:
-  - { name: "server", region: "fra1", size: "s-{{ cpu }}vcpu-{{ ram }}gb", image: "ubuntu-24-04-x64", reserved_ip: "68.183.243.119", dns: "server.labforensic.de" }
-  - { name: "relay",  region: "fra1", size: "s-{{ cpu }}vcpu-{{ ram }}gb", image: "ubuntu-24-04-x64", reserved_ip: "104.248.101.195", dns: "proxy.labforensic.de" }
+  server:
+    name: "server"
+    region: "fra1"
+    size: "s-{{ cpu }}vcpu-{{ ram }}gb"
+    image: "ubuntu-24-04-x64"
+    reserved_ip: "68.183.243.119"
+    dns: "server.labforensic.de"
+  relay:
+    name: "relay"
+    region: "fra1"
+    size: "s-{{ cpu }}vcpu-{{ ram }}gb"
+    image: "ubuntu-24-04-x64"
+    reserved_ip: "104.248.101.195"
+    dns: "proxy.labforensic.de"
 
 vagrant_machines:
-  - name: "client"
+  client:
+    name: "client"
     dir: "vagrant/client"
     shared_dirs:
       - { host: "../../setup/cert", guest: "/cert" }

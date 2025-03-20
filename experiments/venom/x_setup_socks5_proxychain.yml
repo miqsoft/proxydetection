@@ -2,13 +2,13 @@ tasks:
   - host: client
     task:
       name: Remove existing [ProxyList] section
-      shell: "sed '/^\\[ProxyList\\]/q' /etc/proxychains.conf > /tmp/file && mv /tmp/file /etc/proxychains.conf"
+      shell: "sed '/^\\[ProxyList\\]/q' /etc/proxychains4.conf > /tmp/file && mv /tmp/file /etc/proxychains4.conf"
       args:
         executable: /bin/bash
   - host: client
     task:
       name: Insert a new line after [ProxyList] header
       lineinfile:
-        path: /etc/proxychains.conf
+        path: /etc/proxychains4.conf
         line: socks5 127.0.0.1 1080
         insertafter: '^\[ProxyList\]'

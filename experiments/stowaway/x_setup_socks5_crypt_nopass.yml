@@ -1,0 +1,35 @@
+tasks:
+  - host: relay
+    task:
+      name: Run Agent
+      shell:
+        tmux new-session -d -s stowaway_session "/root/linux_x64_agent -l 1234 --tls-enable -s 123"
+
+  - host: client
+    task:
+      name: Start Stowaway Admin in tmux session
+      ansible.builtin.shell: |
+        tmux new-session -d -s stowaway_session "/home/vagrant/linux_x64_admin -c {{ hostvars['relay']['reserved_ip'] }}:1234 --tls-enable -s 123"
+      become: yes
+
+  - host: client
+    task:
+      name: Send 'goto 0' command to Stowaway Admin
+      ansible.builtin.shell: |
+        tmux send-keys -t stowaway_session "use 0" C-m
+      become: yes
+
+  - host: client
+    task:
+      name: Send 'socks' command to Stowaway Admin
+      ansible.builtin.shell: |
+        tmux send-keys -t stowaway_session "socks 1080" C-m
+      become: yes
+
+  - host: all
+    task:
+      name: Start Network Captures (data only)
+      include_tasks: "commands/pcap_start.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+        log: "data_capture_{{ inventory_hostname }}.log"

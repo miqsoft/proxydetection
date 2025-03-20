@@ -1,0 +1,46 @@
+before:
+  - ../x_setup_socks5_crypt_nopass.yml
+after:
+  - ../x_teardown.yml
+tasks:
+  - host: client
+    task:
+      name: Remove existing [ProxyList] section
+      shell: "sed '/^\\[ProxyList\\]/q' /etc/proxychains4.conf > /tmp/file && mv /tmp/file /etc/proxychains4.conf"
+      args:
+        executable: /bin/bash
+  - host: client
+    task:
+      name: Insert a new line after [ProxyList] header
+      lineinfile:
+        path: /etc/proxychains4.conf
+        line: socks5 127.0.0.1 1080
+        insertafter: '^\[ProxyList\]'
+  - host: server
+    task:
+      name: "Add the client's public key to the server's authorized keys"
+      ansible.builtin.shell:
+          cmd: "cat /cert/id_rsa.pub >> ~/.ssh2/authorized_keys && service sshd2 restart"
+  - host: client
+    task:
+      name: "SSH to the server"
+      ansible.builtin.shell:
+          cmd: "proxychains4 ssh -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 root@{{ hostvars['server']['reserved_ip'] }} ls 2>&1 | tee -a /output/client_ssh.log"
+  - host: server
+    task:
+      name: "Remove the client's public key from the server's authorized keys"
+      ansible.builtin.shell:
+          cmd: "rm ~/.ssh2/authorized_keys && touch ~/.ssh2/authorized_keys"
+  - host: client
+    task:
+      name: "Save the ssh client log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+          src: "/output/client_ssh.log"
+          dst: "{{ log_dir }}/client_ssh.log"
+  - host: server
+    task:
+      name: "Restart the server"
+      ansible.builtin.shell:
+        cmd: "service sshd2 restart"
+

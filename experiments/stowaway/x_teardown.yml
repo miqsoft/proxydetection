@@ -1,0 +1,19 @@
+tasks:
+  - host: all
+    task:
+      name: Stop Network Captures
+      include_tasks: "commands/pcap_stop.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+  - host: client
+    task:
+      name: Stop Stowaway Admin tmux session
+      ansible.builtin.shell: |
+        sudo tmux kill-session -t stowaway_session
+      become: yes
+  - host: relay
+    task:
+      name: Stop Stowaway Agent tmux session
+      ansible.builtin.shell: |
+        sudo tmux kill-session -t stowaway_session
+      become: yes

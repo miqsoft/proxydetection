@@ -1,0 +1,2 @@
+2025-03-19 15:05:30,723 - INFO - SSL context created with certfile: /cert/cert.pem and keyfile: /cert/key.pem
+2025-03-19 15:05:30,723 - INFO - Starting server on https://0.0.0.0:4000

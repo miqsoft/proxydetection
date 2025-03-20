@@ -1,0 +1,6 @@
+tasks:
+  - host: relay
+    task:
+      name: "close tmux session rsocx_session"
+      ansible.builtin.shell:
+          cmd: "tmux send-keys -t rsocx_session C-c"

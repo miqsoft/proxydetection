@@ -9,9 +9,9 @@
        dest: /root/.ssh/id_rsa
        mode: 0600
   become: yes
-- name: Install proxychains
+- name: Install proxychains-ng (alias proxychains4)
   apt:
-    name: proxychains
+    name: proxychains4
     state: present
   become: yes
 - name: Install lftp

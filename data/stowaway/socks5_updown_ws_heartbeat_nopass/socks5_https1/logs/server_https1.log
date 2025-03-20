@@ -1,0 +1,3 @@
+2025-03-19 19:08:33,868 - INFO - SSL context created with certfile: /cert/cert.pem and keyfile: /cert/key.pem
+2025-03-19 19:08:33,869 - INFO - Starting server on https://0.0.0.0:4000
+2025-03-19 19:12:03,579 - INFO - Handled GET request from ('104.248.101.195', 33160)

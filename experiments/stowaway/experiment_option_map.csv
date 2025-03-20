@@ -1,0 +1,14 @@
+,tls-enable,heartbeat,up,down,(admin) socks auth., done?
+socks5_nopass,-,-,-,-,-,yes
+socks5_userpass,-,-,-,-,yes,yes
+socks5_crypt_nopass,yes,-,-,-,-,yes
+socks5_hearbeat_nopass,-,yes,-,-,-,yes
+socks5_crypt_heartbeat_nopass,yes,yes,-,-,-,yes
+socks5_updown_http_nopass,-,-,'http','http',-,yes
+socks5_updown_ws_nopass,-,-,'ws','ws',-,yes
+socks5_updown_http_crypt_nopass,yes,-,'http','http',-,yes
+socks5_updown_ws_crypt_nopass,yes,-,'ws','ws',-,yes
+socks5_updown_http_heartbeat_nopass,-,yes,'http','http',-,no
+socks5_updown_ws_heartbeat_nopass,-,yes,'ws','ws',-,no
+socks5_updown_http_heartbeat_crypt_nopass,yes,yes,'http','http',-,no
+socks5_updown_ws_heartbeat_crypt_nopass,yes,yes,'ws','ws',-,no

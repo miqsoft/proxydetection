@@ -13,7 +13,7 @@ tasks:
     task:
       name: "SSH to the server"
       ansible.builtin.shell:
-          cmd: "proxychains ssh -v -i /home/vagrant/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 root@{{ hostvars['server']['reserved_ip'] }} ls 2>&1 | tee -a /output/client_ssh.log"
+          cmd: "proxychains4 ssh -v -i /home/vagrant/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 root@{{ hostvars['server']['reserved_ip'] }} ls 2>&1 | tee -a /output/client_ssh.log"
   - host: server
     task:
       name: "Remove the client's public key from the server's authorized keys"

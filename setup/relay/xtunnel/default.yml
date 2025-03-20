@@ -1,0 +1,17 @@
+---
+- name: Make sure unzip is installed
+  ansible.builtin.apt:
+    name: unzip
+    state: present
+- name: "Download XTunnel"
+  ansible.builtin.get_url:
+    url: "https://github.com/DeaglePC/XTunnel/releases/download/0.2/XTunnel_0.2_linux_x86_64.zip"
+    dest: "/root/xtunnel.zip"
+    mode: "0644"
+- name: "Unzip XTunnel"
+  shell:
+    cmd: "unzip /root/xtunnel.zip -d /root/xtunnel"
+- name: "Change permissions of /root/xtunnel/xtuns"
+  ansible.builtin.file:
+    path: /root/xtunnel/xtuns
+    mode: '0755'

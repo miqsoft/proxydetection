@@ -1,0 +1,19 @@
+tasks:
+  - host: all
+    task:
+      name: Stop Network Captures
+      include_tasks: "commands/pcap_stop.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+  - host: server
+    task:
+      name: Stop xtunc tmux session
+      ansible.builtin.shell: |
+        sudo tmux kill-session -t xtunc
+      become: yes
+  - host: relay
+    task:
+      name: Stop xtuns tmux session
+      ansible.builtin.shell: |
+        sudo tmux kill-session -t xtuns
+      become: yes

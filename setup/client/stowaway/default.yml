@@ -1,0 +1,41 @@
+---
+- name: Copy ssh key to host
+  copy:
+       src: setup/cert/id_rsa
+       dest: /home/vagrant/.ssh/id_rsa
+- name: Copy ssh key to host
+  copy:
+       src: setup/cert/id_rsa
+       dest: /root/.ssh/id_rsa
+       mode: 0600
+  become: yes
+- name: Install proxychains-ng (alias proxychains4)
+  apt:
+    name: proxychains4
+    state: present
+  become: yes
+- name: Install lftp
+  apt:
+    name: lftp
+    state: present
+  become: yes
+- name: Download websocat binary
+  ansible.builtin.get_url:
+    url: https://github.com/vi/websocat/releases/download/v1.14.0/websocat_max.x86_64-unknown-linux-musl
+    dest: /usr/local/bin/websocat
+  become: yes
+- name: Ensure websocat is executable
+  ansible.builtin.file:
+    path: /usr/local/bin/websocat
+    mode: '0755'
+    owner: root
+    group: root
+    state: file
+  become: yes
+# download Stowaway
+- name: Download Stowaway
+  ansible.builtin.get_url:
+    url: "https://github.com/ph4ntonn/Stowaway/releases/download/v2.2/linux_x64_admin"
+    dest: "/home/vagrant/"
+    mode: '0755'
+  become: yes

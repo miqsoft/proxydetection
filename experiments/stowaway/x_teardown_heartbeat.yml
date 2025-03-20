@@ -1,0 +1,6 @@
+tasks:
+  - host: client
+    task:
+      name: Pause for 40 seconds to allow some heartbeat packets to be captured
+      pause:
+        seconds: 40

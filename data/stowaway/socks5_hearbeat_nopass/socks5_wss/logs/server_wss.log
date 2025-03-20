@@ -1,0 +1,7 @@
+2025-03-19 14:38:44,702 - INFO - server listening on 0.0.0.0:8101
+2025-03-19 14:38:44,703 - INFO - WebSocket server started on wss://0.0.0.0:8101
+2025-03-19 14:46:47,454 - INFO - connection open
+2025-03-19 14:46:47,466 - INFO - Received: Hello Server
+
+2025-03-19 14:46:47,466 - INFO - Sent: Echo: Hello Server
+

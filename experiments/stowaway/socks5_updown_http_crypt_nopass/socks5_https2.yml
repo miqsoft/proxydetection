@@ -1,0 +1,29 @@
+before:
+  - ../x_setup_socks5_updown_http_crypt_nopass.yml
+after:
+  - ../x_teardown.yml
+tasks:
+  - host: client
+    task:
+      name: "Curl the server"
+      ansible.builtin.shell:
+          cmd: "export ALL_PROXY=socks5://127.0.0.1:1080 && curl-new -k --http2 -v https://{{ hostvars['server']['reserved_ip'] }}:4001 2>&1 | tee -a /output/client_curl.log"
+  - host: client
+    task:
+      name: "Save the curl log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+          src: "/output/client_curl.log"
+          dst: "{{ log_dir }}/client_curl.log"
+  - host: server
+    task:
+      name: "Save the server log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+        src: "/output/server_https2.log"
+        dst: "{{ log_dir }}/server_https2.log"
+  - host: server
+    task:
+      name: "Restart the server"
+      ansible.builtin.shell:
+        cmd: "service https2 restart"

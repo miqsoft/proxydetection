@@ -1,0 +1,43 @@
+tasks:
+  - host: relay
+    task:
+      name: "render ts.ini"
+      ansible.builtin.template:
+          src: "templates/ts.ini.j2"
+          dest: "/root/xtunnel/ts.ini"
+      vars:
+        port: 1234
+        password: securepassword123
+  - host: relay
+    task:
+      name: "Start xtuns in tmux"
+      shell:
+          cmd: "tmux new-session -d -s xtuns './xtuns -c ts.ini'"
+      args:
+        chdir: "/root/xtunnel"
+  - host: server
+    task:
+      name: "render tc.ini"
+      ansible.builtin.template:
+          src: "templates/tc.ini.j2"
+          dest: "/root/xtunnel/tc.ini"
+      vars:
+        relay: "{{ hostvars['relay']['reserved_ip'] }}"
+        port: 1234
+        password: securepassword123
+  - host: server
+    task:
+      name: "Start xtunc in tmux"
+      shell:
+          cmd: "tmux new-session -d -s xtunc './xtunc -c tc.ini'"
+      args:
+        chdir: "/root/xtunnel"
+
+  - host: all
+    task:
+      name: Start Network Captures (data only)
+      include_tasks: "commands/pcap_start.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+        log: "data_capture_{{ inventory_hostname }}.log"
+

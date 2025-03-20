@@ -1,0 +1,7 @@
+tasks:
+  - host: relay
+    task:
+      name: "Run rsocx reverse proxy"
+      shell:
+          cmd: "tmux new-session -d -s rsocx_session '/root/.cargo/bin/rsocx -l 0.0.0.0:1080'"
+          chdir: "/root/rsocx"

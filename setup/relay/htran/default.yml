@@ -1,0 +1,37 @@
+---
+- name: Install gcc and git
+  apt:
+      name: "{{ item }}"
+      state: present
+      update_cache: yes
+  loop:
+      - gcc
+      - git
+- name: Clone the repository
+  git:
+      repo: "https://github.com/HiwinCN/HTran"
+      dest: "/root/HTran"
+- name: Compile the source code
+  shell: "gcc -o htran Unix-like_Version/HTran.c -lpthread"
+  args:
+      chdir: "/root/HTran/"
+      executable: /bin/bash
+- name: Start HTran tran option for different ports in tmux sessions
+  shell: "tmux new-session -d -s htran_{{ item }} './htran -tran {{ item }} {{ do_machines.server.reserved_ip }} {{ item }}'"
+  args:
+      chdir: "/root/HTran/"
+      executable: /bin/bash
+  loop:
+    - 8000
+    - 8001
+    - 4000
+    - 4001
+    - 4002
+    - 2222
+    - 8100
+    - 8101
+    - 53
+    - 21
+    - 990
+
+

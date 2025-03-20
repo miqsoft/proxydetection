@@ -35,6 +35,10 @@
     create: yes
     state: present
 
+- name: "print machine"
+  debug:
+    var: machine
+
 - name: "Persist dynamic host to inventory within vagrant group"
   ini_file:
     dest: inventory/hosts.ini

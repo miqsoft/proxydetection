@@ -1,0 +1,26 @@
+---
+- name: Install dependencies for Rust build
+  apt:
+    name:
+      - build-essential
+      - clang
+      - pkg-config
+      - libssl-dev
+      - gcc
+    state: present
+- name: Install rust
+  shell: "curl -sSf https://sh.rustup.rs | sh -s -- -y"
+  args:
+    executable: /bin/bash
+- name: Clone rsocx
+  git:
+    repo: "https://github.com/b23r0/rsocx.git"
+    dest: "/root/rsocx"
+- name: Build rsocx
+  shell: "/root/.cargo/bin/cargo build --release"
+  args:
+    chdir: /root/rsocx
+- name: Install rsocx
+  shell: "/root/.cargo/bin/cargo install rsocx"
+  args:
+    chdir: /root/rsocx

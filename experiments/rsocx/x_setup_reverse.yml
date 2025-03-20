@@ -1,0 +1,18 @@
+tasks:
+  - host: relay
+    task:
+      name: "Run rsocx forward proxy"
+      shell:
+          cmd: "tmux new-session -d -s rsocx_session '/root/.cargo/bin/rsocx -t 0.0.0.0:8000 -s 0.0.0.0:1080'"
+          chdir: "/root/rsocx"
+  - host: server
+    task:
+      name: "Set var relay reserved_ip"
+      set_fact:
+          relay_reserved_ip: "{{ hostvars['relay']['reserved_ip'] }}"
+  - host: server
+    task:
+      name: "Connect from server to reverse proxy"
+      shell:
+        cmd: "tmux new-session -d -s rsocx_session '/root/.cargo/bin/rsocx -r {{ relay_reserved_ip }}:8000'"
+        chdir: "/root/rsocx"

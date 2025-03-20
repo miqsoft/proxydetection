@@ -1,0 +1,6 @@
+---
+- name: Download Stowaway
+  ansible.builtin.get_url:
+    url: "https://github.com/ph4ntonn/Stowaway/releases/download/v2.2/linux_x64_agent"
+    dest: "/root/"
+    mode: '0755'

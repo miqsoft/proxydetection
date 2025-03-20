@@ -1,0 +1,3 @@
+2025-03-19 15:05:01,425 - INFO - Running on http://0.0.0.0:8001 (CTRL + C to quit)
+2025-03-19 15:09:31,982 - INFO - Received request: GET /
+2025-03-19 15:09:31,982 - INFO - Response Status: 200 OK

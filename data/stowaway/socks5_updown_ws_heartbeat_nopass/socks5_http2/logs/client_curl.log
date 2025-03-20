@@ -1,0 +1,37 @@
+* Uses proxy env variable ALL_PROXY == 'socks5://127.0.0.1:1080'
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 127.0.0.1:1080...
+* SOCKS5 connect to 68.183.243.119:8001 (locally resolved)
+* SOCKS5 request granted.
+* Connected to 127.0.0.1 () port 1080
+* using HTTP/1.x
+* Connected to 127.0.0.1 (127.0.0.1) port 1080
+* using HTTP/1.x
+> GET / HTTP/1.1
+> Host: 68.183.243.119:8001
+> User-Agent: curl/8.12.1-DEV
+> Accept: */*
+> Connection: Upgrade, HTTP2-Settings
+> Upgrade: h2c
+> HTTP2-Settings: AAMAAABkAAQAAQAAAAIAAAAA
+> 
+* Request completely sent off
+< HTTP/1.1 101 
+< date: Wed, 19 Mar 2025 19:10:52 GMT
+< server: hypercorn-h11
+< connection: upgrade
+< upgrade: h2c
+< 
+* Received 101, Switching to HTTP/2
+* Copied HTTP/2 data in stream buffer to connection buffer after upgrade: len=51
+< HTTP/2 200 
+< content-type: text/html; charset=utf-8
+< content-length: 13
+< date: Wed, 19 Mar 2025 19:10:52 GMT
+< server: hypercorn-h2
+< 
+{ [13 bytes data]
+100    13  100    13    0     0    151      0 --:--:-- --:--:-- --:--:--   152
+* Connection #0 to host 127.0.0.1 left intact
+Hello, HTTP2!
