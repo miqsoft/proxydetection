@@ -1,0 +1,48 @@
+tasks:
+  - host: relay
+    task:
+      name: "Render IPsec configuration file"
+      template:
+          src: "server_ipsec.conf.j2"
+          dest: "/etc/ipsec.conf"
+  - host: relay
+    task:
+      name: "Render IPsec secrets file"
+      template:
+          src: "ipsec.secrets.j2"
+          dest: "/etc/ipsec.secrets"
+      vars:
+        dest: "%any %any"
+  - host: client
+    task:
+      name: "Render IPsec configuration file"
+      template:
+          src: "client_ipsec.conf.j2"
+          dest: "/etc/ipsec.conf"
+      vars:
+        relay: "{{ hostvars['relay']['reserved_ip'] }}"
+  - host: client
+    task:
+      name: "Render IPsec secrets file"
+      template:
+          src: "ipsec.secrets.j2"
+          dest: "/etc/ipsec.secrets"
+      vars:
+        dest: ""
+  - host: relay
+    task:
+      name: "Start strongswan-starter service"
+      service:
+          name: strongswan-starter
+          state: started
+  - host: client
+    task:
+      name: "Start strongswan-starter service"
+      service:
+          name: strongswan-starter
+          state: started
+      become: yes
+  - host: client
+    task:
+      name: "Start IPsec"
+      shell: "ipsec up myvpn"

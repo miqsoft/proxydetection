@@ -1,0 +1,25 @@
+tasks:
+  - host: client
+    task:
+      name: Pause for 60 seconds to allow some ping/pong packets to be captured
+      pause:
+        seconds: 60
+  - host: all
+    task:
+      name: Stop Network Captures
+      include_tasks: "commands/pcap_stop.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+  - host: relay
+    task:
+      name: "Stop xl2tpd service"
+      service:
+        name: xl2tpd
+        state: stopped
+  - host: client
+    task:
+      name: "Stop xl2tpd service"
+      service:
+        name: xl2tpd
+        state: stopped
+    become: yes

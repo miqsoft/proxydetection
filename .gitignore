@@ -8,3 +8,4 @@ poetry.lock
 # ignore any rendered files that contain .rendered in the name
 **/**.rendered.yml
 **/hosts.ini
+**/.tmp/

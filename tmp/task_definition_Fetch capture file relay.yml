@@ -1,5 +1,0 @@
-- fetch:
-    dest: data/shadowsocks/custom_http1/pcaps/data_capture_relay.pcap
-    flat: true
-    src: /output/data_capture_relay.pcap
-  name: Fetch capture file relay

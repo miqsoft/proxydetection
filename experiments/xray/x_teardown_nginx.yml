@@ -1,0 +1,7 @@
+tasks:
+  - host: relay
+    task:
+      name: "Stop Nginx if running"
+      ansible.builtin.service:
+          name: nginx
+          state: stopped

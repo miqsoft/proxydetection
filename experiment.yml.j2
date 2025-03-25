@@ -54,7 +54,7 @@
 
     - name: "Pause to allow capture file to be written"
       pause:
-        seconds: 1
+        seconds: 2
 
     - name: "Restart systemd-resolved to clear DNS cache on relay"
       shell: "sudo resolvectl flush-caches"

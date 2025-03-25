@@ -1,0 +1,14 @@
+tasks:
+  - host: relay
+    task:
+      name: "Start strongswan-starter service"
+      service:
+          name: strongswan-starter
+          state: stopped
+  - host: client
+    task:
+      name: "Start strongswan-starter service"
+      service:
+          name: strongswan-starter
+          state: stopped
+      become: yes

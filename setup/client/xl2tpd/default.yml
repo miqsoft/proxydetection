@@ -1,0 +1,11 @@
+---
+- name: Install strongswan, xl2tpd
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+      - strongswan
+      - xl2tpd
+      - ppp
+  become: yes
+

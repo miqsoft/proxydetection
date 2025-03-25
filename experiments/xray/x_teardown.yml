@@ -1,0 +1,13 @@
+tasks:
+  - host: relay
+    task:
+      name: "Stop xray tmux session"
+      shell:
+          cmd: "tmux kill-session -t xray"
+  - host: client
+    task:
+      name: "Stop xray tmux session"
+      shell:
+          cmd: "tmux kill-session -t xray"
+      become: yes
+

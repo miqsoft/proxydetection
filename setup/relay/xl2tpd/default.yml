@@ -1,0 +1,15 @@
+---
+- name: Install strongswan, xl2tpd
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+      - strongswan
+      - xl2tpd
+      - ppp
+- name: Enable IPv4 forwarding
+  sysctl:
+      name: net.ipv4.ip_forward
+      value: 1
+      state: present
+      sysctl_set: yes

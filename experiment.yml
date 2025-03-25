@@ -50,13 +50,13 @@
         loop_var: task_item
       when: inventory_hostname == task_item.host
 
-    - name: "Stop tcpdump capture"
-      shell: "sudo killall tcpdump"
-      ignore_errors: yes
-
     - name: "Pause to allow capture file to be written"
       pause:
         seconds: 2
+
+    - name: "Stop tcpdump capture"
+      shell: "sudo killall tcpdump"
+      ignore_errors: yes
 
     - name: "Restart systemd-resolved to clear DNS cache on relay"
       shell: "sudo resolvectl flush-caches"

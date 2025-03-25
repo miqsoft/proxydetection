@@ -1,0 +1,66 @@
+{
+    "log": {
+        "loglevel": "debug",
+        "access": "/home/vagrant/access.log",
+        "error": "/home/vagrant/error.log"
+    },
+    "routing": {
+        "domainStrategy": "AsIs",
+        "rules": [
+            {
+                "type": "field",
+                "ip": [
+                    "geoip:private"
+                ],
+                "outboundTag": "direct"
+            }
+        ]
+    },
+    "inbounds": [
+        {
+            "port": 1080,
+            "listen": "127.0.0.1",
+            "protocol": "socks",
+            "settings": {
+                "udp": true
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "socks",
+            "settings": {
+                "servers": [
+                    {
+                        "address": "{{ relay }}",
+                        "port": 1234,
+                        "users": [
+                            {
+                                "user": "testuser",
+                                "pass": "testpassword123"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "serverName": "{{ dns }}",
+                    "allowInsecure": false,
+                    "alpn": [
+                        "h2",
+                        "http/1.1"
+                    ],
+                    "disableSessionResumption": true
+                }
+            },
+            "tag": "proxy"
+        },
+      {
+            "protocol": "freedom",
+            "tag": "direct"
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+tasks:
+  - host: relay
+    task:
+      name: start tinc in tmux
+      command: tmux new-session -d -s tinc 'tincd -n myvpn -D -d3 2>&1 | tee /root/relay_tinc.log'
+  - host: client
+    task:
+      name: start tinc in tmux
+      command: tmux new-session -d -s tinc 'tincd -n myvpn -D -d3 2>&1 | sudo tee /home/vagrant/relay_tinc.log'
+      become: yes
+  - host: all
+    task:
+      name: Start Network Captures (data only)
+      include_tasks: "commands/pcap_start.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+        log: "data_capture_{{ inventory_hostname }}.log"

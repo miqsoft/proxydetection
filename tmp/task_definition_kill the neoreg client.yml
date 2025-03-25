@@ -1,3 +1,0 @@
-- ansible.builtin.shell:
-    cmd: pkill -f neoreg
-  name: kill the neoreg client

@@ -1,0 +1,8 @@
+#!/bin/sh
+ip addr del 10.0.0.1/24 dev $INTERFACE
+ip link set $INTERFACE down
+
+# Clean up NAT and forwarding rules
+iptables -t nat -D POSTROUTING -s 10.0.0.0/24 -o eth0 -j MASQUERADE
+iptables -D FORWARD -i $INTERFACE -o eth0 -j ACCEPT
+iptables -D FORWARD -i eth0 -o $INTERFACE -m state --state RELATED,ESTABLISHED -j ACCEPT

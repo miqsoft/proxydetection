@@ -1,0 +1,31 @@
+tasks:
+  - host: localhost
+    task:
+      name: Create tmp directory
+      command: mkdir -p .tmp/
+  - host: client
+    task:
+      name: Fetch /etc/tinc/myvpn/hosts/client
+      fetch:
+        src: /etc/tinc/myvpn/hosts/client
+        dest: .tmp/
+        flat: yes
+  - host: relay
+    task:
+      name: Fetch /etc/tinc/myvpn/hosts/relay
+      fetch:
+        src: /etc/tinc/myvpn/hosts/relay
+        dest: .tmp/
+        flat: yes
+  - host: relay
+    task:
+      name: Upload local client file to relay
+      copy:
+        src: .tmp/client
+        dest: /etc/tinc/myvpn/hosts/client
+  - host: client
+    task:
+      name: Upload local relay file to client
+      copy:
+        src: .tmp/relay
+        dest: /etc/tinc/myvpn/hosts/relay

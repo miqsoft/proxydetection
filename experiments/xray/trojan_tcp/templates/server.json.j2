@@ -1,0 +1,30 @@
+{
+    "log": {
+        "loglevel": "warning",
+        "access": "/root/access.log",
+        "error": "/root/error.log"
+    },
+    "inbounds": [
+        {
+            "port": 1234,
+            "protocol": "trojan",
+            "settings": {
+                "clients": [
+                    {
+                        "password":"securepassword123",
+                        "email": "love@example.com",
+                        "level": 0
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp"
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom"
+        }
+    ]
+}

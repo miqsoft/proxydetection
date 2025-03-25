@@ -1,0 +1,5 @@
+#!/bin/sh
+
+GATEWAY=$(ip route | awk '/default/ {print $3}')
+ip route add {{ relay }} via $GATEWAY
+ip route add default via 192.168.1.1 dev ppp0

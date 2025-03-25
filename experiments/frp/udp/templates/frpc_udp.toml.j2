@@ -1,0 +1,17 @@
+serverAddr = "{{ relay }}"
+serverPort = 1234
+
+[[proxies]]
+name = "https3"
+type = "udp"
+localIP = "127.0.0.1"
+localPort = 4002
+remotePort = 4002
+
+
+[[proxies]]
+name = "dns"
+type = "udp"
+localIP = "127.0.0.1"
+localPort = 53
+remotePort = 5300

@@ -1,0 +1,43 @@
+{
+    "log": {
+        "loglevel": "debug",
+        "access": "/root/access.log",
+        "error": "/root/error.log"
+    },
+    "inbounds": [
+        {
+            "port": 1234,
+            "protocol": "trojan",
+            "settings": {
+                "clients": [
+                    {
+                        "password":"securepassword123",
+                        "email": "love@example.com"
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "serverName": "proxy.labforensic.de",
+                    "alpn": [
+                        "h2",
+                        "http/1.1"
+                    ],
+                    "certificates": [
+                        {
+                            "certificateFile": "/etc/letsencrypt/live/{{ dns }}/fullchain.pem",
+                            "keyFile": "/etc/letsencrypt/live/{{ dns }}/privkey.pem"
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom"
+        }
+    ]
+}

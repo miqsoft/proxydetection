@@ -1,0 +1,20 @@
+---
+- name: Install required packages
+  apt:
+    name:
+      - unzip
+    state: present
+    update_cache: yes
+  become: yes
+- name: Download Xray
+  get_url:
+      url: "https://github.com/XTLS/Xray-core/releases/download/v25.3.6/Xray-linux-64.zip"
+      dest: "/home/vagrant/Xray-linux-64.zip"
+  become: yes
+- name: Remove Xray if exists
+  shell:
+    cmd: '[ -e "/home/vagrant/Xray-linux-64" ] && rm -rf "/home/vagrant/Xray-linux-64" || true'
+- name: Extract Xray
+  shell:
+    cmd: "unzip /home/vagrant/Xray-linux-64.zip -d /home/vagrant/Xray-linux-64"
+  become: yes

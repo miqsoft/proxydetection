@@ -1,0 +1,10 @@
+[global]
+port = 1701
+
+[lac myvpn]
+lns = {{ relay }}
+require authentication = yes
+name = {{ user }}
+ppp debug = yes
+pppoptfile = /etc/ppp/options.xl2tpd.client
+length bit = yes

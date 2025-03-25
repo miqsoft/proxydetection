@@ -1,0 +1,19 @@
+tasks:
+  - host: all
+    task:
+      name: Stop Network Captures
+      include_tasks: "commands/pcap_stop.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+  - host: relay
+    task:
+      name: Stop frps tmux session
+      ansible.builtin.shell: |
+        sudo tmux kill-session -t frps
+      become: yes
+  - host: server
+    task:
+      name: Stop frpc tmux session
+      ansible.builtin.shell: |
+        sudo tmux kill-session -t frpc
+      become: yes

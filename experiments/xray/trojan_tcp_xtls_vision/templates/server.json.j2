@@ -1,0 +1,71 @@
+{
+    "log": {
+        "loglevel": "debug",
+        "access": "/root/access.log",
+        "error": "/root/error.log"
+    },
+  "inbounds": [
+        {
+            "port": 1234,
+            "protocol": "trojan",
+            "settings": {
+                "clients": [
+                    {
+                        "password":"securepassword123",
+                        "flow": "xtls-rprx-vision"
+                    }
+                ],
+                "fallbacks": [
+                    {
+                        "dest": "8001",
+                        "xver": 1
+                    },
+                    {
+                        "alpn": "h2",
+                        "dest": "8002",
+                        "xver": 1
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "rejectUnknownSni": true,
+                    "alpn": [
+                        "http/1.1",
+                        "h2"
+                    ],
+                    "certificates": [
+                        {
+                            "certificateFile": "/etc/letsencrypt/live/{{ dns }}/fullchain.pem",
+                            "keyFile": "/etc/letsencrypt/live/{{ dns }}/privkey.pem",
+                            "ocspStapling": 3600
+                        }
+                    ],
+                    "minVersion": "1.2"
+                },
+                "sniffing": {
+                  "enabled": true,
+                  "destOverride": [
+                      "http",
+                      "tls"
+                  ]
+                }
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom"
+        }
+    ],
+  "policy": {
+        "levels": {
+            "0": {
+                "handshake": 2,
+                "connIdle": 120
+            }
+        }
+    }
+}

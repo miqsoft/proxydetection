@@ -1,0 +1,11 @@
+#!/bin/sh
+ip addr add 10.0.0.1/24 dev $INTERFACE
+ip link set $INTERFACE up
+
+# NAT for VPN clients
+iptables -t nat -A POSTROUTING -s 10.0.0.0/24 -o eth0 -j MASQUERADE
+
+# Allow traffic forwarding (optional)
+iptables -A FORWARD -i $INTERFACE -o eth0 -j ACCEPT
+iptables -A FORWARD -i eth0 -o $INTERFACE -m state --state RELATED,ESTABLISHED -j ACCEPT
+

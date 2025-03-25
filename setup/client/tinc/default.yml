@@ -1,0 +1,79 @@
+---
+- name: Install tinc
+  apt:
+    name: tinc
+    state: present
+  become: yes
+
+- name: Create tinc directory
+  shell: mkdir -p /etc/tinc/myvpn/hosts
+  become: yes
+
+- name: Set VPN name
+  set_fact:
+    vpn_name: myvpn
+
+- name: Set node name
+  set_fact:
+    node_name: "{{ inventory_hostname }}"
+
+- name: Render tinc configuration
+  template:
+    src: tinc.conf.j2
+    dest: "/etc/tinc/{{ vpn_name }}/tinc.conf"
+  vars:
+    node_name: "{{ node_name }}"
+    vpn_name: "{{ vpn_name }}"
+    server_name: "relay"
+  become: yes
+
+- name: Render tinc host configuration
+  template:
+    src: hosts.j2
+    dest: "/etc/tinc/{{ vpn_name }}/hosts/{{ node_name }}"
+  vars:
+    server: "{{ hostvars['relay']['reserved_ip'] }}"
+  become: yes
+
+- name: Generate tinc keypair non-interactively
+  expect:
+    command: "tincd -n {{ vpn_name }} -K4096"
+    responses:
+      '.*save.*private.*key.*': '/etc/tinc/{{ vpn_name }}/rsa_key.priv'
+      '.*save.*public.*key.*': '/etc/tinc/{{ vpn_name }}/hosts/{{ node_name }}'
+  become: yes
+
+- name: Render tinc-up script
+  template:
+    src: "tinc-up.j2"
+    dest: "/etc/tinc/{{ vpn_name }}/tinc-up"
+  vars:
+    relay: "{{ hostvars['relay']['reserved_ip'] }}"
+  become: yes
+
+- name: Make tinc-up script executable
+  file:
+    path: "/etc/tinc/{{ vpn_name }}/tinc-up"
+    mode: '0755'
+    owner: root
+    group: root
+    state: file
+  become: yes
+
+- name: Render tinc-down script
+  template:
+    src: "tinc-down.j2"
+    dest: "/etc/tinc/{{ vpn_name }}/tinc-down"
+  vars:
+    relay: "{{ hostvars['relay']['reserved_ip'] }}"
+  become: yes
+
+- name: Make tinc-up script executable
+  file:
+    path: "/etc/tinc/{{ vpn_name }}/tinc-down"
+    mode: '0755'
+    owner: root
+    group: root
+    state: file
+  become: yes
+

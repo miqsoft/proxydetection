@@ -1,0 +1,41 @@
+before:
+  - ../x_setup_tcp.yml
+after:
+  - ../x_teardown.yml
+tasks:
+  - host: server
+    task:
+      name: "replace pasv_address with relay's reserved IP in /etc/vsftpd.conf"
+      shell:
+          cmd: "sed -i 's/^pasv_address=.*/pasv_address={{ hostvars['relay']['reserved_ip'] }}/g' /etc/vsftpd.conf"
+  - host: server
+    task:
+      name: "Restart the server"
+      shell:
+        cmd: "service vsftpd restart"
+  - host: client
+    task:
+      name: Run lftp command with proxy
+      shell: |
+        lftp -e "
+          open -u ftpuser,ultra!secret!password ftp://{{ hostvars['relay']['reserved_ip'] }};
+          ls;
+          bye
+        " 2>&1 | tee "/output/client_ftp.log"
+  - host: client
+    task:
+      name: "Save the ftp client log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+        src: "/output/client_ftp.log"
+        dst: "{{ log_dir }}/client_ftp.log"
+  - host: server
+    task:
+      name: "reverse the changes in /etc/vsftpd.conf"
+      shell:
+          cmd: "sed -i 's/^pasv_address=.*/pasv_address={{ hostvars['server']['reserved_ip'] }}/g' /etc/vsftpd.conf"
+  - host: server
+    task:
+      name: "Restart the server"
+      shell:
+        cmd: "service vsftpd restart"

@@ -1,0 +1,15 @@
+---
+- name: Download FRP
+  ansible.builtin.get_url:
+    url: "https://github.com/fatedier/frp/releases/download/v0.61.2/frp_0.61.2_linux_amd64.tar.gz"
+    dest: "/root/frp.tar.gz"
+- name: Extract FRP
+  ansible.builtin.shell:
+    cmd: "tar -xvf /root/frp.tar.gz -C /root"
+- name: Rename FRP
+  ansible.builtin.shell:
+    cmd: "mv /root/frp_0.61.2_linux_amd64 /root/frp"
+- name: "Change permissions"
+  ansible.builtin.file:
+    path: /root/frp/frps
+    mode: '0755'

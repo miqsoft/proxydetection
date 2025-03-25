@@ -1,0 +1,23 @@
+config setup
+    charondebug="ike 2, knl 2, cfg 2, net 2, esp 2, dmn 2, manager 2"
+
+conn %default
+    ikelifetime=60m
+    keylife=20m
+    rekeymargin=3m
+    keyingtries=1
+    authby=secret
+    keyexchange=ikev2
+
+conn myvpn
+    left=%any
+    leftid=%any
+    rightid=%any
+    auto=add
+    authby=secret
+    type=transport
+    ike=aes256-sha256-modp2048
+    esp=aes256-sha256
+    right=%any
+    rightprotoport=17/1701
+    leftprotoport=17/1701

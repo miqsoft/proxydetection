@@ -1,0 +1,45 @@
+{
+    "log": {
+        "loglevel": "debug",
+        "access": "/home/vagrant/access.log",
+        "error": "/home/vagrant/error.log"
+    },
+    "inbounds": [
+        {
+            "port": 1080,
+            "listen": "127.0.0.1",
+            "protocol": "socks",
+            "settings": {
+                "udp": true
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "trojan",
+            "settings": {
+                "servers": [
+                    {
+                        "address": "{{ relay }}",
+                        "port": 1234,
+                        "password": "securepassword123",
+                        "email": "love@example.com"
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "serverName": "proxy.labforensic.de",
+                    "allowInsecure": false,
+                    "alpn": [
+                        "h2",
+                        "http/1.1"
+                    ],
+                    "disableSessionResumption": true
+                }
+            }
+        }
+    ]
+}

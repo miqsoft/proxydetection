@@ -1,0 +1,24 @@
+2025-03-25 09:33:56,407 - INFO - Received GET
+2025-03-25 09:33:56,407 - INFO - Sent data (Hello, HTTP1.1!)
+2025-03-25 09:34:18,094 - INFO - Received GET
+2025-03-25 09:34:18,094 - INFO - Sent data (Hello, HTTP1.1!)
+2025-03-25 09:34:18,448 - INFO - Received GET
+2025-03-25 09:34:18,449 - INFO - Sent data (Hello, HTTP1.1!)
+2025-03-25 09:34:18,748 - INFO - Received GET
+2025-03-25 09:34:18,748 - INFO - Sent data (Hello, HTTP1.1!)
+2025-03-25 09:34:18,752 - INFO - Received GET
+2025-03-25 09:34:18,752 - INFO - Sent data (Hello, HTTP1.1!)
+2025-03-25 10:04:40,860 - INFO - Received GET
+2025-03-25 10:04:40,860 - INFO - Sent data (Hello, HTTP1.1!)
+2025-03-25 10:04:44,076 - INFO - Received GET
+2025-03-25 10:04:44,077 - INFO - Sent data (Hello, HTTP1.1!)
+2025-03-25 10:04:44,296 - INFO - Received GET
+2025-03-25 10:04:44,296 - INFO - Sent data (Hello, HTTP1.1!)
+2025-03-25 10:04:48,803 - INFO - Received GET
+2025-03-25 10:04:48,803 - INFO - Sent data (Hello, HTTP1.1!)
+2025-03-25 10:05:24,934 - INFO - Received GET
+2025-03-25 10:05:24,934 - INFO - Sent data (Hello, HTTP1.1!)
+2025-03-25 10:05:25,114 - INFO - Received GET
+2025-03-25 10:05:25,114 - INFO - Sent data (Hello, HTTP1.1!)
+2025-03-25 10:06:29,641 - INFO - Received GET
+2025-03-25 10:06:29,642 - INFO - Sent data (Hello, HTTP1.1!)

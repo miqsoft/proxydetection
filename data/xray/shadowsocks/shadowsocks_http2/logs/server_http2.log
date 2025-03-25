@@ -1,0 +1,13 @@
+2025-03-23 19:31:45,459 - INFO - Running on http://0.0.0.0:8001 (CTRL + C to quit)
+2025-03-23 19:51:45,788 - INFO - Received request: GET /
+2025-03-23 19:51:45,789 - INFO - Response Status: 200 OK
+2025-03-23 19:51:59,573 - INFO - Received request: GET /
+2025-03-23 19:51:59,573 - INFO - Response Status: 200 OK
+2025-03-23 19:51:59,869 - INFO - Received request: GET /favicon.ico
+2025-03-23 19:51:59,869 - INFO - Response Status: 404 NOT FOUND
+2025-03-23 19:51:59,885 - INFO - Received request: GET /
+2025-03-23 19:51:59,885 - INFO - Response Status: 200 OK
+2025-03-23 19:52:00,174 - INFO - Received request: GET /sitemap.xml
+2025-03-23 19:52:00,175 - INFO - Response Status: 404 NOT FOUND
+2025-03-23 19:52:00,176 - INFO - Received request: GET /robots.txt
+2025-03-23 19:52:00,176 - INFO - Response Status: 404 NOT FOUND

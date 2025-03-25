@@ -1,0 +1,30 @@
+---
+- name: Install required packages
+  apt:
+    name:
+      - unzip
+      - certbot
+      - nginx
+    state: present
+    update_cache: yes
+- name: Stop Nginx if running
+  service:
+    name: nginx
+    state: stopped
+- name: Download V2Ray
+  get_url:
+      url: "https://github.com/XTLS/Xray-core/releases/download/v25.3.6/Xray-linux-64.zip"
+      dest: "/root/Xray-linux-64.zip"
+- name: Remove Xray if exists
+  shell:
+    cmd: '[ -e "/root/Xray-linux-64" ] && rm -rf "/root/Xray-linux-64" || true'
+- name: Extract V2Ray
+  shell:
+    cmd: "unzip /root/Xray-linux-64.zip -d /root/Xray-linux-64"
+- name: Generate TLS certificate with Certbot
+  shell: >
+    certbot certonly --standalone
+    --non-interactive
+    --agree-tos
+    --register-unsafely-without-email
+    -d {{ hostvars['relay']['dns'] }}
