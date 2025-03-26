@@ -1,0 +1,39 @@
+tasks:
+  - host: all
+    task:
+      name: Pause for 40 seconds to check for keep alive
+      pause:
+          seconds: 40
+  - host: all
+    task:
+      name: Stop Network Captures
+      include_tasks: "commands/pcap_stop.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+  - host: client
+    task:
+      name: cleanup softether
+      become: yes
+      shell: |
+        expect -c '
+          spawn /usr/local/vpnclient/vpncmd
+          expect "Select 1, 2 or 3:"
+          send "2\r"
+          expect "Hostname of IP Address of Destination:"
+          send "\r"
+          expect "VPN Client>"
+          send "AccountDisconnect testuser\r"
+          expect "VPN Client>"
+          send "AccountDelete testuser\r"
+          expect "VPN Client>"
+          send "Exit\r"
+        '
+  - host: client
+    task:
+      name: stop ./vpnclient
+      shell: /usr/local/vpnclient/vpnclient stop
+  - host: client
+    task:
+      name: remove routes
+      shell: ip route del {{ hostvars['relay']['reserved_ip'] }} via 10.0.2.2 dev eth0
+      become: yes

@@ -1,0 +1,9 @@
+---
+- name: Install strongswan
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+      - strongswan
+  become: yes
+

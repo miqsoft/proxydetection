@@ -1,0 +1,31 @@
+before:
+  - x_setup.yml
+after:
+  - x_teardown.yml
+tasks:
+  - host: client
+    task:
+      name: "Send websocket traffic with message using websocat"
+      shell:
+        cmd: "(echo 'Hello Server'; sleep 5) | websocat --insecure wss://{{ hostvars['server']['reserved_ip'] }}:8101 2>&1 | tee /output/client_ws.log"
+      args:
+        executable: /bin/bash
+  - host: client
+    task:
+      name: "Save the websocket client log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+        src: "/output/client_ws.log"
+        dst: "{{ log_dir }}/client_ws.log"
+  - host: server
+    task:
+      name: "Save the websocket server log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+        src: "/output/server_wss.log"
+        dst: "{{ log_dir }}/server_wss.log"
+  - host: server
+    task:
+      name: "Restart the server"
+      shell:
+        cmd: "service wss restart"

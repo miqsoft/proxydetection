@@ -1,0 +1,27 @@
+tasks:
+  - host: all
+    task:
+      name: Pause for 40 seconds to check for keep alive
+      pause:
+          seconds: 40
+  - host: all
+    task:
+      name: Stop Network Captures
+      include_tasks: "commands/pcap_stop.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+  - host: client
+    task:
+      name: kill tmux session vpn_session
+      shell: tmux kill-session -t vpn_session
+      become: yes
+  - host: client
+    task:
+      name: kill sstpc
+      shell: pkill sstpc || true
+      become: yes
+  - host: client
+    task:
+      name: remove routes
+      shell: ip route del {{ hostvars['relay']['reserved_ip'] }} via 10.0.2.2
+      become: yes

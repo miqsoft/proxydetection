@@ -1,0 +1,5 @@
+pty "pptp {{ relay }} --nolaunchpppd"
+name {{ user }}
+password {{ password }}
+remotename PPTP
+require-mppe-128

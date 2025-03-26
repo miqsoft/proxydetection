@@ -1,0 +1,62 @@
+tasks:
+  - host: relay
+    task:
+      name: "Render IPsec configuration file"
+      template:
+          src: "server_ipsec.conf.j2"
+          dest: "/etc/ipsec.conf"
+      vars:
+        relay: "{{ hostvars['relay']['reserved_ip'] }}"
+  - host: relay
+    task:
+      name: "Render IPsec secrets file"
+      template:
+          src: "ipsec.secrets.j2"
+          dest: "/etc/ipsec.secrets"
+      vars:
+        dest: "%any %any"
+  - host: client
+    task:
+      name: "Render IPsec configuration file"
+      template:
+          src: "client_ipsec.conf.j2"
+          dest: "/etc/ipsec.conf"
+      vars:
+        relay: "{{ hostvars['relay']['reserved_ip'] }}"
+  - host: client
+    task:
+      name: "Render IPsec secrets file"
+      template:
+          src: "ipsec.secrets.j2"
+          dest: "/etc/ipsec.secrets"
+      vars:
+        dest: ""
+  - host: relay
+    task:
+      name: "Start strongswan-starter service"
+      service:
+          name: strongswan-starter
+          state: started
+  - host: client
+    task:
+      name: "Start strongswan-starter service"
+      service:
+          name: strongswan-starter
+          state: started
+      become: yes
+  - host: relay
+    task:
+      name: "Set iptables rules"
+      shell: |
+        iptables -t nat -A POSTROUTING -s 10.10.10.0/24 -o eth0 -m policy --pol ipsec --dir out -j ACCEPT
+        iptables -t nat -A POSTROUTING -s 10.10.10.0/24 -o eth0 -j MASQUERADE
+        iptables -t filter -A FORWARD --match policy --pol ipsec --dir in -s 10.10.10.0/24 -o eth0 -p tcp -m tcp --tcp-flags SYN,RST SYN -m tcpmss --mss 1361:1536 -j TCPMSS --set-mss 1360
+  - host: client
+    task:
+      name: "Start IPsec"
+      shell: "ipsec up myvpn"
+  - host: client
+    task:
+      name: "Wait 2 seconds for IPsec to establish"
+      pause:
+        seconds: 2

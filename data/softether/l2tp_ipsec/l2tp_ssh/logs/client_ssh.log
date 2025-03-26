@@ -1,0 +1,97 @@
+OpenSSH_9.6p1 Ubuntu-3ubuntu13, OpenSSL 3.0.13 30 Jan 2024
+debug1: Reading configuration data /etc/ssh/ssh_config
+debug1: /etc/ssh/ssh_config line 19: include /etc/ssh/ssh_config.d/*.conf matched no files
+debug1: /etc/ssh/ssh_config line 21: Applying options for *
+debug1: Connecting to 68.183.243.119 [68.183.243.119] port 2222.
+debug1: Connection established.
+debug1: identity file /root/.ssh/id_rsa type 0
+debug1: identity file /root/.ssh/id_rsa-cert type -1
+debug1: identity file /root/.ssh/id_ecdsa type -1
+debug1: identity file /root/.ssh/id_ecdsa-cert type -1
+debug1: identity file /root/.ssh/id_ecdsa_sk type -1
+debug1: identity file /root/.ssh/id_ecdsa_sk-cert type -1
+debug1: identity file /root/.ssh/id_ed25519 type -1
+debug1: identity file /root/.ssh/id_ed25519-cert type -1
+debug1: identity file /root/.ssh/id_ed25519_sk type -1
+debug1: identity file /root/.ssh/id_ed25519_sk-cert type -1
+debug1: identity file /root/.ssh/id_xmss type -1
+debug1: identity file /root/.ssh/id_xmss-cert type -1
+debug1: identity file /root/.ssh/id_dsa type -1
+debug1: identity file /root/.ssh/id_dsa-cert type -1
+debug1: Local version string SSH-2.0-OpenSSH_9.6p1 Ubuntu-3ubuntu13
+debug1: Remote protocol version 2.0, remote software version OpenSSH_9.6p1 Ubuntu-3ubuntu13.8
+debug1: compat_banner: match: OpenSSH_9.6p1 Ubuntu-3ubuntu13.8 pat OpenSSH* compat 0x04000000
+debug1: Authenticating to 68.183.243.119:2222 as 'root'
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts: No such file or directory
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts2: No such file or directory
+debug1: SSH2_MSG_KEXINIT sent
+debug1: SSH2_MSG_KEXINIT received
+debug1: kex: algorithm: sntrup761x25519-sha512@openssh.com
+debug1: kex: host key algorithm: ssh-ed25519
+debug1: kex: server->client cipher: chacha20-poly1305@openssh.com MAC: <implicit> compression: none
+debug1: kex: client->server cipher: chacha20-poly1305@openssh.com MAC: <implicit> compression: none
+debug1: expecting SSH2_MSG_KEX_ECDH_REPLY
+debug1: SSH2_MSG_KEX_ECDH_REPLY received
+debug1: Server host key: ssh-ed25519 SHA256:SvYq9uFTpHRxPam9GBwGqVz+Xa7tDn2hrCm9uRM9Uns
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts: No such file or directory
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts2: No such file or directory
+debug1: checking without port identifier
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts: No such file or directory
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts2: No such file or directory
+Warning: Permanently added '[68.183.243.119]:2222' (ED25519) to the list of known hosts.
+debug1: ssh_packet_send2_wrapped: resetting send seqnr 3
+debug1: rekey out after 134217728 blocks
+debug1: SSH2_MSG_NEWKEYS sent
+debug1: Sending SSH2_MSG_EXT_INFO
+debug1: expecting SSH2_MSG_NEWKEYS
+debug1: ssh_packet_read_poll2: resetting read seqnr 3
+debug1: SSH2_MSG_NEWKEYS received
+debug1: rekey in after 134217728 blocks
+debug1: SSH2_MSG_EXT_INFO received
+debug1: kex_ext_info_client_parse: server-sig-algs=<ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,sk-ssh-ed25519@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,rsa-sha2-512,rsa-sha2-256>
+debug1: kex_ext_info_check_ver: publickey-hostbound@openssh.com=<0>
+debug1: kex_ext_info_check_ver: ping@openssh.com=<0>
+debug1: SSH2_MSG_SERVICE_ACCEPT received
+debug1: SSH2_MSG_EXT_INFO received
+debug1: kex_ext_info_client_parse: server-sig-algs=<ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,sk-ssh-ed25519@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,rsa-sha2-512,rsa-sha2-256>
+debug1: Authentications that can continue: publickey
+debug1: Next authentication method: publickey
+debug1: Will attempt key: /root/.ssh/id_rsa RSA SHA256:r2lX3/ZtNYBSnoOJzmpJtQeKB1eUsBQv7GR403xUlys
+debug1: Will attempt key: /root/.ssh/id_ecdsa 
+debug1: Will attempt key: /root/.ssh/id_ecdsa_sk 
+debug1: Will attempt key: /root/.ssh/id_ed25519 
+debug1: Will attempt key: /root/.ssh/id_ed25519_sk 
+debug1: Will attempt key: /root/.ssh/id_xmss 
+debug1: Will attempt key: /root/.ssh/id_dsa 
+debug1: Offering public key: /root/.ssh/id_rsa RSA SHA256:r2lX3/ZtNYBSnoOJzmpJtQeKB1eUsBQv7GR403xUlys
+debug1: Server accepts key: /root/.ssh/id_rsa RSA SHA256:r2lX3/ZtNYBSnoOJzmpJtQeKB1eUsBQv7GR403xUlys
+Authenticated to 68.183.243.119 ([68.183.243.119]:2222) using "publickey".
+debug1: channel 0: new session [client-session] (inactive timeout: 0)
+debug1: Requesting no-more-sessions@openssh.com
+debug1: Entering interactive session.
+debug1: pledge: network
+debug1: client_input_global_request: rtype hostkeys-00@openssh.com want_reply 0
+debug1: Remote: /root/.ssh2/authorized_keys:1: key options: agent-forwarding port-forwarding pty user-rc x11-forwarding
+debug1: Remote: /root/.ssh2/authorized_keys:1: key options: agent-forwarding port-forwarding pty user-rc x11-forwarding
+debug1: Sending environment.
+debug1: channel 0: setting env LC_TIME = "fr_FR.UTF-8"
+debug1: channel 0: setting env LC_MONETARY = "fr_FR.UTF-8"
+debug1: channel 0: setting env LC_ADDRESS = "fr_FR.UTF-8"
+debug1: channel 0: setting env LANG = "C.utf8"
+debug1: channel 0: setting env LC_TELEPHONE = "fr_FR.UTF-8"
+debug1: channel 0: setting env LC_MESSAGES = "C.utf8"
+debug1: channel 0: setting env LC_NAME = "fr_FR.UTF-8"
+debug1: channel 0: setting env LC_MEASUREMENT = "fr_FR.UTF-8"
+debug1: channel 0: setting env LC_IDENTIFICATION = "fr_FR.UTF-8"
+debug1: channel 0: setting env LC_ALL = "C.utf8"
+debug1: channel 0: setting env LC_NUMERIC = "fr_FR.UTF-8"
+debug1: channel 0: setting env LC_PAPER = "fr_FR.UTF-8"
+debug1: Sending command: ls
+debug1: pledge: fork
+debug1: client_input_channel_req: channel 0 rtype exit-status reply 0
+debug1: client_input_channel_req: channel 0 rtype eow@openssh.com reply 0
+venv
+debug1: channel 0: free: client-session, nchannels 1
+Transferred: sent 4768, received 4284 bytes, in 0.8 seconds
+Bytes per second: sent 5692.9, received 5115.0
+debug1: Exit status 0

@@ -1,0 +1,58 @@
+tasks:
+  - host: localhost
+    task:
+      name: Set Relay, Username, Password
+      set_fact:
+          relay: "{{ hostvars['relay'].reserved_ip }}"
+          username: "testuser"
+          password: "securepassword123"
+  - host: relay
+    task:
+      name: render pptpd.conf
+      template:
+          src: pptpd.conf.j2
+          dest: /etc/pptpd.conf
+  - host: relay
+    task: render chap-secrets
+    template:
+        src: chap-secrets.j2
+        dest: /etc/ppp/chap-secrets
+    vars:
+      user: "{{ username }}"
+      password: "{{ password }}"
+  - host: relay
+    task:
+      name: render pptpd-options
+      template:
+          src: pptpd-options.j2
+          dest: /etc/ppp/pptpd-options
+  - host: relay
+    task:
+      name: Install iptables rules
+      shell: |
+        iptables -t nat -A POSTROUTING -s 192.168.0.0/24 -o eth0 -j MASQUERADE
+        iptables -A FORWARD -p tcp --syn -s 10.10.50.0/24 -j TCPMSS --set-mss 1356
+  - host: client
+    task:
+      name: render myvpn
+      template:
+          src: myvpn.j2
+          dest: /etc/ppp/peers/myvpn
+      vars:
+        relay: "{{ relay }}"
+        user: "{{ username }}"
+        password: "{{ password }}"
+      become: yes
+  - host: relay
+    task:
+      name: Start pptpd
+      service:
+          name: pptpd
+          state: started
+          enabled: yes
+          daemon_reload: yes
+  - host: client
+    task:
+      name: Connect to VPN
+      shell: pon myvpn
+      become: yes

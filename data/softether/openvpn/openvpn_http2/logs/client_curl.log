@@ -1,0 +1,32 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 68.183.243.119:8001...
+* Connected to 68.183.243.119 (68.183.243.119) port 8001
+* using HTTP/1.x
+> GET / HTTP/1.1
+> Host: 68.183.243.119:8001
+> User-Agent: curl/8.12.1-DEV
+> Accept: */*
+> Connection: Upgrade, HTTP2-Settings
+> Upgrade: h2c
+> HTTP2-Settings: AAMAAABkAAQAAQAAAAIAAAAA
+> 
+* Request completely sent off
+< HTTP/1.1 101 
+< date: Wed, 26 Mar 2025 20:01:27 GMT
+< server: hypercorn-h11
+< connection: upgrade
+< upgrade: h2c
+< 
+* Received 101, Switching to HTTP/2
+* Copied HTTP/2 data in stream buffer to connection buffer after upgrade: len=51
+< HTTP/2 200 
+< content-type: text/html; charset=utf-8
+< content-length: 13
+< date: Wed, 26 Mar 2025 20:01:27 GMT
+< server: hypercorn-h2
+< 
+{ [13 bytes data]
+100    13  100    13    0     0    252      0 --:--:-- --:--:-- --:--:--   254
+* Connection #0 to host 68.183.243.119 left intact
+Hello, HTTP2!

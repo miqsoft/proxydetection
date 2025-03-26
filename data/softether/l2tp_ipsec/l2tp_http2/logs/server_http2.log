@@ -1,0 +1,11 @@
+2025-03-26 20:01:33,413 - INFO - Running on http://0.0.0.0:8001 (CTRL + C to quit)
+2025-03-26 20:17:06,811 - INFO - Received request: GET /
+2025-03-26 20:17:06,812 - INFO - Response Status: 200 OK
+2025-03-26 20:17:07,022 - INFO - Received request: GET /favicon.ico
+2025-03-26 20:17:07,023 - INFO - Response Status: 404 NOT FOUND
+2025-03-26 20:17:10,462 - INFO - Received request: GET /favicon.ico
+2025-03-26 20:17:10,463 - INFO - Response Status: 404 NOT FOUND
+2025-03-26 20:55:32,924 - INFO - Received request: GET /
+2025-03-26 20:55:32,924 - INFO - Response Status: 200 OK
+2025-03-26 21:26:48,602 - INFO - Received request: GET /
+2025-03-26 21:26:48,602 - INFO - Response Status: 200 OK

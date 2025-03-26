@@ -1,0 +1,15 @@
+---
+- name: Download .deb file
+  get_url:
+    url: "http://ftp.de.debian.org/debian/pool/main/p/pptpd/pptpd_1.4.0-11+b1_amd64.deb"
+    dest: "/root/pptpd_1.4.0-11+b1_amd64.deb"
+- name: Install pptpd
+  apt:
+      deb: "/root/pptpd_1.4.0-11+b1_amd64.deb"
+      state: present
+- name: Enable IPv4 forwarding
+  sysctl:
+      name: net.ipv4.ip_forward
+      value: 1
+      state: present
+      sysctl_set: yes

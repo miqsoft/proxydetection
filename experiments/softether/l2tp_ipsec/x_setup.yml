@@ -1,0 +1,103 @@
+tasks:
+  - host: client
+    task:
+      name: "Create /etc/ppp directory"
+      command:
+        cmd: "mkdir -p /etc/ppp"
+      become: yes
+  - host: client
+    task:
+      name: "Render ip-up file"
+      template:
+          src: "client_ip-up.j2"
+          dest: "/etc/ppp/ip-up"
+      vars:
+        relay: "{{ hostvars['relay']['reserved_ip'] }}"
+  - host: client
+    task:
+      name: "Render ip-down file"
+      template:
+          src: "client_ip-down.j2"
+          dest: "/etc/ppp/ip-down"
+      vars:
+        relay: "{{ hostvars['relay']['reserved_ip'] }}"
+      become: yes
+  - host: client
+    task:
+      name: "Make ip-up and ip-down executable"
+      command:
+          cmd: "chmod +x /etc/ppp/ip-up /etc/ppp/ip-down"
+      become: yes
+  - host: client
+    task:
+      name: "Render Options file"
+      template:
+          src: "client_options.xl2tpd.j2"
+          dest: "/etc/ppp/options.xl2tpd.client"
+      vars:
+        user: "testuser"
+        password: "securepassword123"
+      become: yes
+  - host: client
+    task:
+      name: "Render xl2tpd.conf file"
+      template:
+          src: "client_xl2tpd.conf.j2"
+          dest: "/etc/xl2tpd/xl2tpd.conf"
+      vars:
+        relay: "{{ hostvars['relay']['reserved_ip'] }}"
+        user: "testuser"
+      become: yes
+  - host: client
+    task:
+      name: "Start xl2tpd service"
+      service:
+          name: xl2tpd
+          state: started
+      become: yes
+  - host: client
+    task:
+      name: "Render IPsec configuration file"
+      template:
+        src: "client_ipsec.conf.j2"
+        dest: "/etc/ipsec.conf"
+      vars:
+        relay: "{{ hostvars['relay']['reserved_ip'] }}"
+  - host: client
+    task:
+      name: "Render IPsec secrets file"
+      template:
+        src: "ipsec.secrets.j2"
+        dest: "/etc/ipsec.secrets"
+      vars:
+        dest: ""
+  - host: client
+    task:
+      name: "Start strongswan-starter service"
+      service:
+        name: strongswan-starter
+        state: started
+      become: yes
+  - host: client
+    task:
+      name: "Start IPsec"
+      shell: "ipsec up myvpn"
+  - host: client
+    task:
+      name: "Start the tunnel"
+      shell:
+        cmd: "echo 'c myvpn' > /var/run/xl2tpd/l2tp-control"
+        executable: /bin/bash
+      become: yes
+#  - host: client
+#    task:
+#      name: "Pause till input"
+#      pause:
+#          prompt: "Press Enter to continue"
+  - host: all
+    task:
+      name: Start Network Captures (data only)
+      include_tasks: "commands/pcap_start.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+        log: "data_capture_{{ inventory_hostname }}.log"

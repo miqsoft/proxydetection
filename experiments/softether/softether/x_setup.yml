@@ -1,0 +1,67 @@
+tasks:
+  - host: client
+    task:
+      name: start ./vpnclient
+      shell: /usr/local/vpnclient/vpnclient start
+  - host: client
+    task:
+      name: setup softether
+      become: yes
+      shell: |
+        expect -c '
+          spawn /usr/local/vpnclient/vpncmd
+          expect "Select 1, 2 or 3:"
+          send "2\r"
+          expect "Hostname of IP Address of Destination:"
+          send "\r"
+          expect "VPN Client>"
+          send "AccountCreate testuser\r"
+          expect "Destination VPN Server Host Name and Port Number:"
+          send "{{ hostvars['relay']['reserved_ip'] }}:5555\r"
+          expect "Destination Virtual Hub Name:"
+          send "VPN\r"
+          expect "Connecting User Name:"
+          send "testuser\r"
+          expect "Used Virtual Network Adapter Name:"
+          send "vpn\r"
+          expect "VPN Client>"
+          send "AccountPasswordSet testuser\r"
+          expect "Password:"
+          send "securepassword123\r"
+          expect "Confirm input:"
+          send "securepassword123\r"
+          expect "Specify standard or radius:"
+          send "standard\r"
+          expect "VPN Client>"
+          send "AccountConnect testuser\r"
+          expect "VPN Client>"
+          send "Exit\r"
+        '
+  - host: client
+    task:
+      name: adjust interface
+      shell: |
+        ip addr add 192.168.30.0/24 dev vpn_vpn
+        ip link set vpn_vpn up
+      become: yes
+    become: yes
+  - host: client
+    task:
+      name: route traffic
+      shell: |
+        ip route add {{ hostvars['relay']['reserved_ip'] }} via 10.0.2.2 dev eth0
+        ip route add default via 192.168.30.1 dev vpn_vpn
+      become: yes
+  - host: client
+    task:
+      name: pause for 2 seconds
+      pause:
+          seconds: 2
+
+  - host: all
+    task:
+      name: Start Network Captures (data only)
+      include_tasks: "commands/pcap_start.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+        log: "data_capture_{{ inventory_hostname }}.log"

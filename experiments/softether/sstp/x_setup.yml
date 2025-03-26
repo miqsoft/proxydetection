@@ -1,0 +1,36 @@
+tasks:
+  - host: client
+    task:
+      name: set var relay
+      set_fact:
+          relay: "{{ hostvars['relay']['reserved_ip'] }}"
+  - host: client
+    task:
+      name: make sure sstpc is not running
+      shell: sudo pkill sstpc || true
+      become: yes
+  - host: client
+    task:
+      name: start sstpc client
+      shell: 'tmux new-session -d -s vpn_session "sudo sstpc --log-stderr --log-level 2 --cert-warn --tls-ext --user testuser --password securepassword123 {{ relay }} usepeerdns require-mschap-v2 noauth noipdefault defaultroute refuse-eap noccp"'
+      become: yes
+  - host: client
+    task:
+      name: wait 4s for interface to come up
+      pause:
+          seconds: 4
+  - host: client
+    task:
+      name: route traffic
+      shell: |
+        ip route add {{ hostvars['relay']['reserved_ip'] }} via 10.0.2.2 dev eth0
+        ip route add default via 192.168.30.10 dev ppp0
+      become: yes
+
+  - host: all
+    task:
+      name: Start Network Captures (data only)
+      include_tasks: "commands/pcap_start.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+        log: "data_capture_{{ inventory_hostname }}.log"

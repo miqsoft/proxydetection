@@ -1,0 +1,104 @@
+---
+# do https://www.atlantic.net/dedicated-server-hosting/how-to-install-softether-vpn-server-on-ubuntu-22-04/#step-1-install-softether-vpn
+- name: Install dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - build-essential
+    - gnupg2
+    - gcc
+    - make
+    - expect
+- name: download softether
+  get_url:
+      url: "http://www.softether-download.com/files/softether/v4.42-9798-rtm-2023.06.30-tree/Linux/SoftEther_VPN_Server/64bit_-_Intel_x64_or_AMD64/softether-vpnserver-v4.42-9798-rtm-2023.06.30-linux-x64-64bit.tar.gz"
+      dest: "/root/softether-vpnserver-v4.42-9798-rtm-2023.06.30-linux-x64-64bit.tar.gz"
+- name: Extract softether
+  shell:
+    cmd: "tar -xvzf /root/softether-vpnserver-v4.42-9798-rtm-2023.06.30-linux-x64-64bit.tar.gz -C /root/"
+- name: Run make in the extracted directory
+  shell:
+    cmd: "cd /root/vpnserver && make"
+- name: Remove the default vpnserver directory if it exists
+  shell:
+    cmd: "rm -rf /usr/local/vpnserver"
+- name: Copy the vpnserver directory to /usr/local
+  shell:
+      cmd: "mv /root/vpnserver /usr/local/"
+- name: Change permissions
+  shell:
+    cmd: "cd /usr/local/vpnserver/ && chmod 600 * && chmod 700 vpnserver && chmod 700 vpncmd"
+- name: render the vpnserver init script
+  template:
+    src: "vpnserver.j2"
+    dest: "/etc/init.d/vpnserver"
+- name: Make subsys directory
+  shell:
+    cmd: "chmod 755 /etc/init.d/vpnserver"
+- name: start softether
+  shell: /etc/init.d/vpnserver start
+- name: Setup SoftEther
+  shell: |
+    expect -c '
+      spawn /usr/local/vpnserver/vpncmd
+      expect "Select 1, 2 or 3:"
+      send "1\r"
+      expect "Hostname of IP Address of Destination:"
+      send "\r"
+      expect "Specify Virtual Hub Name:"
+      send "\r"
+      expect "VPN Server>"
+      send "ServerPasswordSet\r"
+      expect "Password:"
+      send "securepassword123\r"
+      expect "Confirm input:"
+      send "securepassword123\r"
+      expect "VPN Server>"
+      send "HubCreate VPN\r"
+      expect "Password:"
+      send "securepassword123\r"
+      expect "Confirm input:"
+      send "securepassword123\r"
+      expect "VPN Server>"
+      send "Hub VPN\r"
+      expect "VPN Server/VPN>"
+      send "SecureNatEnable\r"
+      expect "VPN Server/VPN>"
+      send "UserCreate testuser\r"
+      expect "Assigned Group Name:"
+      send "\r"
+      expect "User Full Name:"
+      send "test user\r"
+      expect "User Description:"
+      send "\r"
+      expect "VPN Server/VPN>"
+      send "UserPasswordSet testuser\r"
+      expect "Password:"
+      send "securepassword123\r"
+      expect "Confirm input:"
+      send "securepassword123\r"
+      expect "VPN Server/VPN>"
+      send "IPsecEnable\r"
+      expect "Enable L2TP over IPsec Server Function (yes / no):"
+      send "yes\r"
+      expect "Enable Raw L2TP Server Function (yes / no):"
+      send "yes\r"
+      expect "Enable EtherIP / L2TPv3 over IPsec Server Function (yes / no):"
+      send "yes\r"
+      expect "Pre Shared Key for IPsec (Recommended: 9 letters at maximum):"
+      send "securepassword123\r"
+      expect "Default Virtual HUB in a case of omitting the HUB on the Username:"
+      send "VPN\r"
+      expect "VPN Server/VPN>"
+      send "ServerCertRegenerate [CN]\r"
+      expect "VPN Server/VPN>"
+      send "ServerCertGet ~/ca.crt\r"
+      expect "VPN Server/VPN>"
+      send "SstpEnable yes\r"
+      expect "VPN Server/VPN>"
+      send "OpenVpnEnable yes /PORTS:1194\r"
+      expect "VPN Server/VPN>"
+      send "exit\r"
+      expect eof
+    '

@@ -1,0 +1,51 @@
+---- Resolving host address...
+---- IPv6 is not supported or configured
+---- 1 address found: 68.183.243.119
+---- Connecting to 68.183.243.119 (68.183.243.119) port 990
+<--- 220 (vsFTPd 3.0.5)
+---> FEAT
+<--- 211-Features:
+<---  AUTH SSL
+<---  AUTH TLS
+<---  EPRT
+<---  EPSV
+<---  MDTM
+<---  PASV
+<---  PBSZ
+<---  PROT
+<---  REST STREAM
+<---  SIZE
+<---  TVFS
+<--- 211 End
+---> AUTH TLS
+<--- 234 Proceed with negotiation.
+Loaded 146 CAs
+Loaded 0 CRLs
+---> USER ftpuser
+WARNING: Certificate verification: The certificate is NOT trusted. The certificate issuer is unknown. The certificate chain uses expired certificate.  (76:2F:1B:26:DA:D7:BF:C8:DF:EC:23:85:9C:9F:FB:74:82:D3:DC:A1)
+<--- 331 Please specify the password.
+---> PASS ultra!secret!password
+<--- 230 Login successful.
+---> PWD
+<--- 257 "/" is the current directory
+---> PBSZ 0
+<--- 200 PBSZ set to 0.
+---> PROT P
+<--- 200 PROT now Private.
+---> PASV
+<--- 227 Entering Passive Mode (68,183,243,119,39,16).
+---- Connecting data socket to (68.183.243.119) port 10000
+---- Data connection established
+---> LIST
+<--- 150 Here comes the directory listing.
+Loaded 146 CAs
+Loaded 0 CRLs
+WARNING: Certificate verification: The certificate is NOT trusted. The certificate issuer is unknown. The certificate chain uses expired certificate.  (76:2F:1B:26:DA:D7:BF:C8:DF:EC:23:85:9C:9F:FB:74:82:D3:DC:A1)
+---- Got EOF on data connection
+---- Closing data socket
+-rw-r--r--    1 1000     1000            9 Mar 26 12:59 test.txt
+<--- 226 Directory send OK.
+---> QUIT
+gnutls_record_recv: The TLS connection was non-properly terminated. Assuming EOF.
+<--- 221 Goodbye.
+---- Closing control socket

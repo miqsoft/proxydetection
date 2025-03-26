@@ -1,0 +1,12 @@
+tasks:
+  - host: client
+    task:
+      name: Disconnect from VPN
+      shell: poff myvpn
+      become: yes
+  - host: relay
+    task:
+      name: Stop pptpd
+      service:
+        name: pptpd
+        state: Stopped

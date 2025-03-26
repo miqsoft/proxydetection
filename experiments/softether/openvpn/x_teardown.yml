@@ -1,0 +1,17 @@
+tasks:
+  - host: all
+    task:
+      name: Pause for 40 seconds to check for keep alive
+      pause:
+          seconds: 40
+  - host: all
+    task:
+      name: Stop Network Captures
+      include_tasks: "commands/pcap_stop.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+  - host: client
+    task:
+      name: send strg-c to tmux session vpn_session
+      shell: tmux send-keys -t vpn_session C-c
+      become: yes

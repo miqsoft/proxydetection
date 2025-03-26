@@ -1,0 +1,4 @@
+#!/bin/sh
+
+ip route del {{ relay }}
+ip route del default via 1.0.0.1 dev ppp0

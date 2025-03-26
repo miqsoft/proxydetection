@@ -1,9 +1,9 @@
 tasks:
   - host: client
     task:
-      name: Pause for 60 seconds to allow some ping/pong packets to be captured
+      name: Pause for 40 seconds to allow some ping/pong packets to be captured
       pause:
-        seconds: 60
+        seconds: 40
   - host: all
     task:
       name: Stop Network Captures

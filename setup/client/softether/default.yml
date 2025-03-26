@@ -1,0 +1,55 @@
+---
+- name: Install dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+  become: yes
+  with_items:
+    - build-essential
+    - gnupg2
+    - gcc
+    - make
+    - expect
+    - sstp-client
+    - strongswan
+    - xl2tpd
+    - ppp
+    - openvpn
+- name: download softether
+  get_url:
+      url: "http://www.softether-download.com/files/softether/v4.42-9798-rtm-2023.06.30-tree/Linux/SoftEther_VPN_Client/64bit_-_Intel_x64_or_AMD64/softether-vpnclient-v4.42-9798-rtm-2023.06.30-linux-x64-64bit.tar.gz"
+      dest: "/home/vagrant/softether-vpnclient-v4.42-9798-rtm-2023.06.30-linux-x64-64bit.tar.gz"
+  become: yes
+- name: Extract softether
+  shell:
+      cmd: "tar -xvzf /home/vagrant/softether-vpnclient-v4.42-9798-rtm-2023.06.30-linux-x64-64bit.tar.gz -C /home/vagrant/"
+  become: yes
+- name: Remove the default vpnclient directory if it exists
+  shell:
+    cmd: "rm -rf /usr/local/vpnclient"
+- name: Run make in the extracted directory
+  shell:
+    cmd: "cd /home/vagrant/vpnclient && make"
+  become: yes
+- name: Copy the vpnclient directory to /usr/local
+  shell:
+      cmd: "mv /home/vagrant/vpnclient /usr/local/"
+  become: yes
+- name: Change permissions
+  shell:
+    cmd: "cd /usr/local/vpnclient/ && chmod 600 * && chmod 700 vpn*"
+  become: yes
+- name: Setup SoftEther
+  become: yes
+  shell: |
+    expect -c '
+      spawn /usr/local/vpnclient/vpncmd
+      expect "Select 1, 2 or 3:"
+      send "2\r"
+      expect "Hostname of IP Address of Destination:"
+      send "\r"
+      expect "VPN Client>"
+      send "NicCreate vpn\r"
+      expect "VPN Client>"
+      send "Exit\r"
+    '

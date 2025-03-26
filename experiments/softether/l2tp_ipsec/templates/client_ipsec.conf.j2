@@ -1,0 +1,22 @@
+config setup
+    charondebug="ike 2, knl 2, cfg 2"
+
+conn myvpn
+    keyexchange=ikev1
+    auto=add
+    authby=secret
+    left=%defaultroute
+    right={{ relay }}
+    rightid=%any
+    ike=aes256-sha1-modp1024
+    esp=aes256-sha1
+    keyingtries=%forever
+    dpdaction=restart
+    dpddelay=30s
+    dpdtimeout=120s
+    leftauth=psk
+    rightauth=psk
+    type=transport
+    leftprotoport=17/1701
+    rightprotoport=17/1701
+    leftfirewall=yes

@@ -1,0 +1,58 @@
+tasks:
+  - host: client
+    task:
+      name: set var relay
+      set_fact:
+          relay: "{{ hostvars['relay']['reserved_ip'] }}"
+  - host: client
+    task:
+      name: Render OpenVPN client configuration
+      template:
+          src: "openvpn.conf.j2"
+          dest: "/home/vagrant/client.conf"
+      vars:
+          relay: "{{ relay }}"
+  - host: client
+    task:
+      name: render auth file
+      template:
+          src: "auth.txt.j2"
+          dest: "/home/vagrant/auth.txt"
+      vars:
+        user: "testuser"
+        password: "securepassword123"
+  - host: localhost
+    task:
+      name: create local .tmp directory
+      shell: mkdir -p .tmp
+  - host: relay
+    task:
+      name: fetch /root/ca.crt
+      fetch:
+          src: /root/ca.crt
+          dest: .tmp/
+          flat: yes
+  - host: client
+    task:
+      name: copy ca.crt to client
+      copy:
+          src: .tmp/ca.crt
+          dest: /home/vagrant/ca.crt
+  - host: client
+    task:
+      name: start sstpc client
+      shell: 'tmux new-session -d -s vpn_session "sudo openvpn --config /home/vagrant/client.conf"'
+      become: yes
+  - host: client
+    task:
+      name: wait 4s for vpn to connect
+      pause:
+          seconds: 4
+
+  - host: all
+    task:
+      name: Start Network Captures (data only)
+      include_tasks: "commands/pcap_start.yml"
+      vars:
+        file: "data_capture_{{ inventory_hostname }}.pcap"
+        log: "data_capture_{{ inventory_hostname }}.log"
