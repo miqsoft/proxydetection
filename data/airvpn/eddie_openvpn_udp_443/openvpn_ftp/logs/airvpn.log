@@ -1,0 +1,95 @@
+﻿. 2025.03.31 16:19:29 - Reading options from /root/.config/eddie/default.profile
+. 2025.03.31 16:19:31 - OpenVPN - Version: 2.6.12 - OpenSSL 3.0.13 30 Jan 2024, LZO 2.10 (/usr/sbin/openvpn)
+. 2025.03.31 16:19:31 - SSH - Version: OpenSSH_9.6p1 Ubuntu-3ubuntu13, OpenSSL 3.0.13 30 Jan 2024 (/usr/bin/ssh)
+. 2025.03.31 16:19:31 - SSL - Version: 5.72 (/usr/bin/stunnel4)
+. 2025.03.31 16:19:31 - Service systemd-resolved restarted
+I 2025.03.31 16:19:31 - Press 'X' to exit (or disconnect), 'N' to connect/reconnect to the best available server.
+I 2025.03.31 16:19:31 - Ready
+I 2025.03.31 16:19:31 - Checking login ...
+! 2025.03.31 16:19:32 - Logged in.
+. 2025.03.31 16:19:33 - Collect information about AirVPN completed
+I 2025.03.31 16:19:33 - Session starting.
+. 2025.03.31 16:19:33 - Activation of Network Lock - Linux nftables
+I 2025.03.31 16:19:33 - Checking authorization ...
+! 2025.03.31 16:19:33 - Connecting to Diadema (Belgium, Brussels)
+. 2025.03.31 16:19:33 - Routes, add 194.187.251.162/32 for interface "eth0".
+. 2025.03.31 16:19:34 - OpenVPN > Note: '--allow-compression' is not set to 'no', disabling data channel offload.
+. 2025.03.31 16:19:34 - OpenVPN > OpenVPN 2.6.12 x86_64-pc-linux-gnu [SSL (OpenSSL)] [LZO] [LZ4] [EPOLL] [PKCS11] [MH/PKTINFO] [AEAD] [DCO]
+. 2025.03.31 16:19:34 - OpenVPN > library versions: OpenSSL 3.0.13 30 Jan 2024, LZO 2.10
+. 2025.03.31 16:19:34 - OpenVPN > DCO version: N/A
+. 2025.03.31 16:19:34 - OpenVPN > TCP/UDP: Preserving recently used remote address: [AF_INET]194.187.251.162:443
+. 2025.03.31 16:19:34 - OpenVPN > Socket Buffers: R=[212992->212992] S=[212992->212992]
+. 2025.03.31 16:19:34 - OpenVPN > UDPv4 link local: (not bound)
+. 2025.03.31 16:19:34 - OpenVPN > UDPv4 link remote: [AF_INET]194.187.251.162:443
+. 2025.03.31 16:19:34 - OpenVPN > TLS: Initial packet from [AF_INET]194.187.251.162:443, sid=d4018355 cfdacc5c
+. 2025.03.31 16:19:34 - OpenVPN > VERIFY OK: depth=1, C=IT, ST=IT, L=Perugia, O=airvpn.org, CN=airvpn.org CA, emailAddress=info@airvpn.org
+. 2025.03.31 16:19:34 - OpenVPN > VERIFY KU OK
+. 2025.03.31 16:19:34 - OpenVPN > Validating certificate extended key usage
+. 2025.03.31 16:19:34 - OpenVPN > ++ Certificate has EKU (str) TLS Web Server Authentication, expects TLS Web Server Authentication
+. 2025.03.31 16:19:34 - OpenVPN > VERIFY EKU OK
+. 2025.03.31 16:19:34 - OpenVPN > VERIFY OK: depth=0, C=IT, ST=IT, L=Perugia, O=airvpn.org, CN=Diadema, emailAddress=info@airvpn.org
+. 2025.03.31 16:19:34 - OpenVPN > Control Channel: TLSv1.3, cipher TLSv1.3 TLS_CHACHA20_POLY1305_SHA256, peer certificate: 4096 bits RSA, signature: RSA-SHA512, peer temporary key: 253 bits X25519
+. 2025.03.31 16:19:34 - OpenVPN > [Diadema] Peer Connection Initiated with [AF_INET]194.187.251.162:443
+. 2025.03.31 16:19:34 - OpenVPN > TLS: move_session: dest=TM_ACTIVE src=TM_INITIAL reinit_src=1
+. 2025.03.31 16:19:34 - OpenVPN > TLS: tls_multi_process: initial untrusted session promoted to trusted
+. 2025.03.31 16:19:34 - OpenVPN > PUSH: Received control message: 'PUSH_REPLY,comp-lzo no,redirect-gateway ipv6 def1 bypass-dhcp,dhcp-option DNS 10.15.180.1,dhcp-option DNS6 fde6:7a:7d20:bb4::1,tun-ipv6,route-gateway 10.15.180.1,topology subnet,ping 10,ping-restart 60,ifconfig-ipv6 fde6:7a:7d20:bb4::1017/64 fde6:7a:7d20:bb4::1,ifconfig 10.15.180.25 255.255.255.0,peer-id 0,cipher AES-256-GCM'
+. 2025.03.31 16:19:34 - OpenVPN > Pushed option removed by filter: 'redirect-gateway ipv6 def1 bypass-dhcp'
+. 2025.03.31 16:19:34 - OpenVPN > Pushed option removed by filter: 'dhcp-option DNS 10.15.180.1'
+. 2025.03.31 16:19:34 - OpenVPN > Pushed option removed by filter: 'dhcp-option DNS6 fde6:7a:7d20:bb4::1'
+. 2025.03.31 16:19:34 - OpenVPN > OPTIONS IMPORT: --ifconfig/up options modified
+. 2025.03.31 16:19:34 - OpenVPN > OPTIONS IMPORT: route-related options modified
+. 2025.03.31 16:19:34 - OpenVPN > TUN/TAP device tun0 opened
+. 2025.03.31 16:19:34 - OpenVPN > net_iface_mtu_set: mtu 1500 for tun0
+. 2025.03.31 16:19:34 - OpenVPN > net_iface_up: set tun0 up
+. 2025.03.31 16:19:34 - OpenVPN > net_addr_v4_add: 10.15.180.25/24 dev tun0
+. 2025.03.31 16:19:34 - OpenVPN > net_iface_mtu_set: mtu 1500 for tun0
+. 2025.03.31 16:19:34 - OpenVPN > net_iface_up: set tun0 up
+. 2025.03.31 16:19:34 - OpenVPN > net_addr_v6_add: fde6:7a:7d20:bb4::1017/64 dev tun0
+. 2025.03.31 16:19:34 - OpenVPN > Initialization Sequence Completed
+. 2025.03.31 16:19:34 - OpenVPN > Data Channel: cipher 'AES-256-GCM', peer-id: 0, compression: 'stub'
+. 2025.03.31 16:19:34 - DNS of the system switched to VPN DNS - via /etc/resolv.conf)
+. 2025.03.31 16:19:34 - Routes, add 0.0.0.0/1 for interface "tun0".
+. 2025.03.31 16:19:35 - Routes, add 128.0.0.0/1 for interface "tun0".
+. 2025.03.31 16:19:35 - Routes, add ::/1 for interface "tun0".
+. 2025.03.31 16:19:35 - Routes, add 8000::/1 for interface "tun0".
+. 2025.03.31 16:19:35 - Routes, add 194.187.251.163/32 for interface "tun0".
+. 2025.03.31 16:19:35 - Routes, add 2001:ac8:27:8:565a:d8b5:65b0:a0c6/128 for interface "tun0".
+. 2025.03.31 16:19:35 - Flushing DNS
+. 2025.03.31 16:19:35 - Flush DNS - systemd-resolved flush-caches
+I 2025.03.31 16:19:35 - Checking route IPv4
+I 2025.03.31 16:19:35 - Checking route IPv6
+I 2025.03.31 16:19:35 - Checking DNS
+. 2025.03.31 16:19:36 - Collect network information
+! 2025.03.31 16:19:36 - Connected.
+. 2025.03.31 16:19:36 - OpenVPN > Timers: ping 10, ping-restart 60
+. 2025.03.31 16:19:36 - OpenVPN > Protocol options: explicit-exit-notify 5
+. 2025.03.31 16:19:43 - Collect information about AirVPN completed
+I 2025.03.31 16:19:52 - Break signal received. Shutdown. Hit again to force break.
+. 2025.03.31 16:19:52 - Shutdown in progress
+! 2025.03.31 16:19:52 - Disconnecting
+. 2025.03.31 16:19:52 - Sending soft termination signal
+. 2025.03.31 16:19:52 - OpenVPN > event_wait : Interrupted system call (fd=-1,code=4)
+. 2025.03.31 16:19:52 - OpenVPN > SIGTERM received, sending exit notification to peer
+. 2025.03.31 16:19:57 - OpenVPN > Closing TUN/TAP interface
+. 2025.03.31 16:19:57 - OpenVPN > net_addr_v4_del: 10.15.180.25 dev tun0
+. 2025.03.31 16:19:57 - OpenVPN > net_addr_v6_del: fde6:7a:7d20:bb4::1017/64 dev tun0
+. 2025.03.31 16:19:57 - OpenVPN > SIGTERM[soft,exit-with-notification] received, process exiting
+. 2025.03.31 16:19:57 - Routes, delete 0.0.0.0/1 for interface "tun0", not exists.
+. 2025.03.31 16:19:57 - Routes, delete 128.0.0.0/1 for interface "tun0", not exists.
+. 2025.03.31 16:19:57 - Routes, delete ::/1 for interface "tun0", not exists.
+. 2025.03.31 16:19:57 - Routes, delete 8000::/1 for interface "tun0", not exists.
+. 2025.03.31 16:19:57 - Routes, delete 194.187.251.162/32 for interface "eth0".
+. 2025.03.31 16:19:57 - Routes, delete 194.187.251.163/32 for interface "tun0", not exists.
+. 2025.03.31 16:19:57 - Routes, delete 2001:ac8:27:8:565a:d8b5:65b0:a0c6/128 for interface "tun0", not exists.
+. 2025.03.31 16:19:57 - DNS of the system restored - via /etc/resolv.conf)
+. 2025.03.31 16:19:57 - Service systemd-resolved restarted
+. 2025.03.31 16:19:57 - DNS of the interface 'eth0' restored to '10.0.2.3' - via systemd-resolved
+. 2025.03.31 16:19:57 - Default Route of the interface 'eth0' restored to 'yes' - via systemd-resolved
+. 2025.03.31 16:19:57 - Collect network information
+. 2025.03.31 16:19:58 - Connection terminated.
+. 2025.03.31 16:19:58 - Flushing DNS
+. 2025.03.31 16:19:58 - Flush DNS - systemd-resolved flush-caches
+. 2025.03.31 16:19:58 - Deactivation of Network Lock
+! 2025.03.31 16:19:58 - Session terminated.
+! 2025.03.31 16:19:58 - Logged out.
+. 2025.03.31 16:19:58 - Shutdown complete

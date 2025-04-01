@@ -1,0 +1,18 @@
+tasks:
+  - host: client
+    task:
+      name: Copy .ovpn file to the client
+      ansible.builtin.copy:
+          src: "../config/AirVPN_BE-Brussels_Diadema_UDP-443-Entry3.ovpn"
+          dest: "/home/vagrant/config.ovpn"
+  - host: client
+    task:
+      name: Connect to VM in tmux sessions
+      shell: |
+        tmux new-session -d -s vpn_session "sudo /home/vagrant/AirVPN-Suite/bin/hummingbird /home/vagrant/config.ovpn"
+      become: true
+  - host: client
+    task:
+      name: Wait for the VPN connection to establish
+      pause:
+        seconds: 10

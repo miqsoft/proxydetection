@@ -1,0 +1,16 @@
+tasks:
+  - host: client
+    task:
+      name: "use routes to find only traffic send via eth0"
+      ansible.builtin.shell:
+        cmd: "ip route | grep 'via 10.0.2.2 dev eth0' | grep -v '^default' | awk '{print $1}' > /output/airvpn_ip"
+  - host: client
+    task:
+      name: Connect to VM in tmux sessions
+      shell: wg-quick down wg0
+      become: true
+  - host: client
+    task:
+      name: Wait for the VPN connection to establish
+      pause:
+        seconds: 10

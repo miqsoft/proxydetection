@@ -1,0 +1,28 @@
+before:
+  - ./x_connect_openvpn.yml
+  - ../x_start_datapcap.yml
+after:
+  - ../x_stop_datapcap.yml
+  - ../x_teardown.yml
+tasks:
+  - host: client
+    task:
+      name: Run lftp command with proxy
+      shell: |
+        lftp -e "
+          open -u ftpuser,ultra!secret!password ftp://{{ hostvars['server']['reserved_ip'] }};
+          ls;
+          bye
+        " 2>&1 | tee "/output/client_ftp.log"
+  - host: client
+    task:
+      name: "Save the ftp client log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+        src: "/output/client_ftp.log"
+        dst: "{{ log_dir }}/client_ftp.log"
+  - host: server
+    task:
+      name: "Restart the server"
+      shell:
+        cmd: "service vsftpd restart"

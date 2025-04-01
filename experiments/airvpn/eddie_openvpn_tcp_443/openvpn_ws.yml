@@ -1,0 +1,33 @@
+before:
+  - ./x_connect_eddie_p443_tcp.yml
+  - ../x_start_datapcap.yml
+after:
+  - ../x_stop_datapcap.yml
+  - ../x_teardown.yml
+tasks:
+  - host: client
+    task:
+      name: "Send websocket traffic with message using websocat"
+      shell:
+        cmd: "(echo 'Hello Server'; sleep 5) | websocat ws://{{ hostvars['server']['reserved_ip'] }}:8100 2>&1 | tee /output/client_ws.log"
+      args:
+        executable: /bin/bash
+  - host: client
+    task:
+      name: "Save the websocket client log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+        src: "/output/client_ws.log"
+        dst: "{{ log_dir }}/client_ws.log"
+  - host: server
+    task:
+      name: "Save the websocket server log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+        src: "/output/server_ws.log"
+        dst: "{{ log_dir }}/server_ws.log"
+  - host: server
+    task:
+      name: "Restart the server"
+      shell:
+        cmd: "service ws restart"

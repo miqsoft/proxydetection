@@ -1,0 +1,28 @@
+tasks:
+  - host: client
+    task:
+      name: Load .env file contents into a single variable
+      ansible.builtin.set_fact:
+        env_file_content: "{{ lookup('file', '../../../.env') }}"
+  - host: client
+    task:
+      set_fact:
+        envdata: "{{ dict(env_file_content.split('\n') | map('trim') | select('match', '^[^#].*=.*$') | map('split', '=', 1) | reject('equalto', [])) }}"
+  - host: client
+    task:
+      name: Load username and password from .env file
+      ansible.builtin.set_fact:
+        airvpn_username: "{{ envdata['AIRVPN_USER'] }}"
+        airvpn_password: "{{ envdata['AIRVPN_PW'] }}"
+        airvpn_server: "Diadema"
+  - host: client
+    task:
+      name: Connect to VM in tmux sessions
+      shell: |
+        tmux new-session -d -s vpn_session "sudo eddie-cli -login={{ airvpn_username }} -password={{ airvpn_password }} -connect -server={{ airvpn_server }} -mode.port=443 -mode.type=openvpn -mode.protocol=udp -log.file.enabled=True -log.file.path=/output/airvpn.log"
+      become: true
+  - host: client
+    task:
+      name: Wait for the VPN connection to establish
+      pause:
+        seconds: 10

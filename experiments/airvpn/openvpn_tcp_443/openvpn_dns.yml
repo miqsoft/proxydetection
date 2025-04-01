@@ -1,0 +1,41 @@
+before:
+  - ./x_connect_openvpn.yml
+  - ../x_start_datapcap.yml
+after:
+  - ../x_stop_datapcap.yml
+  - ../x_teardown.yml
+tasks:
+  - host: server
+    task:
+      name: "Clear the DNS log to avoid old log entries"
+      ansible.builtin.shell:
+          cmd: "sudo truncate -s 0 /output/server_dns.log"
+  - host: server
+    task:
+      name: "Restart the server"
+      ansible.builtin.shell:
+        cmd: "service unbound restart"
+  - host: client
+    task:
+      name: "Dig the server"
+      ansible.builtin.shell:
+          cmd: "dig @{{ hostvars['server']['reserved_ip'] }} https://www.example.com 2>&1 | tee -a /output/client_dig.log"
+  - host: client
+    task:
+      name: "Save the dig log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+          src: "/output/client_dig.log"
+          dst: "{{ log_dir }}/client_dig.log"
+  - host: server
+    task:
+      name: "Save the server log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+        src: "/output/server_dns.log"
+        dst: "{{ log_dir }}/server_dns.log"
+  - host: server
+    task:
+      name: "Restart the server"
+      ansible.builtin.shell:
+        cmd: "service unbound restart"

@@ -7,6 +7,7 @@
         base_dir: "<<< base_dir >>>"
     - name: "Generate local Pcap Directory based on experiment file"
       set_fact:
+        output_dir: "<<< output_dir >>>"
         pcap_dir: "<<< output_dir >>>/pcaps"
 
     - name: "Generate local Log Directory based on experiment file"

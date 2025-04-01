@@ -1,0 +1,18 @@
+tasks:
+  - host: client
+    task:
+      name: Copy .ovpn file to the client
+      ansible.builtin.copy:
+          src: "../config/AirVPN_BE-Brussels_Diadema_UDP-1637-Entry3.conf"
+          dest: "/etc/wireguard/wg0.conf"
+      become: yes
+  - host: client
+    task:
+      name: Connect to VM in tmux sessions
+      shell: wg-quick up wg0
+      become: true
+  - host: client
+    task:
+      name: Wait for the VPN connection to establish
+      pause:
+        seconds: 10

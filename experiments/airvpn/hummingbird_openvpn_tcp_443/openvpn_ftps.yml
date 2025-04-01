@@ -1,0 +1,34 @@
+before:
+  - ./x_connect_hummingbird_p443_tcp.yml
+  - ../x_start_datapcap.yml
+after:
+  - ../x_stop_datapcap.yml
+  - ../x_teardown.yml
+tasks:
+  - host: client
+    task:
+      name: Run lftp FTPS command over port 990 with proxy
+      shell: |
+        lftp -e "
+          set log:enabled true;
+          set ftps:initial-prot "";
+          set ftp:ssl-force true;
+          set ftp:ssl-protect-data true;
+          set ssl:verify-certificate no;
+          set ftp:ssl-auth TLS;
+          open -u ftpuser,ultra!secret!password ftp://{{ hostvars['server']['reserved_ip'] }}:990;
+          ls;
+          bye
+        " 2>&1 | tee "/output/client_ftp.log"
+  - host: client
+    task:
+      name: "Save the ftp client log"
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+        src: "/output/client_ftp.log"
+        dst: "{{ log_dir }}/client_ftp.log"
+  - host: server
+    task:
+      name: "Restart the server"
+      shell:
+        cmd: "service vsftpd restart"
