@@ -130,6 +130,8 @@ def main(path: Path, pattern: str, prevent_clean: bool):
 
         experiment_config = __load_yaml(file)
 
+        init_tasks = load_tasks('init', experiment_config, file)
+        final_tasks = load_tasks('final', experiment_config, file)
         before_tasks = load_tasks('before', experiment_config, file)
         after_tasks = load_tasks('after', experiment_config, file)
         tasks = [x for t in experiment_config.get('tasks', []) for x in __transform_task(t)]
@@ -148,10 +150,22 @@ def main(path: Path, pattern: str, prevent_clean: bool):
         template = JINJA2_ENV.get_template(EXPERIMENT_TEMPLATE)
         yaml_experiment_tasks = yaml.dump(experiment_tasks, width=float("inf"))
         yaml_experiment_tasks = indent_yaml(yaml_experiment_tasks)
+
+        kwargs = {
+            'experiment_tasks': yaml_experiment_tasks,
+            'output_dir': output_dir.absolute(),
+            'base_dir': Path('.').absolute(),
+        }
+        if init_tasks:
+            yaml_init_tasks = yaml.dump(init_tasks, width=float("inf"))
+            yaml_init_tasks = indent_yaml(yaml_init_tasks)
+            kwargs['init_tasks'] = yaml_init_tasks
+        if final_tasks:
+            yaml_final_tasks = yaml.dump(final_tasks, width=float("inf"))
+            yaml_final_tasks = indent_yaml(yaml_final_tasks)
+            kwargs['final_tasks'] = yaml_final_tasks
         rendered = template.render(
-            experiment_tasks=yaml_experiment_tasks,
-            output_dir=output_dir.absolute(),
-            base_dir=Path('.').absolute()
+            **kwargs
         )
 
         new_file = file.parent / f'{file.stem}.rendered.yml'
@@ -167,6 +181,7 @@ def main(path: Path, pattern: str, prevent_clean: bool):
 
         if not prevent_clean:
             new_file.unlink()
+
 
 
 if __name__ == '__main__':

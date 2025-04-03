@@ -15,8 +15,8 @@ logging.basicConfig(
 # Constants
 PORT = 4001
 HOST = "0.0.0.0"
-CERTFILE = "/cert/cert.pem"
-KEYFILE = "/cert/key.pem"
+CERTFILE = "/etc/letsencrypt/live/server.labforensic.de/fullchain.pem"
+KEYFILE = "/etc/letsencrypt/live/server.labforensic.de/privkey.pem"
 
 # Create a Quart app
 app = Quart(__name__)

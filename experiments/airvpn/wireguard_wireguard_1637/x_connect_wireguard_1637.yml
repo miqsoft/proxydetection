@@ -3,7 +3,7 @@ tasks:
     task:
       name: Copy .ovpn file to the client
       ansible.builtin.copy:
-          src: "../config/AirVPN_BE-Brussels_Diadema_UDP-1637-Entry3.conf"
+          src: "../config/wg0.conf"
           dest: "/etc/wireguard/wg0.conf"
       become: yes
   - host: client

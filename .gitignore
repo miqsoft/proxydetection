@@ -9,3 +9,6 @@ poetry.lock
 **/**.rendered.yml
 **/hosts.ini
 **/.tmp/
+*.ovpn
+*.deb
+wg*.conf

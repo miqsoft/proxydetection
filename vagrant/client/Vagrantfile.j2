@@ -6,6 +6,11 @@ Vagrant.configure("2") do |config|
     config.vm.synced_folder "{{ folder.host }}", "{{ folder.guest }}"
     {% endfor %}
 
+    # for nordvpn only
+    config.vm.provider "virtualbox" do |vb|
+      vb.customize ["modifyvm", :id, "--natnet1", "10.64.0.0/16"]
+    end
+
     # Provisioning script for Ubuntu
     config.vm.provision "shell", inline: <<-SHELL
       # Update package lists and install required packages

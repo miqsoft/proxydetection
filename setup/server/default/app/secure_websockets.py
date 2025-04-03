@@ -14,8 +14,8 @@ logging.basicConfig(
 
 PORT = 8101
 HOST = "0.0.0.0"
-CERTFILE = "/cert/cert.pem"
-KEYFILE = "/cert/key.pem"
+CERTFILE = "/etc/letsencrypt/live/server.labforensic.de/fullchain.pem"
+KEYFILE = "/etc/letsencrypt/live/server.labforensic.de/privkey.pem"
 
 ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
 ssl_context.load_cert_chain(certfile=CERTFILE, keyfile=KEYFILE)

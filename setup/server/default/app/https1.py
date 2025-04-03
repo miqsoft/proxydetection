@@ -16,8 +16,8 @@ logging.basicConfig(
 RESPONSE = "Hello, HTTP1.1 with TLS!"
 HOST = "0.0.0.0"
 PORT = 4000
-CERTFILE = "/cert/cert.pem"
-KEYFILE = "/cert/key.pem"
+CERTFILE = "/etc/letsencrypt/live/server.labforensic.de/fullchain.pem"
+KEYFILE = "/etc/letsencrypt/live/server.labforensic.de/privkey.pem"
 
 
 class SimpleHTTPRequestHandler(http.server.BaseHTTPRequestHandler):

@@ -1,4 +1,9 @@
 tasks:
+  - host: client
+    task:
+      name: Pause for 30s to check for heartbeat
+      ansible.builtin.pause:
+          seconds: 30
   - host: all
     task:
       name: Stop Network Captures

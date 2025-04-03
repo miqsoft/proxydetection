@@ -1,8 +1,6 @@
-python3 experiment.py ./experiments/airvpn/eddie_openvpn_tcp_443/
-python3 experiment.py ./experiments/airvpn/eddie_openvpn_udp_443/
-python3 experiment.py ./experiments/airvpn/eddie_wireguard_1637/
-python3 experiment.py ./experiments/airvpn/hummingbird_openvpn_tcp_443/
-python3 experiment.py ./experiments/airvpn/hummingbird_openvpn_udp_443/
-python3 experiment.py ./experiments/airvpn/openvpn_tcp_443/
-python3 experiment.py ./experiments/airvpn/openvpn_udp_443/
-python3 experiment.py ./experiments/airvpn/wireguard_wireguard_1637/
+python3 experiment.py ./experiments/protonvpn/openvpn_udp
+python3 experiment.py ./experiments/protonvpn/openvpn_udp_securecore
+python3 experiment.py ./experiments/protonvpn/wireguard
+python3 experiment.py ./experiments/protonvpn/wireguard_securecore
+python3 experiment.py ./experiments/protonvpn/wireguard_vpnacc
+python3 experiment.py ./experiments/protonvpn/wireguard_securecore_vpnacc

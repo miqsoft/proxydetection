@@ -1,4 +1,19 @@
 ---
+- name: Install certbot
+  apt:
+      name: certbot
+      state: present
+      update_cache: yes
+- name: Check if cert dir already exists (/etc/letsencrypt/live/server.labforensic.de/)
+  ansible.builtin.stat:
+    path: /etc/letsencrypt/live/{{ hostvars['server']['dns'] }}/
+  register: cert_dir_status
+- name: Create Cert
+  command: certbot certonly --standalone --non-interactive --agree-tos --register-unsafely-without-email -d {{ hostvars['server']['dns'] }}
+  register: certbot_result
+  ignore_errors: yes
+  when: cert_dir_status.stat.exists == false
+
 - name: Copy App dir to host
   synchronize:
       src: setup/server/default/app

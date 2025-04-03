@@ -35,6 +35,8 @@
     - name: "Generate Output Directory"
       command: "sudo mkdir -p /output"
 
+<<< init_tasks >>>
+
     - name: "Start tcpdump capture"
       shell: >
         nohup tcpdump -i eth0 not port 22 -w /output/capture_{{ inventory_hostname }}.pcap  > /output/tcpdump_{{ inventory_hostname }}.log 2>&1 &
@@ -56,6 +58,8 @@
     - name: "Pause to allow capture file to be written"
       pause:
         seconds: 2
+
+<<< final_tasks >>>
 
     - name: "Restart systemd-resolved to clear DNS cache on relay"
       shell: "sudo resolvectl flush-caches"

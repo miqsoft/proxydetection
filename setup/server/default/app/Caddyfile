@@ -6,7 +6,7 @@
 }
 
 server.labforensic.de:4002 {
-    tls /cert/cert.pem /cert/key.pem
+    tls /etc/letsencrypt/live/server.labforensic.de/fullchain.pem /etc/letsencrypt/live/server.labforensic.de/privkey.pem
     @only_get method GET
     respond @only_get "Hello, HTTPS3!"
 
@@ -21,7 +21,7 @@ server.labforensic.de:4002 {
 }
 
 68.183.243.119:4002 {
-    tls /cert/cert.pem /cert/key.pem
+    tls /etc/letsencrypt/live/server.labforensic.de/fullchain.pem /etc/letsencrypt/live/server.labforensic.de/privkey.pem
     @only_get method GET
     respond @only_get "Hello, HTTPS3!"
 
