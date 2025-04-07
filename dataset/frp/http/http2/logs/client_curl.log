@@ -1,0 +1,51 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Host proxy.labforensic.de:8001 was resolved.
+* IPv6: (none)
+* IPv4: 104.248.101.195
+*   Trying 104.248.101.195:8001...
+* Connected to proxy.labforensic.de (104.248.101.195) port 8001
+* using HTTP/1.x
+> GET / HTTP/1.1
+> Host: proxy.labforensic.de:8001
+> User-Agent: curl/8.12.1-DEV
+> Accept: */*
+> Connection: Upgrade, HTTP2-Settings
+> Upgrade: h2c
+> HTTP2-Settings: AAMAAABkAAQAAQAAAAIAAAAA
+> 
+* Request completely sent off
+< HTTP/1.1 101 Switching Protocols
+< Connection: Upgrade
+< Upgrade: h2c
+< 
+* Received 101, Switching to HTTP/2
+* Copied HTTP/2 data in stream buffer to connection buffer after upgrade: len=45
+< HTTP/2 404 
+< content-type: text/html; charset=utf-8
+< content-length: 489
+< date: Sat, 05 Apr 2025 15:08:42 GMT
+< 
+{ [489 bytes data]
+100   489  100   489    0     0   7296      0 --:--:-- --:--:-- --:--:--  7409
+* Connection #0 to host proxy.labforensic.de left intact
+<!DOCTYPE html>
+<html>
+<head>
+<title>Not Found</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>The page you requested was not found.</h1>
+<p>Sorry, the page you are looking for is currently unavailable.<br/>
+Please try again later.</p>
+<p>The server is powered by <a href="https://github.com/fatedier/frp">frp</a>.</p>
+<p><em>Faithfully yours, frp.</em></p>
+</body>
+</html>

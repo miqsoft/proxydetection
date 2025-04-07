@@ -1,6 +1,8 @@
 before:
   - x_setup.yml
+  - x_start_datapcap.yml
 after:
+  - x_stop_datapcap.yml
   - x_teardown.yml
 tasks:
   - host: client

@@ -13,3 +13,26 @@
   ansible.builtin.file:
     path: /root/frp/frps
     mode: '0755'
+- name: Install certbot
+  apt:
+      name: certbot
+      state: present
+      update_cache: yes
+- name: Check if cert dir already exists
+  ansible.builtin.stat:
+    path: /etc/letsencrypt/live/{{ hostvars['relay']['dns'] }}/
+  register: cert_dir_status
+- name: Create Cert
+  command: certbot certonly --standalone --non-interactive --agree-tos --register-unsafely-without-email -d {{ hostvars['relay']['dns'] }}
+  ignore_errors: yes
+  when: cert_dir_status.stat.exists == false
+- name: Copy crt to root
+  ansible.builtin.copy:
+    src: /etc/letsencrypt/live/{{ hostvars['relay']['dns'] }}/fullchain.pem
+    dest: /root/server.crt
+    remote_src: yes
+- name: Copy key to root
+  ansible.builtin.copy:
+    src: /etc/letsencrypt/live/{{ hostvars['relay']['dns'] }}/privkey.pem
+    dest: /root/server.key
+    remote_src: yes

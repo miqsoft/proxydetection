@@ -1,0 +1,20 @@
+tasks:
+  - host: client
+    task:
+      name: "use routes to find only traffic send via eth0"
+      ansible.builtin.shell:
+        cmd: "ip route | grep 'via 10.64.0.2 dev eth0' | grep -v '^default' | awk '{print $1}' > /output/relay_ip.txt"
+  - host: client
+    task:
+      name: Fetch the relay IP
+      include_tasks: "commands/fetch_and_empty.yml"
+      vars:
+        src: "/output/relay_ip.txt"
+        dst: "{{ output_dir }}/relay_ip.txt"
+  - host: client
+    task:
+      name: "Disconnect from Windscribe VPN"
+      shell: export DISPLAY=:0 && windscribe-cli disconnect
+      become: yes
+      args:
+        executable: /bin/bash

@@ -1,18 +1,4 @@
 ---
-# install websocat
-- name: Download websocat binary
-  ansible.builtin.get_url:
-    url: https://github.com/vi/websocat/releases/download/v1.14.0/websocat_max.x86_64-unknown-linux-musl
-    dest: /usr/local/bin/websocat
-  become: yes
-- name: Ensure websocat is executable
-  ansible.builtin.file:
-    path: /usr/local/bin/websocat
-    mode: '0755'
-    owner: root
-    group: root
-    state: file
-  become: yes
 # install shadowsocks
 - name: Install Go
   ansible.builtin.command:

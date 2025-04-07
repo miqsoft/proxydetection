@@ -1,0 +1,12 @@
+2025-04-06 09:50:27,432 - INFO - Running on http://0.0.0.0:8001 (CTRL + C to quit)
+2025-04-06 12:17:06,969 - INFO - Received request: GET /
+2025-04-06 12:17:06,969 - INFO - Response Status: 200 OK
+2025-04-06 12:17:40,720 - INFO - Received request: GET /favicon.ico
+2025-04-06 12:17:40,720 - INFO - Response Status: 404 NOT FOUND
+2025-04-06 12:18:05,008 - INFO - Received request: GET /
+2025-04-06 12:18:05,008 - INFO - Query Params: ImmutableMultiDict([('format', 'json')])
+2025-04-06 12:18:05,008 - INFO - Response Status: 200 OK
+2025-04-06 12:18:26,809 - INFO - Received request: CONNECT /443
+2025-04-06 12:18:26,810 - INFO - Response Status: 404 NOT FOUND
+2025-04-06 12:39:17,899 - INFO - Received request: GET /
+2025-04-06 12:39:17,899 - INFO - Response Status: 200 OK

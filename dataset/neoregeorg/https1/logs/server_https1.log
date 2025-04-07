@@ -1,0 +1,3 @@
+2025-04-07 08:45:11,131 - INFO - SSL context created with certfile: /cert/tls/fullchain1.pem and keyfile: /cert/tls/privkey1.pem
+2025-04-07 08:45:11,131 - INFO - Starting server on https://0.0.0.0:4000
+2025-04-07 09:16:08,452 - INFO - Handled GET request from ('104.248.101.195', 56702)

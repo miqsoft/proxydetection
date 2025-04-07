@@ -1,0 +1,24 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Host proxy.labforensic.de:8000 was resolved.
+* IPv6: (none)
+* IPv4: 104.248.101.195
+*   Trying 104.248.101.195:8000...
+* Connected to proxy.labforensic.de (104.248.101.195) port 8000
+* using HTTP/1.x
+> GET / HTTP/1.1
+> Host: proxy.labforensic.de:8000
+> User-Agent: curl/8.12.1-DEV
+> Accept: */*
+> 
+* Request completely sent off
+< HTTP/1.1 200 OK
+< Content-Length: 15
+< Content-Type: text/html
+< Date: Sat, 05 Apr 2025 15:07:36 GMT
+< Server: BaseHTTP/0.6 Python/3.12.3
+< 
+{ [15 bytes data]
+100    15  100    15    0     0    293      0 --:--:-- --:--:-- --:--:--   300
+* Connection #0 to host proxy.labforensic.de left intact
+Hello, HTTP1.1!

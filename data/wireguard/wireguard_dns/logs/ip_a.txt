@@ -7,11 +7,11 @@
 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
     link/ether 08:00:27:64:e1:ff brd ff:ff:ff:ff:ff:ff
     altname enp0s3
-    inet 10.0.2.15/24 brd 10.0.2.255 scope global dynamic noprefixroute eth0
-       valid_lft 85258sec preferred_lft 85258sec
+    inet 10.64.0.15/16 brd 10.64.255.255 scope global dynamic noprefixroute eth0
+       valid_lft 85736sec preferred_lft 85736sec
     inet6 fe80::a00:27ff:fe64:e1ff/64 scope link 
        valid_lft forever preferred_lft forever
-5: wg0: <POINTOPOINT,NOARP,UP,LOWER_UP> mtu 1420 qdisc noqueue state UNKNOWN group default qlen 1000
+4: wg0: <POINTOPOINT,NOARP,UP,LOWER_UP> mtu 1420 qdisc noqueue state UNKNOWN group default qlen 1000
     link/none 
     inet 10.8.0.2/32 scope global wg0
        valid_lft forever preferred_lft forever

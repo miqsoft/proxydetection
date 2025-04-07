@@ -1,0 +1,28 @@
+tasks:
+  - host: relay
+    task:
+      name: render frps.toml
+      template:
+          src: frps.toml.j2
+          dest: /root/frps.toml
+  - host: server
+    task:
+      name: render frps.toml
+      template:
+        src: frpc.toml.j2
+        dest: /root/frpc.toml
+      vars:
+        relay: "{{ hostvars['relay']['reserved_ip'] }}"
+
+  - host: relay
+    task:
+      name: Run Server
+      shell:
+        tmux new-session -d -s frps "/root/frp/frps -c /root/frps.toml"
+
+  - host: server
+    task:
+      name: Run Client
+      ansible.builtin.shell: |
+        tmux new-session -d -s frpc "/root/frp/frpc -c /root/frpc.toml"
+      become: yes

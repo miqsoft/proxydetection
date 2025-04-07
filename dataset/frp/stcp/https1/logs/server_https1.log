@@ -1,0 +1,6 @@
+2025-04-06 10:49:49,549 - INFO - SSL context created with certfile: /etc/letsencrypt/live/server.labforensic.de/fullchain.pem and keyfile: /etc/letsencrypt/live/server.labforensic.de/privkey.pem
+2025-04-06 10:49:49,549 - INFO - Starting server on https://0.0.0.0:4000
+2025-04-06 12:23:11,206 - INFO - Handled GET request from ('167.94.138.161', 49030)
+2025-04-06 12:23:16,519 - INFO - Handled GET request from ('167.94.138.161', 59514)
+2025-04-06 12:24:11,381 - INFO - Handled GET request from ('167.94.138.161', 32870)
+2025-04-06 12:40:24,480 - INFO - Handled GET request from ('127.0.0.1', 35632)
